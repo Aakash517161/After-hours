@@ -1,20 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K46SX05LJV"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-K46SX05LJV');
-    </script>
-    <meta name="google-site-verification" content="s4x21MIe4t3dngVzEcA4_yO_ezjXqFDAXu3y4Wwp-sU" />
-    <link rel="icon" type="image/png" href="cup.png">
-    
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>After Hours Café | Bhairahawa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>After Hours Café | Premium Roasts</title>
     
     <!-- Tailwind, GSAP, Lenis, and Phosphor Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -26,21 +15,24 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&display=swap');
         
-        /* ========= THEME VARIABLES ========= */
+        /* ========= DYNAMIC THEME VARIABLES ========= */
         :root {
+            /* Dark Mode (Default) */
+            --bg-rgb: 8, 5, 4; /* #080504 */
             --bg-deep: #080504;
-            --bg-card: #120b08;
+            --bg-card: #140d0a;
             --text-main: #f9f6f0;
             --text-muted: #8c827a;
-            --border-color: rgba(255,255,255,0.08);
+            --border-color: rgba(255,255,255,0.06);
             --gold: #d4a373;
             --gold-glow: rgba(212, 163, 115, 0.4);
-            /* Cart is always light for maximum visibility */
-            --cart-bg: rgba(250, 248, 245, 0.95);
+            --cart-bg: rgba(250, 248, 245, 0.98);
             --cart-text: #1a120e;
         }
 
         body.light-mode {
+            /* Light Mode */
+            --bg-rgb: 245, 240, 235; /* #f5f0eb */
             --bg-deep: #f5f0eb;
             --bg-card: #ffffff;
             --text-main: #1a120e;
@@ -48,111 +40,143 @@
             --border-color: rgba(0,0,0,0.08);
             --gold: #b07d47;
             --gold-glow: rgba(176, 125, 71, 0.3);
+            --cart-bg: rgba(255, 255, 255, 0.98);
         }
 
         html.lenis { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto; }
-        body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Outfit', sans-serif; overflow-x: hidden; cursor: none; transition: background 0.5s, color 0.5s; }
+        body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Outfit', sans-serif; overflow-x: hidden; cursor: none; transition: background-color 0.1s; }
         ::selection { background: var(--gold); color: #fff; }
         .font-serif { font-family: 'Playfair Display', serif; }
 
-        /* ========= SENSORY CUSTOM CURSOR ========= */
-        .cursor-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999999; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s; }
-        .cursor-ring { width: 34px; height: 34px; border: 1px solid var(--gold); border-radius: 50%; opacity: 0.5; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999998; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s; }
-        .cursor-click-ripple { position: fixed; width: 20px; height: 20px; border: 2px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999997; transform: translate(-50%, -50%) scale(0); opacity: 0; }
-        .hover-active .cursor-dot { width: 0; height: 0; }
-        .hover-active .cursor-ring { width: 60px; height: 60px; opacity: 1; background: rgba(212, 163, 115, 0.1); backdrop-filter: blur(4px); }
+        /* ========= THEME TRANSITION OVERLAY ========= */
+        .theme-transition-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: var(--bg-deep); z-index: 99999999;
+            border-radius: 50%; transform: scale(0); pointer-events: none;
+        }
 
-        /* ========= AMBIENT BEANS & BLOBS ========= */
-        .ambient-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-        .blob { position: absolute; filter: blur(100px); border-radius: 50%; opacity: 0.15; animation: float 25s infinite alternate ease-in-out; background: var(--gold); }
-        .blob-1 { width: 40vw; height: 40vw; top: -10%; left: -10%; }
-        .blob-2 { width: 30vw; height: 30vw; bottom: 10%; right: -5%; animation-delay: -5s; }
-        @keyframes float { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(10vw, 10vh) scale(1.2); } }
-        
-        .floating-bean { position: absolute; width: 40px; height: 40px; opacity: 0.05; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23d4a373"><path d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M12,20c-4.41,0-8-3.59-8-8s3.59-8,8-8s8,3.59,8,8 S16.41,20,12,20z M12.5,6.5c-0.83,0-1.5,0.67-1.5,1.5v8c0,0.83,0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5V8C14,7.17,13.33,6.5,12.5,6.5z"/></svg>'); background-size: contain; background-repeat: no-repeat; z-index: 0; }
+        /* ========= LIQUID GLASS HEADER ========= */
+        .liquid-glass-header {
+            background: rgba(var(--bg-rgb), 0.5);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
 
-        /* ========= LEFT COMMAND CENTER (Logo + Clock + Weather) ========= */
-        .command-center { position: fixed; top: 24px; left: 24px; z-index: 50; display: flex; flex-direction: column; gap: 16px; }
-        .glass-panel { background: rgba(18, 11, 8, 0.4); backdrop-filter: blur(16px); border: 1px solid var(--border-color); border-radius: 20px; padding: 16px; transition: 0.5s; }
-        body.light-mode .glass-panel { background: rgba(255, 255, 255, 0.5); }
-        
-        .analog-clock { width: 50px; height: 50px; border: 2px solid var(--gold); border-radius: 50%; position: relative; box-shadow: 0 0 15px var(--gold-glow); }
+        /* ========= SENSORY CURSOR ========= */
+        @media (pointer: fine) {
+            .cursor-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999999; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s; }
+            .cursor-ring { width: 34px; height: 34px; border: 1px solid var(--gold); border-radius: 50%; opacity: 0.5; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999998; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s; }
+            .cursor-click-ripple { position: fixed; width: 20px; height: 20px; border: 2px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999997; transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            .hover-active .cursor-dot { width: 0; height: 0; }
+            .hover-active .cursor-ring { width: 60px; height: 60px; opacity: 1; background: rgba(212, 163, 115, 0.1); backdrop-filter: blur(4px); border-width: 2px; }
+        }
+
+        /* ========= HERO BROWN VIBE SECTION ========= */
+        .hero-brown-bg {
+            position: absolute; inset: 0; z-index: 0;
+            background-image: url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover; background-position: center;
+            /* Mix blend forces it to adopt a deep roasted brown tint */
+            mix-blend-mode: luminosity; opacity: 0.25; filter: sepia(0.8) hue-rotate(340deg) saturate(2);
+        }
+        .hero-gradient { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 40%, var(--bg-deep) 100%); z-index: 1; }
+
+        /* ========= ANALOG CLOCK ========= */
+        .analog-clock { width: 45px; height: 45px; border: 2px solid var(--gold); border-radius: 50%; position: relative; box-shadow: 0 0 15px var(--gold-glow); background: var(--bg-card); }
         .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: var(--text-main); border-radius: 10px; }
-        .hour-hand { width: 3px; height: 14px; margin-left: -1.5px; }
-        .min-hand { width: 2px; height: 20px; margin-left: -1px; }
-        .sec-hand { width: 1px; height: 22px; background: var(--gold); margin-left: -0.5px; }
+        .hour-hand { width: 3px; height: 12px; margin-left: -1.5px; }
+        .min-hand { width: 2px; height: 16px; margin-left: -1px; }
+        .sec-hand { width: 1px; height: 18px; background: var(--gold); margin-left: -0.5px; }
         .clock-center { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 
-        /* ========= MENU CARDS ========= */
-        .menu-card { background: var(--bg-card); border-radius: 30px; border: 1px solid var(--border-color); overflow: hidden; transition: 0.5s ease; position: relative; z-index: 2; }
-        .menu-card:hover { border-color: var(--gold); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
-        .menu-img-wrap { height: 260px; overflow: hidden; position: relative; z-index: 2; perspective: 1000px; }
-        .menu-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
-        .menu-card:hover .menu-img { transform: scale(1.05); filter: brightness(1.1); }
+        /* ========= ENHANCED TIMELINE ========= */
+        .timeline-wrapper { position: relative; max-width: 1000px; margin: 0 auto; padding: 40px 0; display: flex; justify-content: space-between; }
+        .timeline-track { position: absolute; top: 50px; left: 0; width: 100%; height: 2px; background: var(--border-color); }
+        .timeline-fill { position: absolute; top: 0; left: 0; width: 0%; height: 100%; background: var(--gold); box-shadow: 0 0 15px var(--gold); }
+        .timeline-node { position: relative; z-index: 2; display: flex; flex-direction: column; items-center; text-align: center; width: 100px; }
+        .node-dot { width: 20px; height: 20px; background: var(--bg-deep); border: 2px solid var(--border-color); border-radius: 50%; margin: 0 auto 15px; transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .node-dot.active { border-color: var(--gold); background: var(--gold); box-shadow: 0 0 20px var(--gold); transform: scale(1.4); }
+
+        @media (max-width: 768px) {
+            .timeline-wrapper { flex-direction: column; gap: 40px; padding-left: 20px; }
+            .timeline-track { width: 2px; height: 100%; left: 29px; top: 40px; }
+            .timeline-fill { width: 100%; height: 0%; }
+            .timeline-node { flex-direction: row; text-align: left; width: 100%; align-items: center; }
+            .node-dot { margin: 0 20px 0 0; }
+        }
+
+        /* ========= MENU CARDS & OFFERS ========= */
+        .menu-card { background: var(--bg-card); border-radius: 24px; border: 1px solid var(--border-color); overflow: hidden; transition: 0.4s ease; position: relative; z-index: 2; }
+        .menu-card:hover { border-color: var(--gold); box-shadow: 0 20px 50px rgba(0,0,0,0.2); transform: translateY(-8px); }
+        .menu-img-wrap { height: 260px; overflow: hidden; position: relative; }
+        .menu-img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s ease; }
+        .menu-card:hover .menu-img { transform: scale(1.08); }
         
-        .add-btn { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 14px 28px; border-radius: 40px; font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: 0.3s; opacity: 0; width: 85%; justify-content: center; z-index: 3; }
-        body.light-mode .add-btn { background: var(--bg-deep); color: var(--text-main); }
+        .offer-tag { position: absolute; top: 15px; right: 15px; background: #e63946; color: #fff; font-size: 0.7rem; font-weight: 800; padding: 4px 10px; border-radius: 20px; letter-spacing: 1px; box-shadow: 0 5px 15px rgba(230, 57, 70, 0.4); z-index: 10; }
+        .happy-tag { background: var(--gold); color: #000; box-shadow: 0 5px 15px var(--gold-glow); }
+
+        .add-btn { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: var(--bg-deep); padding: 12px 24px; border-radius: 30px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: 0.3s; opacity: 0; width: 85%; justify-content: center; z-index: 3; }
         .menu-card:hover .add-btn { opacity: 1; background: var(--gold); color: #fff; }
+        @media (max-width: 768px) { .add-btn { opacity: 1; bottom: 15px; } }
 
-        /* ========= LIQUID FLY-TO-CART (FROM BEHIND) ========= */
+        /* ========= 3D LIQUID DROPS (CART ANIMATION) ========= */
         .gooey-filter { filter: url('#goo'); position: fixed; inset: 0; z-index: 999999; pointer-events: none; }
-        .liquid-drop { position: absolute; background: var(--gold); border-radius: 50%; box-shadow: 0 0 10px var(--gold); transform-origin: center; }
+        .liquid-drop-3d {
+            position: absolute; border-radius: 50%;
+            /* 3D Sphere shading */
+            background: radial-gradient(circle at 30% 30%, #ffeedb, var(--gold) 60%, #8b5e34);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4), inset -2px -2px 6px rgba(0,0,0,0.3);
+            transform-origin: center;
+        }
 
-        /* ========= BRIGHT RIGHT-SIDE CART ========= */
-        #cart-sidebar { position: fixed; top: 0; right: -100%; width: 100%; max-width: 420px; height: 100vh; z-index: 10000; transition: 0.6s cubic-bezier(0.25, 1, 0.5, 1); background: var(--cart-bg); color: var(--cart-text); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; box-shadow: -20px 0 60px rgba(0,0,0,0.3); backdrop-filter: blur(30px); }
+        /* ========= BRIGHT CART SIDEBAR ========= */
+        #cart-sidebar { position: fixed; top: 0; right: -100%; width: 100%; max-width: 420px; height: 100vh; z-index: 10000; transition: 0.6s cubic-bezier(0.25, 1, 0.5, 1); background: var(--cart-bg); color: var(--cart-text); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; box-shadow: -20px 0 60px rgba(0,0,0,0.4); backdrop-filter: blur(30px); }
         #cart-sidebar.open { right: 0; }
         .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 9999; opacity: 0; pointer-events: none; transition: 0.4s; }
         .cart-overlay.open { opacity: 1; pointer-events: all; }
 
-        /* ========= TIMELINE (Open Late, Always) ========= */
-        .timeline-container { position: relative; max-width: 1000px; margin: 0 auto; padding: 40px 0; }
-        .timeline-line { position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: rgba(212, 163, 115, 0.2); transform: translateY(-50%); }
-        .timeline-progress { position: absolute; top: 0; left: 0; height: 100%; width: 0%; background: var(--gold); box-shadow: 0 0 15px var(--gold); }
-        .timeline-item { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; text-align: center; flex: 1; }
-        .timeline-dot { width: 16px; height: 16px; background: var(--bg-deep); border: 2px solid var(--gold); border-radius: 50%; margin-bottom: 16px; transition: 0.4s; }
-        .timeline-item:hover .timeline-dot { background: var(--gold); box-shadow: 0 0 20px var(--gold); transform: scale(1.5); }
+        /* ========= PRE-FOOTER (FLOATING CUPS) ========= */
+        .pre-footer { position: relative; padding: 150px 20px; overflow: hidden; background: linear-gradient(to bottom, var(--bg-deep), #040201); display: flex; align-items: center; justify-content: center; text-align: center; }
+        .floating-cup-container { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+        /* SVG Coffee Cup definition */
+        .cup-svg { width: 60px; height: 60px; position: absolute; opacity: 0.08; fill: var(--gold); filter: blur(2px); }
 
         /* ========= 3D NEON MAP FOOTER ========= */
-        .map-3d-wrapper { perspective: 1200px; width: 100%; max-width: 600px; height: 300px; margin: 0 auto; position: relative; }
-        .map-3d { width: 100%; height: 100%; transform: rotateX(60deg) rotateZ(-30deg); transform-style: preserve-3d; background: 
-            linear-gradient(rgba(212, 163, 115, 0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(212, 163, 115, 0.1) 1px, transparent 1px);
-            background-size: 30px 30px; border: 1px solid rgba(212,163,115,0.3); border-radius: 20px; box-shadow: inset 0 0 50px rgba(0,0,0,0.8), 0 20px 50px rgba(0,0,0,0.5); position: relative;
-        }
-        .neon-road { position: absolute; background: rgba(212,163,115,0.4); box-shadow: 0 0 10px var(--gold); }
+        .map-3d-wrapper { perspective: 1200px; width: 100%; max-width: 600px; height: 250px; margin: 0 auto; position: relative; }
+        .map-3d { width: 100%; height: 100%; transform: rotateX(60deg) rotateZ(-30deg); transform-style: preserve-3d; background: linear-gradient(rgba(212, 163, 115, 0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(212, 163, 115, 0.15) 1px, transparent 1px); background-size: 30px 30px; border: 1px solid rgba(212,163,115,0.3); border-radius: 20px; box-shadow: inset 0 0 50px rgba(0,0,0,0.9), 0 20px 50px rgba(0,0,0,0.5); position: relative; }
+        body.light-mode .map-3d { box-shadow: inset 0 0 50px rgba(255,255,255,0.9), 0 20px 50px rgba(0,0,0,0.1); }
+        .neon-road { position: absolute; background: rgba(212,163,115,0.6); box-shadow: 0 0 15px var(--gold); }
         .r1 { top: 40%; left: 10%; width: 80%; height: 3px; transform: rotate(-5deg); }
         .r2 { top: 20%; left: 50%; width: 3px; height: 60%; transform: rotate(15deg); }
         .map-marker { position: absolute; top: 40%; left: 50%; width: 15px; height: 15px; background: #fff; border-radius: 50%; transform: translate(-50%, -50%) translateZ(20px); box-shadow: 0 0 20px #fff, 0 0 40px var(--gold); animation: markerPulse 1.5s infinite; }
-        .marker-shadow { position: absolute; top: 40%; left: 50%; width: 20px; height: 20px; background: rgba(0,0,0,0.8); border-radius: 50%; transform: translate(-50%, -50%); filter: blur(4px); }
-        @keyframes markerPulse { 0% { box-shadow: 0 0 10px #fff, 0 0 20px var(--gold); } 50% { box-shadow: 0 0 20px #fff, 0 0 60px var(--gold); } 100% { box-shadow: 0 0 10px #fff, 0 0 20px var(--gold); } }
+        @keyframes markerPulse { 0%, 100% { box-shadow: 0 0 10px #fff, 0 0 20px var(--gold); transform: translate(-50%, -50%) translateZ(20px) scale(1); } 50% { box-shadow: 0 0 20px #fff, 0 0 60px var(--gold); transform: translate(-50%, -50%) translateZ(20px) scale(1.2); } }
 
-        /* Main Content wrapper for footer reveal */
-        #main-content { position: relative; z-index: 2; background: var(--bg-deep); margin-bottom: 90vh; box-shadow: 0 40px 100px rgba(0,0,0,1); border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; transition: background 0.5s; }
-        footer { position: fixed; bottom: 0; left: 0; width: 100%; height: 90vh; z-index: 1; background: #030202; display: flex; flex-direction: column; justify-content: center; }
+        /* Main Curtain */
+        #main-content { position: relative; z-index: 2; background: var(--bg-deep); margin-bottom: 85vh; box-shadow: 0 40px 100px rgba(0,0,0,1); border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; transition: background 0.1s; }
+        footer { position: fixed; bottom: 0; left: 0; width: 100%; height: 85vh; z-index: 1; background: #030201; display: flex; flex-direction: column; justify-content: center; }
+        body.light-mode footer { background: #f0e9e1; }
 
         @media (max-width: 768px) {
             #main-content { margin-bottom: auto; border-radius: 0; }
             footer { position: relative; height: auto; padding: 60px 20px; }
-            .cursor-dot, .cursor-ring { display: none !important; }
-            body { cursor: auto; }
-            .timeline-container { display: flex; flex-direction: column; gap: 40px; padding-left: 20px; }
-            .timeline-line { width: 2px; height: 100%; left: 27px; top: 0; transform: none; }
-            .timeline-progress { width: 100%; height: 0%; }
-            .timeline-item { flex-direction: row; text-align: left; gap: 20px; }
-            .timeline-dot { margin-bottom: 0; }
-            .map-3d-wrapper { height: 200px; }
+            .map-3d-wrapper { height: 180px; }
         }
     </style>
 </head>
 <body class="hover-target-container">
 
-    <!-- SVG Filters for Liquid Drops -->
+    <!-- Theme Transition Overlay -->
+    <div class="theme-transition-overlay" id="theme-overlay"></div>
+
+    <!-- SVG Gooey Filter -->
     <svg style="display: none;">
         <defs>
             <filter id="goo">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
-                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="goo" />
+                <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 15 -6" result="goo" />
                 <feBlend in="SourceGraphic" in2="goo" />
             </filter>
         </defs>
@@ -163,59 +187,61 @@
     <div class="cursor-ring" id="cursor-ring"></div>
     <div class="cursor-click-ripple" id="cursor-ripple"></div>
 
-    <!-- AMBIENT BACKGROUND -->
-    <div class="ambient-bg" id="ambient-bg">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <!-- Coffee Beans injected via JS -->
-    </div>
-
-    <!-- LEFT COMMAND CENTER -->
-    <div class="command-center hover-target">
-        <!-- Minimal Logo -->
-        <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
-            <svg width="40" height="40" viewBox="0 0 100 100" fill="none" class="hover:rotate-12 transition-transform duration-500">
-                <circle cx="50" cy="50" r="48" stroke="var(--gold)" stroke-width="2"/>
-                <path d="M30 70 L50 30 L70 70" stroke="var(--gold)" stroke-width="4" stroke-linecap="round"/>
-                <line x1="40" y1="55" x2="60" y2="55" stroke="var(--gold)" stroke-width="4" stroke-linecap="round"/>
-            </svg>
-            <span class="text-sm font-bold tracking-[0.2em] leading-none hidden sm:block">AFTER HOURS</span>
-        </div>
-        
-        <!-- Glass Widget: Clock & Weather -->
-        <div class="glass-panel flex items-center gap-4">
-            <div class="analog-clock">
-                <div class="hand hour-hand" id="hour-hand"></div>
-                <div class="hand min-hand" id="min-hand"></div>
-                <div class="hand sec-hand" id="sec-hand"></div>
-                <div class="clock-center"></div>
+    <!-- LIQUID GLASS HEADER (Top Left & Top Right) -->
+    <div class="fixed top-0 left-0 w-full z-50 flex justify-between items-start px-6 py-6 liquid-glass-header pointer-events-none">
+        <!-- Left Command Center -->
+        <div class="flex items-center gap-6 pointer-events-auto hover-target" onclick="window.scrollTo(0,0)">
+            <div class="flex items-center gap-3">
+                <svg width="45" height="45" viewBox="0 0 100 100" fill="none" class="transition-transform duration-500 hover:rotate-12">
+                    <circle cx="50" cy="50" r="48" stroke="var(--gold)" stroke-width="2"/>
+                    <path d="M30 70 L50 30 L70 70" stroke="var(--gold)" stroke-width="4" stroke-linecap="round"/>
+                    <line x1="40" y1="55" x2="60" y2="55" stroke="var(--gold)" stroke-width="4" stroke-linecap="round"/>
+                </svg>
+                <div class="hidden sm:flex flex-col">
+                    <span class="text-xl font-bold tracking-[0.2em] leading-none">AFTER HOURS</span>
+                </div>
             </div>
-            <div class="flex flex-col">
-                <span class="text-2xl font-bold font-serif text-gold leading-none" id="digital-time">--:--</span>
-                <span class="text-xs opacity-80 flex items-center gap-1 mt-1"><i id="weather-icon" class="ph ph-moon-stars"></i> <span id="weather-text">22°C</span></span>
+            
+            <!-- Clock & Weather -->
+            <div class="hidden md:flex items-center gap-4 pl-6 border-l border-[var(--border-color)]">
+                <div class="analog-clock">
+                    <div class="hand hour-hand" id="hour-hand"></div>
+                    <div class="hand min-hand" id="min-hand"></div>
+                    <div class="hand sec-hand" id="sec-hand"></div>
+                    <div class="clock-center"></div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-2xl font-bold font-serif text-gold leading-none" id="digital-time">--:--</span>
+                    <span class="text-xs opacity-80 flex items-center gap-1 mt-1"><i id="weather-icon" class="ph ph-moon-stars"></i> <span id="weather-text">22°C</span></span>
+                </div>
             </div>
         </div>
+
+        <!-- Right Controls -->
+        <div class="flex items-center gap-4 pointer-events-auto">
+            <!-- Theme Toggle -->
+            <button onclick="toggleTheme(event)" class="hover-target w-12 h-12 rounded-full border border-[var(--border-color)] flex justify-center items-center text-xl hover:text-gold transition-colors bg-[var(--bg-deep)]" id="theme-btn">
+                <i class="ph ph-sun" id="theme-icon"></i>
+            </button>
+
+            <!-- Cart Button -->
+            <button onclick="toggleCart()" class="relative w-14 h-14 rounded-full border border-[var(--border-color)] flex justify-center items-center hover-target hover:bg-gold hover:text-black transition-colors bg-[var(--bg-deep)] group" id="cart-icon">
+                <i class="ph ph-shopping-bag text-2xl transition-transform group-hover:scale-110"></i>
+                <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-600 text-white text-[11px] font-bold w-6 h-6 flex justify-center items-center rounded-full scale-0 transition-transform duration-300">0</span>
+            </button>
+        </div>
     </div>
 
-    <!-- RIGHT HEADER CONTROLS -->
-    <div class="fixed top-6 right-6 md:right-12 z-50 flex items-center gap-4">
-        <button onclick="toggleTheme()" class="hover-target text-2xl hover:text-gold transition-colors glass p-3 rounded-full"><i class="ph ph-moon" id="theme-icon"></i></button>
-        <button onclick="toggleCart()" class="relative glass w-14 h-14 rounded-full flex justify-center items-center hover-target hover:bg-gold hover:text-black transition-colors group" id="cart-icon">
-            <i class="ph ph-shopping-bag text-2xl"></i>
-            <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-600 text-white text-[11px] font-bold w-6 h-6 flex justify-center items-center rounded-full scale-0 transition-transform duration-300">0</span>
-        </button>
-    </div>
-
-    <!-- CART SIDEBAR (BRIGHT) -->
+    <!-- BRIGHT CART SIDEBAR -->
     <div class="cart-overlay hover-target" onclick="toggleCart()" id="cart-overlay"></div>
-    <div id="cart-sidebar" class="pt-24 pb-8 px-6">
+    <div id="cart-sidebar" class="pt-32 pb-8 px-6">
         <div class="flex justify-between items-center mb-6 border-b border-black/10 pb-4">
             <h2 class="text-3xl font-serif font-bold text-black">Your Order</h2>
             <button onclick="toggleCart()" class="text-3xl text-black hover:text-red-500 hover-target"><i class="ph ph-x"></i></button>
         </div>
         
         <div id="cart-items" class="flex-1 overflow-y-auto space-y-3 pr-2">
-            <div class="text-center mt-10 text-base italic text-black/60">Your cart is empty. Add some magic.</div>
+            <div class="text-center mt-10 text-base italic text-black/50">Your cart is empty. Let's brew something.</div>
         </div>
         
         <div class="mt-6 border-t border-black/10 pt-6">
@@ -227,91 +253,102 @@
             <div class="flex justify-between text-2xl font-bold mb-6 border-t border-black/10 pt-4 text-black"><span>Total:</span> <span id="cart-total" class="text-[#b07d47]">Rs 0</span></div>
             
             <button onclick="checkout()" class="w-full bg-[#111] text-white py-4 rounded-xl font-bold tracking-widest uppercase hover-target hover:bg-[#d4a373] transition-colors flex justify-center items-center gap-2 shadow-lg">
-                <i class="ph ph-whatsapp-logo text-2xl"></i> Checkout
+                <i class="ph ph-whatsapp-logo text-2xl"></i> Checkout via WhatsApp
             </button>
         </div>
     </div>
 
     <div id="main-content">
-        <!-- HERO SECTION -->
+        <!-- HERO SECTION (Brown Coffee Vibe) -->
         <section class="h-screen flex flex-col items-center justify-center px-6 relative">
-            <div class="text-center z-10 w-full">
-                <h1 class="text-7xl md:text-[13rem] font-bold tracking-tighter leading-[0.85] mb-4">
+            <div class="hero-brown-bg"></div>
+            <div class="hero-gradient"></div>
+
+            <div class="text-center z-10 w-full relative pt-20">
+                <h1 class="text-7xl md:text-[13rem] font-bold tracking-tighter leading-[0.85] mb-4 text-white">
                     STAY<br><span class="font-serif italic font-normal text-gold">Awake</span>
                 </h1>
-                <p class="max-w-md mx-auto text-base md:text-lg font-light opacity-80">
-                    Bhairahawa's premier roastery. Exquisite beans, delivered hot.
+                <p class="max-w-lg mx-auto text-base md:text-lg font-light opacity-90 text-white">
+                    Bhairahawa's premier roastery. Deep flavors, aesthetic vibes, delivered hot.
                 </p>
             </div>
         </section>
 
-        <!-- TIMELINE SECTION (Open Late, Always) -->
-        <section class="py-20 px-6 bg-black/20 border-y border-[var(--border-color)]">
+        <!-- ENHANCED TIMELINE SECTION -->
+        <section class="py-24 px-6 relative z-10">
             <div class="text-center mb-16">
                 <h2 class="text-4xl md:text-5xl font-serif italic text-gold">Open Late, Always</h2>
             </div>
-            <div class="timeline-container flex justify-between">
-                <div class="timeline-line"><div class="timeline-progress" id="timeline-progress"></div></div>
+            <div class="timeline-wrapper" id="timeline-container">
+                <div class="timeline-track"><div class="timeline-fill" id="timeline-fill"></div></div>
                 
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
+                <div class="timeline-node">
+                    <div class="node-dot" data-stop="0"></div>
                     <h4 class="font-bold text-xl font-serif">8 AM</h4>
                     <p class="text-sm opacity-70">Morning Brew</p>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
+                <div class="timeline-node">
+                    <div class="node-dot" data-stop="33"></div>
                     <h4 class="font-bold text-xl font-serif">12 PM</h4>
                     <p class="text-sm opacity-70">Lunch Rush</p>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
+                <div class="timeline-node">
+                    <div class="node-dot" data-stop="66"></div>
                     <h4 class="font-bold text-xl font-serif">6 PM</h4>
                     <p class="text-sm opacity-70">Evening Calm</p>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <h4 class="font-bold text-xl font-serif">11 PM</h4>
+                <div class="timeline-node">
+                    <div class="node-dot" data-stop="100"></div>
+                    <h4 class="font-bold text-xl font-serif text-gold">11 PM</h4>
                     <p class="text-sm opacity-70 text-gold font-bold">Last Call</p>
                 </div>
             </div>
         </section>
 
-        <!-- MENU SECTION -->
-        <section id="menu" class="py-32 px-6 md:px-20 max-w-[1300px] mx-auto relative z-10">
+        <!-- MENU SECTION WITH OFFERS -->
+        <section id="menu" class="py-24 px-6 md:px-20 max-w-[1300px] mx-auto relative z-10">
             <div class="text-center mb-16">
                 <h2 class="text-5xl md:text-6xl font-bold tracking-tighter mb-2">The <span class="font-serif italic text-gold font-normal">Selection</span></h2>
-                <p class="opacity-70">Hover to explore. Click to add to your order.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 
-                <!-- Midnight Americano -->
-                <div class="menu-card group scroll-anim">
+                <!-- Item 1 (Offer) -->
+                <div class="menu-card group">
+                    <div class="offer-tag">15% OFF</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Americano">
-                        <button onclick="addToCart('Midnight Americano', 180, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
+                        <button onclick="addToCart('Midnight Americano', 150, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
                     </div>
                     <div class="p-6">
-                        <div class="flex justify-between items-start mb-2"><h4 class="text-2xl font-bold">Midnight Americano</h4><span class="font-serif text-xl font-bold text-gold">Rs 180</span></div>
-                        <p class="text-sm opacity-70 font-light">Double-shot espresso pulled from 100% Arabica. Pure energy.</p>
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="text-2xl font-bold">Midnight Americano</h4>
+                            <div class="text-right">
+                                <span class="block text-xs line-through opacity-50">Rs 180</span>
+                                <span class="font-serif text-xl font-bold text-gold">Rs 150</span>
+                            </div>
+                        </div>
+                        <p class="text-sm opacity-70 font-light">Double-shot espresso pulled from 100% Arabica.</p>
                     </div>
                 </div>
 
-                <!-- Velvet Latte -->
-                <div class="menu-card group scroll-anim">
+                <!-- Item 2 -->
+                <div class="menu-card group">
+                    <div class="offer-tag happy-tag">Chef's Pick</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1572286258217-40142c1c6a70?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Latte">
                         <button onclick="addToCart('Velvet Latte', 240, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
                     </div>
                     <div class="p-6">
                         <div class="flex justify-between items-start mb-2"><h4 class="text-2xl font-bold">Velvet Latte</h4><span class="font-serif text-xl font-bold text-gold">Rs 240</span></div>
-                        <p class="text-sm opacity-70 font-light">Silk micro-foam over a rich espresso base. Smooth & sweet.</p>
+                        <p class="text-sm opacity-70 font-light">Silk micro-foam over a rich espresso base.</p>
                     </div>
                 </div>
 
-                <!-- Caramel Macchiato -->
-                <div class="menu-card group scroll-anim">
+                <!-- Item 3 -->
+                <div class="menu-card group">
                     <div class="menu-img-wrap">
+                        <!-- High quality Caramel Macchiato -->
                         <img src="https://images.unsplash.com/photo-1485808191679-5f86510681a2?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Macchiato">
                         <button onclick="addToCart('Caramel Macchiato', 280, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
                     </div>
@@ -321,8 +358,8 @@
                     </div>
                 </div>
 
-                <!-- Noir Cold Brew -->
-                <div class="menu-card group scroll-anim">
+                <!-- Item 4 -->
+                <div class="menu-card group">
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Cold Brew">
                         <button onclick="addToCart('Noir Cold Brew', 320, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
@@ -333,42 +370,63 @@
                     </div>
                 </div>
 
-                <!-- Moonlit Waffle -->
-                <div class="menu-card group scroll-anim">
+                <!-- Item 5 (Offer) -->
+                <div class="menu-card group">
+                    <div class="offer-tag" style="background:#8b5e34">Combo</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Waffle">
-                        <button onclick="addToCart('Moonlit Waffle', 350, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
+                        <button onclick="addToCart('Moonlit Waffle + Coffee', 450, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
                     </div>
                     <div class="p-6">
-                        <div class="flex justify-between items-start mb-2"><h4 class="text-2xl font-bold">Moonlit Waffle</h4><span class="font-serif text-xl font-bold text-gold">Rs 350</span></div>
-                        <p class="text-sm opacity-70 font-light">Light waffles topped with wild honey and seasonal berries.</p>
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="text-2xl font-bold">Waffle Combo</h4>
+                            <div class="text-right">
+                                <span class="block text-xs line-through opacity-50">Rs 530</span>
+                                <span class="font-serif text-xl font-bold text-gold">Rs 450</span>
+                            </div>
+                        </div>
+                        <p class="text-sm opacity-70 font-light">Waffles with honey & berries, plus any classic coffee.</p>
                     </div>
                 </div>
+
             </div>
         </section>
 
-        <!-- Liquid Filter Container for animations -->
-        <div class="gooey-filter" id="liquid-container"></div>
+        <!-- PRE-FOOTER (Animated Coffee Cups & Poetry) -->
+        <section class="pre-footer relative z-10">
+            <!-- Floating SVGs injected by JS -->
+            <div class="floating-cup-container" id="cup-container"></div>
+            
+            <div class="relative z-10 max-w-3xl mx-auto px-6">
+                <i class="ph ph-quotes text-4xl text-gold mb-6 inline-block"></i>
+                <h3 class="text-3xl md:text-5xl font-serif font-light leading-snug mb-6">
+                    For the dreamers, the thinkers, the night owls. Every cup is a companion to your midnight journey.
+                </h3>
+                <p class="text-gold tracking-widest uppercase text-sm font-bold">— After Hours Collective</p>
+            </div>
+        </section>
 
+        <!-- Liquid Filter Container for Add-to-Cart -->
+        <div class="gooey-filter" id="liquid-container"></div>
     </div>
 
-    <!-- FOOTER (Curtain + 3D Map + Socials) -->
+    <!-- FOOTER (3D Neon Map + Contact) -->
     <footer class="px-6 md:px-20 pt-20 pb-10 text-center relative overflow-hidden flex flex-col items-center">
         
         <div class="grid grid-cols-1 md:grid-cols-2 w-full max-w-[1200px] gap-20 items-center mb-16 relative z-10">
             
             <!-- Contact & Socials -->
             <div class="flex flex-col items-center md:items-start text-left">
-                <h2 class="text-6xl md:text-8xl font-bold tracking-tighter mb-4 text-white">After Hours</h2>
-                <a href="tel:+9779705965333" class="font-serif text-4xl md:text-6xl font-bold text-gold mb-10 hover-target transition-transform hover:translate-x-2">
+                <h2 class="text-6xl md:text-8xl font-bold tracking-tighter mb-4 font-serif">After Hours</h2>
+                <a href="tel:+9779705965333" class="font-serif text-4xl md:text-6xl font-bold text-gold mb-10 hover-target transition-transform hover:translate-x-2 inline-block">
                     970 596 5333
                 </a>
                 
-                <div class="flex gap-4">
-                    <a href="https://wa.me/9779705965333" target="_blank" class="hover-target flex items-center gap-2 px-6 py-3 border border-[#25D366] text-[#25D366] rounded-full text-xs font-bold tracking-widest uppercase hover:bg-[#25D366] hover:text-black transition-all">
+                <div class="flex gap-4 flex-wrap justify-center md:justify-start">
+                    <a href="https://wa.me/9779705965333" target="_blank" class="hover-target flex items-center gap-2 px-6 py-3 border border-[#25D366] text-[#25D366] rounded-full text-xs font-bold tracking-widest uppercase hover:bg-[#25D366] hover:text-white transition-all shadow-lg">
                         <i class="ph ph-whatsapp-logo text-xl"></i> WhatsApp
                     </a>
-                    <a href="https://www.instagram.com/afterhourscafe.bhw/" target="_blank" class="hover-target flex items-center gap-2 px-6 py-3 border border-[#E1306C] text-[#E1306C] rounded-full text-xs font-bold tracking-widest uppercase hover:bg-[#E1306C] hover:text-white transition-all">
+                    <a href="https://www.instagram.com/afterhourscafe.bhw/" target="_blank" class="hover-target flex items-center gap-2 px-6 py-3 border border-[#E1306C] text-[#E1306C] rounded-full text-xs font-bold tracking-widest uppercase hover:bg-[#E1306C] hover:text-white transition-all shadow-lg">
                         <i class="ph ph-instagram-logo text-xl"></i> Instagram
                     </a>
                 </div>
@@ -378,14 +436,14 @@
             <div class="flex flex-col items-center w-full">
                 <span class="text-gold tracking-[0.4em] text-[10px] font-bold uppercase block mb-6">Locate Us</span>
                 <div class="map-3d-wrapper hover-target">
-                    <div class="marker-shadow"></div>
                     <div class="map-3d">
                         <div class="neon-road r1"></div>
                         <div class="neon-road r2"></div>
                     </div>
                     <div class="map-marker"></div>
                 </div>
-                <p class="text-xl font-light mt-8 text-white">Bhairahawa, Nepal</p>
+                <p class="text-xl font-light mt-8">Bhairahawa, Nepal</p>
+                <p class="text-xs text-gold font-bold tracking-widest uppercase mt-2" id="neon-text">Delivering to: Buddha Chowk</p>
             </div>
         </div>
 
@@ -400,66 +458,71 @@
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
-        // 2. Sensory Cursor & Click Ripple
-        const cursorDot = document.getElementById('cursor-dot');
-        const cursorRing = document.getElementById('cursor-ring');
-        const cursorRipple = document.getElementById('cursor-ripple');
-        let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+        // 2. Sensory Cursor (Only on desktop)
+        const isTouch = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
+        if(!isTouch) {
+            const cursorDot = document.getElementById('cursor-dot');
+            const cursorRing = document.getElementById('cursor-ring');
+            const cursorRipple = document.getElementById('cursor-ripple');
+            let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
 
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX; mouseY = e.clientY;
-            gsap.to(cursorDot, { x: mouseX, y: mouseY, duration: 0.1 });
-        });
-        gsap.ticker.add(() => {
-            ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15;
-            gsap.set(cursorRing, { x: ringX, y: ringY });
-        });
-        document.querySelectorAll('.hover-target, button, a, .menu-card').forEach(el => {
-            el.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
-            el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
-        });
-        document.addEventListener('mousedown', () => {
-            gsap.fromTo(cursorRipple, { x: mouseX, y: mouseY, scale: 0, opacity: 1 }, { scale: 4, opacity: 0, duration: 0.6, ease: "power2.out" });
-        });
-
-        // 3. Floating Coffee Beans Generation
-        const bgContainer = document.getElementById('ambient-bg');
-        for(let i=0; i<12; i++) {
-            const bean = document.createElement('div');
-            bean.classList.add('floating-bean');
-            bean.style.left = Math.random() * 100 + 'vw';
-            bean.style.top = Math.random() * 100 + 'vh';
-            bean.style.transform = `rotate(${Math.random() * 360}deg) scale(${Math.random() * 0.5 + 0.5})`;
-            bgContainer.appendChild(bean);
-            
-            gsap.to(bean, {
-                y: `-=${Math.random() * 200 + 100}`,
-                rotation: `+=${Math.random() * 180 - 90}`,
-                duration: Math.random() * 20 + 15,
-                repeat: -1,
-                yoyo: true,
-                ease: "sine.inOut"
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX; mouseY = e.clientY;
+                gsap.to(cursorDot, { x: mouseX, y: mouseY, duration: 0.1 });
+            });
+            gsap.ticker.add(() => {
+                ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15;
+                gsap.set(cursorRing, { x: ringX, y: ringY });
+            });
+            document.querySelectorAll('.hover-target, button, a, .menu-card').forEach(el => {
+                el.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
+                el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
+            });
+            document.addEventListener('mousedown', () => {
+                gsap.fromTo(cursorRipple, { x: mouseX, y: mouseY, scale: 0, opacity: 1 }, { scale: 4, opacity: 0, duration: 0.6, ease: "power2.out" });
             });
         }
 
-        // 4. Auto Theme & Manual Toggle
+        // 3. Immersive Light/Dark Theme Toggle (Clip Path Animation)
         function initTheme() {
             const h = new Date().getHours();
             if (h >= 6 && h < 18) {
                 document.body.classList.add('light-mode');
-                document.getElementById('theme-icon').classList.replace('ph-moon', 'ph-sun');
+                document.getElementById('theme-icon').classList.replace('ph-sun', 'ph-moon');
             }
         }
         initTheme();
 
-        window.toggleTheme = function() {
-            document.body.classList.toggle('light-mode');
+        window.toggleTheme = function(e) {
+            const isLight = document.body.classList.contains('light-mode');
+            const overlay = document.getElementById('theme-overlay');
             const icon = document.getElementById('theme-icon');
-            if(document.body.classList.contains('light-mode')) icon.classList.replace('ph-moon', 'ph-sun');
-            else icon.classList.replace('ph-sun', 'ph-moon');
+            
+            // Get click coordinates for circle origin
+            const x = e.clientX; const y = e.clientY;
+            
+            // Calculate max radius needed
+            const radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+            
+            // Set overlay color to the NEXT theme's background
+            overlay.style.backgroundColor = isLight ? '#080504' : '#f5f0eb';
+            
+            gsap.fromTo(overlay, 
+                { left: x, top: y, width: 0, height: 0, scale: 0, marginLeft: 0, marginTop: 0 },
+                { 
+                    width: radius * 2, height: radius * 2, 
+                    marginLeft: -radius, marginTop: -radius,
+                    scale: 1, duration: 0.8, ease: "power3.inOut",
+                    onComplete: () => {
+                        document.body.classList.toggle('light-mode');
+                        icon.classList.replace(isLight ? 'ph-moon' : 'ph-sun', isLight ? 'ph-sun' : 'ph-moon');
+                        gsap.to(overlay, { opacity: 0, duration: 0.4, onComplete: () => gsap.set(overlay, { scale: 0, opacity: 1 }) });
+                    }
+                }
+            );
         };
 
-        // 5. Analog Clock & Weather Widget
+        // 4. Analog Clock & Weather Widget
         function updateWidgets() {
             const now = new Date();
             const h = now.getHours(); const m = now.getMinutes(); const s = now.getSeconds();
@@ -472,9 +535,9 @@
             document.getElementById('digital-time').innerText = `${h % 12 || 12}:${m.toString().padStart(2,'0')} ${ampm}`;
 
             let icon, temp;
-            if (h >= 5 && h < 17) { icon = "ph-sun"; temp = "28°C Warm"; }
-            else if (h >= 17 && h < 20) { icon = "ph-cloud-sun"; temp = "24°C Mild"; }
-            else { icon = "ph-moon-stars"; temp = "18°C Cool"; }
+            if (h >= 5 && h < 17) { icon = "ph-sun"; temp = "28°C"; }
+            else if (h >= 17 && h < 20) { icon = "ph-cloud-sun"; temp = "24°C"; }
+            else { icon = "ph-moon-stars"; temp = "18°C"; }
             
             document.getElementById('weather-icon').className = `ph ${icon}`;
             document.getElementById('weather-text').innerText = temp;
@@ -482,19 +545,59 @@
         setInterval(updateWidgets, 1000);
         updateWidgets();
 
-        // 6. Timeline Scroll Animation
-        gsap.to('#timeline-progress', {
-            height: '100%', width: '100%', // handles both desktop(width) and mobile(height) based on CSS layout
+        // 5. Enhanced Timeline Scroll Logic
+        const track = document.querySelector('.timeline-track');
+        const fill = document.getElementById('timeline-fill');
+        const dots = document.querySelectorAll('.node-dot');
+        const isMobile = window.innerWidth <= 768;
+
+        gsap.to(fill, {
+            [isMobile ? 'height' : 'width']: '100%',
             ease: 'none',
             scrollTrigger: {
-                trigger: '.timeline-container',
+                trigger: '#timeline-container',
                 start: 'top center',
                 end: 'bottom center',
-                scrub: true
+                scrub: true,
+                onUpdate: (self) => {
+                    const progress = self.progress * 100;
+                    dots.forEach(dot => {
+                        const stop = parseInt(dot.getAttribute('data-stop'));
+                        if(progress >= stop) dot.classList.add('active');
+                        else dot.classList.remove('active');
+                    });
+                }
             }
         });
 
-        // 7. Advanced From-Behind Liquid Fly-to-Cart
+        // 6. Pre-Footer Floating Coffee Cups
+        const cupContainer = document.getElementById('cup-container');
+        const cupSVG = `<svg class="cup-svg" viewBox="0 0 24 24"><path d="M20,3H4v10c0,2.21,1.79,4,4,4h6c2.21,0,4-1.79,4-4v-3h2c1.11,0,2-0.89,2-2V5C22,3.89,21.11,3,20,3z M20,8h-2V5h2V8z M4,19h16v2H4V19z M12,4c0.55,0,1,0.45,1,1s-0.45,1-1,1s-1-0.45-1-1S11.45,4,12,4z M9,4c0.55,0,1,0.45,1,1s-0.45,1-1,1s-1-0.45-1-1S8.45,4,9,4z M15,4c0.55,0,1,0.45,1,1s-0.45,1-1,1s-1-0.45-1-1S14.45,4,15,4z"/></svg>`;
+        for(let i=0; i<8; i++) {
+            const div = document.createElement('div');
+            div.innerHTML = cupSVG;
+            const svg = div.firstChild;
+            svg.style.left = Math.random() * 100 + 'vw';
+            svg.style.top = Math.random() * 100 + 'vh';
+            cupContainer.appendChild(svg);
+            
+            gsap.to(svg, {
+                y: `-=${Math.random() * 200 + 100}`,
+                rotation: Math.random() * 360,
+                duration: Math.random() * 15 + 10,
+                repeat: -1, yoyo: true, ease: "sine.inOut"
+            });
+        }
+
+        // 7. Neon Map Locations
+        const locations = ["Buddha Chowk", "Milan Chowk", "Bank Road", "Devkota Chowk", "Airport"];
+        let locIndex = 0;
+        setInterval(() => {
+            locIndex = (locIndex + 1) % locations.length;
+            document.getElementById('neon-text').innerText = "Delivering to: " + locations[locIndex];
+        }, 3000);
+
+        // 8. Advanced 3D Liquid Fly-to-Cart (From Behind)
         let cart = [];
         const liquidContainer = document.getElementById('liquid-container');
         
@@ -507,37 +610,32 @@
         window.addToCart = function(name, price, btnElement) {
             cart.push({ id: Date.now(), name, price });
             
-            // Badge pop
             const badge = document.getElementById('cart-badge');
             badge.innerText = cart.length;
             badge.classList.remove('scale-0');
             gsap.fromTo(badge, { scale: 1.5 }, { scale: 1, duration: 0.4, ease: "back.out" });
 
-            // The "From Behind" Image Lift Animation
+            // Image Lift Animation
             const card = btnElement.closest('.menu-card');
             const img = card.querySelector('.menu-img');
-            gsap.to(img, { y: -15, scale: 1.15, duration: 0.2, yoyo: true, repeat: 1, ease: "power1.inOut" });
+            gsap.to(img, { y: -20, scale: 1.1, duration: 0.2, yoyo: true, repeat: 1, ease: "power1.inOut" });
 
-            // Liquid Drops Bursting
+            // 10 3D Liquid Drops Bursting
             const imgRect = img.getBoundingClientRect();
             const iconRect = document.getElementById('cart-icon').getBoundingClientRect();
             
-            const numDrops = 4;
-            for(let i=0; i<numDrops; i++) {
+            for(let i=0; i<10; i++) {
                 const drop = document.createElement('div');
-                drop.classList.add('liquid-drop');
-                const size = Math.random() * 15 + 10; // 10px to 25px
-                drop.style.width = size + 'px';
-                drop.style.height = size + 'px';
+                drop.classList.add('liquid-drop-3d');
+                const size = Math.random() * 15 + 10;
+                drop.style.width = size + 'px'; drop.style.height = size + 'px';
                 
-                // Start center of image
                 drop.style.left = (imgRect.left + imgRect.width/2) + 'px';
                 drop.style.top = (imgRect.top + imgRect.height/2) + 'px';
                 liquidContainer.appendChild(drop);
 
-                // Burst outward randomly, then arc to cart
-                const randomX = (Math.random() - 0.5) * 150;
-                const randomY = (Math.random() - 0.5) * 100 - 50;
+                const randomX = (Math.random() - 0.5) * 200;
+                const randomY = (Math.random() - 0.5) * 150 - 50;
 
                 const tl = gsap.timeline({
                     onComplete: () => {
@@ -546,11 +644,11 @@
                     }
                 });
 
-                tl.to(drop, { x: randomX, y: randomY, duration: 0.3, ease: "power2.out" })
+                tl.to(drop, { x: randomX, y: randomY, scale: Math.random() * 0.5 + 0.8, duration: 0.3, ease: "power2.out" })
                   .to(drop, {
                       left: iconRect.left + 20, top: iconRect.top + 20,
-                      x: 0, y: 0, scale: 0.5,
-                      duration: 0.6 + Math.random()*0.3,
+                      x: 0, y: 0, scale: 0.2,
+                      duration: 0.6 + Math.random()*0.4,
                       ease: "back.in(1.2)"
                   });
             }
@@ -567,7 +665,7 @@
         function renderCart() {
             const container = document.getElementById('cart-items');
             if(cart.length === 0) {
-                container.innerHTML = `<div class="text-center mt-10 text-base italic text-black/60">Your cart is empty. Add some magic.</div>`;
+                container.innerHTML = `<div class="text-center mt-10 text-base italic opacity-50">Your cart is empty. Add some magic.</div>`;
                 document.getElementById('cart-subtotal').innerText = 'Rs 0';
                 document.getElementById('cart-total').innerText = 'Rs 0';
                 return;
@@ -581,11 +679,11 @@
 
             for (const [name, data] of Object.entries(counts)) {
                 html += `
-                    <div class="flex justify-between items-center bg-black/5 p-4 rounded-xl border border-black/10 text-black">
+                    <div class="flex justify-between items-center bg-black/5 p-4 rounded-xl border border-black/10">
                         <div><h5 class="font-bold text-base">${name}</h5><p class="text-sm opacity-70">Rs ${data.price} x ${data.count}</p></div>
                         <div class="flex items-center gap-4">
-                            <span class="font-bold text-lg text-black">Rs ${data.price * data.count}</span>
-                            <button onclick="removeFromCart(${data.ids[0]})" class="text-red-500 hover:bg-red-100 p-2 rounded-full transition-colors hover-target"><i class="ph ph-trash text-lg"></i></button>
+                            <span class="font-bold text-lg">Rs ${data.price * data.count}</span>
+                            <button onclick="removeFromCart(${data.ids[0]})" class="text-red-500 hover:bg-red-100 p-2 rounded-full transition-colors"><i class="ph ph-trash text-lg"></i></button>
                         </div>
                     </div>`;
             }
@@ -603,11 +701,6 @@
             msg += `\nDelivery: Free\nTotal: Rs ${total}\n\nPlease confirm!`;
             window.open(`https://wa.me/9779705965333?text=${encodeURIComponent(msg)}`, '_blank');
         };
-
-        // Scroll Animations for Menu
-        gsap.utils.toArray('.scroll-anim').forEach(el => {
-            gsap.from(el, { y: 60, opacity: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 85%" }});
-        });
 
     </script>
 </body>
