@@ -28,38 +28,67 @@
         
         /* ========= DUAL PHYSICS & THEME VARIABLES ========= */
         :root {
-            /* NIGHT MODE (Deep, Slow, Smooth) */
+            /* NIGHT MODE */
             --bg-rgb: 8, 5, 4; 
             --bg-deep: #0a0604;
             --bg-card: rgba(20, 12, 8, 0.5);
+            --bg-glass: rgba(10, 6, 4, 0.6);
             --text-main: #f4eade;
             --text-muted: #8c7e73;
             --border-color: rgba(255,255,255,0.05);
             --gold: #c69b6a;
             --accent-pour: #1f110a; 
-            --cart-bg: #140c08; --cart-text: #f4eade; --cart-border: rgba(255,255,255,0.1);
-            --blob-color: var(--gold);
+            
+            /* Physics Engine */
+            --anim-speed: 0.8s;
+            --anim-ease: cubic-bezier(0.4, 0, 0.2, 1); 
+            --card-lift: -8px;
+            --card-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            
+            /* Cart visibility fixed to ALWAYS BE LIGHT */
+            --cart-bg: #ffffff; 
+            --cart-text: #1a120e; 
+            --cart-border: rgba(0,0,0,0.1);
         }
 
         body.light-mode {
-            /* DAY MODE (Bright, Airy, High-Contrast) */
-            --bg-rgb: 250, 246, 240;
-            --bg-deep: #faf6f0;
-            --bg-card: rgba(255, 255, 255, 0.85);
+            /* DAY MODE */
+            --bg-rgb: 242, 233, 223;
+            --bg-deep: #f2e9df;
+            --bg-card: rgba(255, 255, 255, 0.8);
+            --bg-glass: rgba(255, 255, 255, 0.6);
             --text-main: #2b1c11;
             --text-muted: #736154;
             --border-color: rgba(0,0,0,0.08);
             --gold: #b0703c;
-            --accent-pour: #ffffff; 
-            --cart-bg: #ffffff; --cart-text: #1a120e; --cart-border: rgba(0,0,0,0.1);
-            --blob-color: #ffecd2; /* Sun flare effect */
+            --accent-pour: #fdfaf6; 
+            
+            /* Physics Engine */
+            --anim-speed: 0.4s;
+            --anim-ease: cubic-bezier(0.34, 1.56, 0.64, 1); 
+            --card-lift: -15px;
+            --card-shadow: 0 25px 40px rgba(176, 112, 60, 0.15);
+            
+            /* Cart visibility */
+            --cart-bg: #ffffff; 
+            --cart-text: #1a120e; 
+            --cart-border: rgba(0,0,0,0.1);
         }
 
         html.lenis { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto; }
-        body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Outfit', sans-serif; overflow-x: hidden; cursor: none; transition: background-color 0.8s ease, color 0.8s ease; }
+        body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Outfit', sans-serif; overflow-x: hidden; cursor: none; transition: background-color 0.1s, color 0.1s; }
         ::selection { background: var(--gold); color: #fff; }
         .font-serif { font-family: 'Playfair Display', serif; }
+
+        /* ========= OLD-SCHOOL FROSTED GLASS ========= */
+        .old-frost {
+            background: var(--bg-card);
+            backdrop-filter: blur(30px) saturate(140%);
+            -webkit-backdrop-filter: blur(30px) saturate(140%);
+            border: 1px solid var(--border-color);
+            transition: all var(--anim-speed) var(--anim-ease);
+        }
 
         /* ========= THE VIBE SELECTOR (PRELOADER) ========= */
         #vibe-selector { position: fixed; inset: 0; background: #0a0604; z-index: 100000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1s; }
@@ -75,24 +104,71 @@
         .pour-container { position: fixed; inset: 0; z-index: 99999999; pointer-events: none; display: flex; filter: url('#goo'); }
         .pour-drip { flex: 1; height: 0vh; background: var(--accent-pour); border-radius: 0 0 100px 100px; transform-origin: top; margin: 0 -5px; }
 
-        /* ========= OLD-SCHOOL FROSTED GLASS ========= */
-        .old-frost { background: var(--bg-card); backdrop-filter: blur(30px) saturate(140%); -webkit-backdrop-filter: blur(30px) saturate(140%); border: 1px solid var(--border-color); transition: all 0.8s ease; }
-
         /* ========= SENSORY CURSOR ========= */
         @media (pointer: fine) {
             .cursor-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999999; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s; }
-            .cursor-ring { width: 34px; height: 34px; border: 1px solid var(--gold); border-radius: 50%; opacity: 0.5; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999998; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s; }
+            .cursor-ring { width: 34px; height: 34px; border: 1px solid var(--gold); border-radius: 50%; opacity: 0.5; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999998; transform: translate(-50%, -50%); transition: width var(--anim-speed) var(--anim-ease), height var(--anim-speed) var(--anim-ease), backdrop-filter 0.2s; }
             .cursor-click-ripple { position: fixed; width: 20px; height: 20px; border: 2px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999997; transform: translate(-50%, -50%) scale(0); opacity: 0; }
             .hover-active .cursor-dot { width: 0; height: 0; }
             .hover-active .cursor-ring { width: 60px; height: 60px; opacity: 1; background: rgba(212, 163, 115, 0.1); backdrop-filter: blur(4px); border-width: 2px; }
+            
+            /* Fix for volume slider blur issue */
+            .hover-no-blur .cursor-ring { backdrop-filter: none !important; background: transparent !important; border-color: var(--gold) !important; width: 30px !important; height: 30px !important; }
         }
 
-        /* ========= AMBIENT BLOBS ========= */
-        .ambient-bg { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
-        .blob { position: absolute; filter: blur(100px); border-radius: 50%; opacity: 0.15; animation: float 25s infinite alternate ease-in-out; background: var(--blob-color); transition: background 1s ease; }
-        .blob-1 { width: 40vw; height: 40vw; top: -10%; left: -10%; }
-        .blob-2 { width: 30vw; height: 30vw; bottom: 10%; right: -5%; animation-delay: -5s; }
-        @keyframes float { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(10vw, 10vh) scale(1.2); } }
+        /* ========= ANALOG CLOCK ========= */
+        .analog-clock { width: 45px; height: 45px; border: 2px solid var(--gold); border-radius: 50%; position: relative; background: transparent; }
+        .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: var(--text-main); border-radius: 10px; }
+        .hour-hand { width: 3px; height: 12px; margin-left: -1.5px; }
+        .min-hand { width: 2px; height: 16px; margin-left: -1px; }
+        .sec-hand { width: 1px; height: 18px; background: var(--gold); margin-left: -0.5px; }
+        .clock-center { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+        /* ========= MENU CARDS (3D Magnetic & Aroma) ========= */
+        .menu-card { position: relative; overflow: hidden; border-radius: 24px; z-index: 2; transition: transform var(--anim-speed) var(--anim-ease), box-shadow var(--anim-speed) var(--anim-ease), border-color 0.3s; transform-style: preserve-3d; }
+        .menu-card:hover { transform: translateY(var(--card-lift)); border-color: var(--gold); z-index: 10; box-shadow: var(--card-shadow); }
+        .menu-img-wrap { height: 260px; overflow: hidden; position: relative; border-radius: 24px 24px 0 0; }
+        .menu-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease, filter 0.5s ease; opacity: 0.9; }
+        .menu-card:hover .menu-img { transform: scale(1.1); filter: brightness(1.15); opacity: 1; }
+        
+        /* The Aroma Steam Gimmick */
+        .aroma-steam { position: absolute; bottom: 10%; left: 50%; transform: translateX(-50%); width: 60px; height: 80px; opacity: 0; pointer-events: none; transition: 0.5s; z-index: 20; stroke: #fff; stroke-width: 3; }
+        .menu-card:hover .aroma-steam { opacity: 0.7; animation: riseUp 2s infinite ease-in; }
+        @keyframes riseUp { 0% { transform: translate(-50%, 0) scale(0.8); opacity: 0; filter: blur(1px); } 50% { opacity: 0.7; } 100% { transform: translate(-50%, -60px) scale(1.3); opacity: 0; filter: blur(5px); } }
+        
+        /* Unique Offers */
+        .offer-tag { position: absolute; top: 15px; right: 15px; font-size: 0.7rem; font-weight: 800; padding: 6px 14px; border-radius: 30px; letter-spacing: 1px; z-index: 10; backdrop-filter: blur(10px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .tag-red { background: rgba(230, 57, 70, 0.9); color: #fff; }
+        .tag-gold { background: rgba(212, 163, 115, 0.9); color: #000; }
+        .tag-dark { background: rgba(30, 30, 30, 0.9); color: #fff; border: 1px solid var(--gold); }
+        .tag-green { background: rgba(85, 107, 47, 0.9); color: #fff; }
+
+        .add-btn { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%) translateZ(30px); background: var(--text-main); color: var(--bg-deep); padding: 14px 28px; border-radius: 40px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; box-shadow: var(--card-shadow); transition: 0.3s; opacity: 0; width: 85%; justify-content: center; z-index: 30; }
+        .menu-card:hover .add-btn { opacity: 1; background: var(--gold); color: #fff; }
+        @media (max-width: 768px) { .add-btn { opacity: 1; bottom: 15px; background: var(--text-main); color: var(--bg-deep); transform: translateX(-50%); } }
+
+        /* ========= 3D LIQUID DROPS (CART ANIMATION) ========= */
+        .gooey-filter { filter: url('#goo'); position: fixed; inset: 0; z-index: 999999; pointer-events: none; }
+        .liquid-drop-3d { position: absolute; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #ffeedb, var(--gold) 60%, #8b5e34); box-shadow: 0 10px 20px rgba(0,0,0,0.5), inset -2px -2px 6px rgba(0,0,0,0.4); transform-origin: center; z-index: 999999; }
+
+        /* ========= ALWAYS BRIGHT CART SIDEBAR ========= */
+        #cart-sidebar { position: fixed; top: 0; right: -100%; width: 100%; max-width: 420px; height: 100vh; z-index: 10000; transition: 0.6s var(--anim-ease); background: var(--cart-bg); color: var(--cart-text); border-left: 1px solid var(--cart-border); display: flex; flex-direction: column; box-shadow: -20px 0 60px rgba(0,0,0,0.5); backdrop-filter: blur(30px); }
+        #cart-sidebar.open { right: 0; }
+        .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 9999; opacity: 0; pointer-events: none; transition: 0.4s; }
+        .cart-overlay.open { opacity: 1; pointer-events: all; }
+
+        /* ========= EXTRA THINGO: HIMALAYAN ORIGINS ========= */
+        .origin-section { position: relative; height: 60vh; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-top: 50px; }
+        .origin-bg { position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2000&auto=format&fit=crop') center/cover; opacity: 0.4; z-index: 0; filter: grayscale(50%); }
+        body.light-mode .origin-bg { opacity: 0.2; filter: grayscale(0%); }
+
+        /* ========= THE ROASTING JOURNEY ACCORDION ========= */
+        .process-item { border-bottom: 1px solid var(--border-color); padding: 25px 0; cursor: pointer; transition: var(--anim-speed) var(--anim-ease); overflow: hidden; height: 85px; }
+        .process-item.active { height: 220px; border-bottom-color: var(--gold); }
+        .process-title { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--text-muted); transition: 0.4s; display: flex; align-items: center; justify-content: space-between; }
+        .process-item.active .process-title { color: var(--gold); font-size: 2.5rem; }
+        .process-content { opacity: 0; transform: translateY(20px); transition: 0.4s; padding-top: 15px; color: var(--text-main); font-weight: 300; line-height: 1.6; }
+        .process-item.active .process-content { opacity: 1; transform: translateY(0); }
 
         /* ========= RADIO WIDGET & VOLUME SLIDER ========= */
         .radio-widget { position: fixed; bottom: 30px; left: 30px; z-index: 50; display: flex; align-items: center; gap: 15px; padding: 10px 20px 10px 10px; border-radius: 50px; overflow: hidden; transition: 0.4s ease; }
@@ -101,68 +177,38 @@
         @keyframes spin { 100% { transform: rotate(360deg); } }
         
         .radio-info { display: flex; flex-direction: column; white-space: nowrap; transition: 0.3s; }
-        
-        /* Volume Slider Container */
         .volume-container { display: flex; align-items: center; gap: 10px; width: 0; opacity: 0; overflow: hidden; transition: 0.4s ease; }
         .radio-widget:hover .volume-container { width: 100px; opacity: 1; }
-        .radio-widget:hover .radio-info { display: none; } /* Hide text to make room for slider */
+        .radio-widget:hover .radio-info { display: none; }
         
         input[type=range] { -webkit-appearance: none; width: 100px; background: transparent; cursor: none; }
         input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 12px; width: 12px; border-radius: 50%; background: var(--gold); margin-top: -4px; box-shadow: 0 0 10px var(--gold); }
         body.light-mode input[type=range]::-webkit-slider-runnable-track { background: rgba(0,0,0,0.2); }
 
-        /* ========= MENU CARDS (3D MAGNETIC) ========= */
-        .menu-card { position: relative; border-radius: 24px; z-index: 2; border: 1px solid var(--border-color); background: var(--bg-card); transform-style: preserve-3d; transition: border-color 0.3s, box-shadow 0.3s; }
-        .menu-card:hover { border-color: var(--gold); z-index: 10; box-shadow: 0 25px 50px rgba(0,0,0,0.3); }
-        body.light-mode .menu-card:hover { box-shadow: 0 25px 50px rgba(176, 112, 60, 0.2); }
-        
-        .menu-img-wrap { height: 260px; overflow: hidden; position: relative; border-radius: 24px 24px 0 0; }
-        .menu-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease, filter 0.5s ease; opacity: 0.9; }
-        .menu-card:hover .menu-img { transform: scale(1.1); filter: brightness(1.15); opacity: 1; }
+        /* ========= GET DIRECTIONS BUTTON (DAY MODE FIX) ========= */
+        .get-dir-btn { background: var(--bg-card); color: var(--gold); border: 1px solid var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+        body.light-mode .get-dir-btn { background: #1a120e; color: var(--gold); border: 2px solid var(--gold); }
+        .get-dir-btn:hover { background: var(--gold); color: #fff; transform: translateY(-5px); }
 
-        /* Aroma Steam Gimmick */
-        .aroma-steam { position: absolute; bottom: 20%; left: 50%; transform: translateX(-50%); width: 40px; height: 60px; opacity: 0; pointer-events: none; transition: 0.5s; z-index: 20; }
-        .menu-card:hover .aroma-steam { opacity: 0.6; animation: riseUp 2s infinite ease-in; }
-        @keyframes riseUp { 0% { transform: translate(-50%, 0) scale(0.8); opacity: 0; filter: blur(2px); } 50% { opacity: 0.6; } 100% { transform: translate(-50%, -40px) scale(1.2); opacity: 0; filter: blur(6px); } }
-
-        .offer-tag { position: absolute; top: 15px; right: 15px; font-size: 0.7rem; font-weight: 800; padding: 6px 14px; border-radius: 30px; letter-spacing: 1px; z-index: 10; backdrop-filter: blur(10px); }
-        .tag-red { background: rgba(230, 57, 70, 0.9); color: #fff; box-shadow: 0 5px 15px rgba(230,57,70,0.4); }
-        .tag-gold { background: rgba(198, 155, 106, 0.9); color: #000; box-shadow: 0 5px 15px rgba(198,155,106,0.4); }
-        .tag-dark { background: rgba(30, 30, 30, 0.9); color: #fff; border: 1px solid var(--gold); }
-        .tag-green { background: rgba(85, 107, 47, 0.9); color: #fff; box-shadow: 0 5px 15px rgba(85,107,47,0.4); }
-
-        .add-btn { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%) translateZ(30px); background: var(--text-main); color: var(--bg-deep); padding: 12px 28px; border-radius: 40px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: 0.3s; opacity: 0; width: 85%; justify-content: center; z-index: 30; }
-        .menu-card:hover .add-btn { opacity: 1; background: var(--gold); color: #fff; }
-        @media (max-width: 768px) { .add-btn { opacity: 1; bottom: 15px; background: var(--text-main); color: var(--bg-deep); transform: translateX(-50%); } }
-
-        /* ========= 3D LIQUID DROPS (CART ANIMATION) ========= */
-        .gooey-filter { filter: url('#goo'); position: fixed; inset: 0; z-index: 999999; pointer-events: none; }
-        .liquid-drop-3d { position: absolute; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #ffeedb, var(--gold) 60%, #8b5e34); box-shadow: 0 10px 20px rgba(0,0,0,0.5), inset -2px -2px 6px rgba(0,0,0,0.4); transform-origin: center; z-index: 999999; }
-
-        /* ========= BRIGHT CART SIDEBAR ========= */
-        #cart-sidebar { position: fixed; top: 0; right: -100%; width: 100%; max-width: 420px; height: 100vh; z-index: 10000; transition: 0.6s cubic-bezier(0.25, 1, 0.5, 1); background: var(--cart-bg); color: var(--cart-text); border-left: 1px solid var(--cart-border); display: flex; flex-direction: column; box-shadow: -20px 0 60px rgba(0,0,0,0.3); backdrop-filter: blur(30px); }
-        #cart-sidebar.open { right: 0; }
-        .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 9999; opacity: 0; pointer-events: none; transition: 0.4s; }
-        .cart-overlay.open { opacity: 1; pointer-events: all; }
-
-        /* ========= DYNAMIC FOOTER CURTAIN FIX ========= */
-        #main-content { position: relative; z-index: 2; background: var(--bg-deep); box-shadow: 0 40px 100px rgba(0,0,0,1); border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; transition: background 0.8s ease; }
-        footer { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1; background: #050302; display: flex; flex-direction: column; justify-content: center; transition: background 0.8s; }
+        /* ========= FOOTER & MAIN WRAPPER ========= */
+        #main-content { position: relative; z-index: 2; background: var(--bg-deep); margin-bottom: 85vh; box-shadow: 0 40px 100px rgba(0,0,0,1); border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; transition: background 0.8s ease; }
+        footer { position: fixed; bottom: 0; left: 0; width: 100%; height: 85vh; z-index: 1; background: #050302; display: flex; flex-direction: column; justify-content: center; transition: 0.8s; }
         body.light-mode footer { background: #e6dfd5; }
 
         @media (max-width: 768px) {
             #main-content { margin-bottom: 0 !important; border-radius: 0; }
             footer { position: relative; height: auto !important; padding: 60px 20px; }
+            .process-item.active { height: 280px; }
             .radio-widget { display: none; }
         }
     </style>
 </head>
 <body class="hover-target-container">
 
-    <!-- AUDIO ENGINE (Background Ambience) -->
-    <audio id="audio-night" loop src="https://ia800900.us.archive.org/21/items/ambient-piano-music/Ambient%20Piano.mp3" crossorigin="anonymous" preload="auto"></audio>
-    <audio id="audio-day" loop src="https://ia801402.us.archive.org/34/items/AcousticGuitar_336/Acoustic_Guitar.mp3" crossorigin="anonymous" preload="auto"></audio>
+    <!-- RELIABLE AUDIO ENGINE (Pixabay CDNs) -->
+    <audio id="audio-night" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3" crossorigin="anonymous" preload="auto"></audio>
+    <audio id="audio-day" loop src="https://cdn.pixabay.com/download/audio/2022/02/07/audio_6774e1d670.mp3?filename=acoustic-guitars-112349.mp3" crossorigin="anonymous" preload="auto"></audio>
 
     <!-- SVG Gooey Filter for Liquid Pour -->
     <svg style="display: none;">
@@ -175,7 +221,7 @@
         </defs>
     </svg>
 
-    <!-- THE VIBE SELECTOR (Interactive Preloader) -->
+    <!-- THE VIBE SELECTOR (Interactive Preloader / Unlocks Audio) -->
     <div id="vibe-selector">
         <div class="vibe-box hover-target">
             <h1 class="text-4xl font-serif text-gold mb-2">Welcome to After Hours</h1>
@@ -189,6 +235,7 @@
 
     <!-- LIQUID POUR THEME TRANSITION -->
     <div class="pour-container" id="pour-container">
+        <!-- 6 Drips for smooth screen coverage -->
         <div class="pour-drip"></div><div class="pour-drip"></div><div class="pour-drip"></div>
         <div class="pour-drip"></div><div class="pour-drip"></div><div class="pour-drip"></div>
     </div>
@@ -200,6 +247,7 @@
 
     <!-- HEADER: FROSTED COMMAND CENTER -->
     <div class="fixed top-0 left-0 w-full z-50 flex justify-between items-start px-6 py-6 pointer-events-none nav-anim opacity-0 translate-y-[-20px]">
+        
         <!-- Left: Logo + Clock + Weather -->
         <div class="flex flex-col gap-4 pointer-events-auto">
             <div class="old-frost rounded-full px-6 py-3 flex items-center gap-4 hover-target cursor-pointer" onclick="window.scrollTo(0,0)">
@@ -231,7 +279,7 @@
         <!-- Right: Controls -->
         <div class="flex items-center gap-4 pointer-events-auto">
             <button onclick="triggerLiquidPour()" class="old-frost hover-target w-14 h-14 rounded-full flex justify-center items-center text-xl hover:text-gold transition-colors text-[var(--text-main)]" id="theme-btn">
-                <i class="ph ph-moon" id="theme-icon"></i>
+                <i class="ph ph-sun" id="theme-icon"></i>
             </button>
             <button onclick="toggleCart()" class="old-frost relative w-14 h-14 rounded-full flex justify-center items-center hover-target hover:bg-gold hover:text-white transition-colors group text-[var(--text-main)]" id="cart-icon">
                 <i class="ph ph-shopping-bag text-2xl transition-transform group-hover:scale-110"></i>
@@ -241,7 +289,7 @@
     </div>
 
     <!-- RADIO WIDGET (Bottom Left) WITH VOLUME SLIDER -->
-    <div class="radio-widget old-frost hover-target nav-anim opacity-0">
+    <div class="radio-widget old-frost hover-target hover-radio nav-anim opacity-0">
         <div class="vinyl"></div>
         <div class="radio-info">
             <span class="text-[9px] uppercase tracking-widest text-gold font-bold">Now Playing</span>
@@ -253,7 +301,7 @@
         </div>
     </div>
 
-    <!-- BRIGHT CART SIDEBAR -->
+    <!-- BRIGHT CART SIDEBAR (ALWAYS LIGHT/READABLE) -->
     <div class="cart-overlay hover-target" onclick="toggleCart()" id="cart-overlay"></div>
     <div id="cart-sidebar" class="pt-32 pb-8 px-6">
         <div class="flex justify-between items-center mb-6 border-b border-black/10 pb-4">
@@ -280,24 +328,17 @@
     </div>
 
     <div id="main-content">
-        <!-- AMBIENT BACKGROUND -->
-        <div class="ambient-bg" id="ambient-bg">
-            <div class="blob blob-1"></div>
-            <div class="blob blob-2"></div>
-        </div>
-
         <!-- HERO SECTION -->
         <section class="h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden">
             <div class="absolute inset-0 z-0">
-                <!-- Image changes dynamically in JS -->
                 <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover opacity-30 transition-all duration-1000 parallax-bg" id="hero-img" alt="Bg">
                 <div class="absolute inset-0 bg-gradient-to-t from-[var(--bg-deep)] via-transparent to-[var(--bg-deep)] transition-colors duration-1000"></div>
             </div>
 
             <div class="text-center z-10 w-full relative pt-20">
-                <h1 class="text-7xl md:text-[14rem] font-bold tracking-tighter leading-[0.85] mb-4 flex flex-col items-center hero-anim opacity-0 translate-y-10">
-                    <span class="text-[var(--text-main)] transition-colors">STAY</span>
-                    <span class="font-serif italic font-normal text-gold mt-2" id="hero-state-text">Awake</span>
+                <h1 class="text-7xl md:text-[14rem] font-bold tracking-tighter leading-[0.85] mb-4 flex flex-col items-center">
+                    <span class="hero-anim opacity-0 translate-y-10 text-[var(--text-main)] transition-colors" id="hero-state-text">STAY</span>
+                    <span class="font-serif italic font-normal text-gold hero-anim opacity-0 translate-y-10 mt-2" id="hero-state-word">Awake</span>
                 </h1>
                 <p class="max-w-lg mx-auto text-base md:text-lg font-light opacity-90 hero-anim opacity-0 translate-y-10 text-[var(--text-main)] transition-colors" id="hero-sub-text">
                     Bhairahawa's premier nocturnal roastery. Deep flavors, old-school aesthetics, delivered hot.
@@ -399,7 +440,7 @@
                     </div>
                 </div>
                 
-                <!-- Item 6 -->
+                <!-- Item 6 (Fixed Zen Matcha) -->
                 <div class="menu-card old-frost group scroll-anim">
                     <div class="offer-tag tag-green">Vegan Favorite</div>
                     <div class="menu-img-wrap">
@@ -414,6 +455,37 @@
             </div>
         </section>
 
+        <!-- EXTRA THINGO: HIMALAYAN ORIGINS (Parallax Mountain Idea) -->
+        <section class="origin-section scroll-anim">
+            <div class="origin-bg parallax-bg"></div>
+            <div class="origin-content old-frost rounded-[40px]">
+                <h2 class="text-4xl md:text-5xl font-bold tracking-tighter mb-4 text-[var(--text-main)]">Roots in the <span class="font-serif italic text-gold font-normal">Himalayas</span></h2>
+                <p class="text-sm md:text-base font-light opacity-80 max-w-lg mx-auto text-[var(--text-main)]">
+                    We exclusively partner with small-batch farmers in the high-altitude regions of Nepal. 
+                    Every bean is hand-picked, sun-dried, and roasted locally in Bhairahawa to ensure absolute freshness.
+                </p>
+            </div>
+        </section>
+
+        <!-- EXTRA THINGO: THE ROASTING JOURNEY -->
+        <section class="py-24 px-6 max-w-[1000px] mx-auto z-10 relative scroll-anim">
+            <h2 class="text-4xl md:text-5xl font-bold tracking-tighter mb-10 text-center text-[var(--text-main)] transition-colors">The <span class="font-serif italic text-gold font-normal">Journey</span></h2>
+            <div class="old-frost rounded-[40px] p-8 md:p-12">
+                <div class="process-item hover-target active" onclick="toggleAccordion(this)">
+                    <h3 class="process-title">01. Sourcing <i class="ph ph-caret-down text-xl opacity-50"></i></h3>
+                    <p class="process-content">We ethically source 100% organic beans directly from high-altitude farmers, ensuring fair trade and premium quality.</p>
+                </div>
+                <div class="process-item hover-target" onclick="toggleAccordion(this)">
+                    <h3 class="process-title">02. Roasting <i class="ph ph-caret-down text-xl opacity-50"></i></h3>
+                    <p class="process-content">Our master roasters craft small batches daily, carefully controlling temperature profiles to unlock deep, chocolatey notes.</p>
+                </div>
+                <div class="process-item hover-target" onclick="toggleAccordion(this)">
+                    <h3 class="process-title">03. Brewing <i class="ph ph-caret-down text-xl opacity-50"></i></h3>
+                    <p class="process-content">Calibrated water chemistry, perfect pressure, and artisan baristas come together. Every espresso shot is a calculated science experiment.</p>
+                </div>
+            </div>
+        </section>
+
         <!-- Liquid Filter Container for Add-to-Cart -->
         <div class="gooey-filter" id="liquid-container"></div>
     </div>
@@ -422,8 +494,7 @@
     <footer id="footer" class="px-6 md:px-20 pt-20 pb-10 text-center flex flex-col items-center">
         <div class="grid grid-cols-1 md:grid-cols-2 w-full max-w-[1200px] gap-20 items-center mb-16 relative z-10">
             
-            <!-- Contact & Socials -->
-            <div class="flex flex-col items-center md:items-start text-left">
+            <div class="flex flex-col items-center md:items-start text-left scroll-anim">
                 <h2 class="text-6xl md:text-8xl font-bold tracking-tighter mb-4 font-serif text-[var(--text-main)] transition-colors">After Hours</h2>
                 <a href="tel:+9779705965333" class="font-serif text-4xl md:text-6xl font-bold text-gold mb-10 hover-target transition-transform hover:translate-x-2 inline-block">
                     970 596 5333
@@ -438,17 +509,17 @@
                 </div>
             </div>
 
-            <!-- Get Directions (Clean Frosted Look) -->
-            <div class="flex flex-col items-center w-full old-frost p-10 rounded-3xl">
+            <div class="flex flex-col items-center w-full scroll-anim old-frost p-10 rounded-[40px]">
                 <i class="ph ph-map-pin text-6xl text-gold mb-4"></i>
                 <p class="text-2xl font-light mb-2 text-[var(--text-main)] transition-colors">Bhairahawa, Nepal</p>
                 <p class="text-sm opacity-60 mb-8 text-[var(--text-main)]">Delivering hot to your doorstep.</p>
-                <a href="https://maps.app.goo.gl/4KRKkC4Xjv824BLf7" target="_blank" class="px-8 py-4 bg-gold text-white rounded-full text-sm font-bold tracking-widest uppercase hover-target shadow-[0_10px_30px_rgba(212,163,115,0.4)] transition-transform hover:-translate-y-1">
+                <!-- FIXED DAY MODE BUTTON COLOR -->
+                <a href="https://maps.app.goo.gl/4KRKkC4Xjv824BLf7" target="_blank" class="get-dir-btn px-8 py-4 rounded-full text-sm font-bold tracking-widest uppercase hover-target transition-transform hover:-translate-y-1">
                     Get Directions
                 </a>
             </div>
         </div>
-        <p class="text-[10px] tracking-[0.5em] uppercase opacity-50 text-[var(--text-main)] transition-colors">&copy; 2024 After Hours Café.</p>
+        <p class="text-[10px] tracking-[0.5em] uppercase opacity-50 relative z-10 text-[var(--text-main)] transition-colors">&copy; 2024 After Hours Café.</p>
     </footer>
 
     <script>
@@ -459,7 +530,7 @@
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
-        // 2. Web Audio API Click Engine (No scrolling clicks)
+        // 2. Web Audio API Tactile Click Engine
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playClickSound() {
             if(audioCtx.state === 'suspended') audioCtx.resume();
@@ -469,24 +540,24 @@
             gainNode.connect(audioCtx.destination);
             
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.05);
+            osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.05);
             
-            gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
             gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
             
             osc.start();
             osc.stop(audioCtx.currentTime + 0.05);
         }
 
-        // Only play sound on explicit clicks on interactive elements
+        // Only play sound on explicit interactive elements
         document.addEventListener('mousedown', (e) => {
             if(e.target.closest('button, a, .hover-target, .menu-card, .process-item')) {
                 playClickSound();
             }
         });
 
-        // 3. Audio Tracks Setup & Volume Slider Logic
+        // 3. Audio Tracks Setup & Volume Logic
         const audioNight = document.getElementById('audio-night');
         const audioDay = document.getElementById('audio-day');
         let currentAudio = null;
@@ -498,12 +569,16 @@
         });
 
         function crossfadeAudio(newAudio) {
-            if(currentAudio) {
+            if(currentAudio && currentAudio !== newAudio) {
                 gsap.to(currentAudio, { volume: 0, duration: 1.5, onComplete: () => currentAudio.pause() });
             }
             newAudio.volume = 0;
-            newAudio.play().catch(e => console.log("Autoplay prevented."));
-            gsap.to(newAudio, { volume: globalVolume, duration: 1.5 });
+            let playPromise = newAudio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    gsap.to(newAudio, { volume: globalVolume, duration: 1.5 });
+                }).catch(error => console.log("Audio play prevented."));
+            }
             currentAudio = newAudio;
         }
 
@@ -515,34 +590,33 @@
             const cursorRipple = document.getElementById('cursor-ripple');
             let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
 
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX; mouseY = e.clientY;
-                gsap.to(cursorDot, { x: mouseX, y: mouseY, duration: 0.1 });
-            });
-            gsap.ticker.add(() => {
-                ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15;
-                gsap.set(cursorRing, { x: ringX, y: ringY });
-            });
+            document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; gsap.to(cursorDot, { x: mouseX, y: mouseY, duration: 0.1 }); });
+            gsap.ticker.add(() => { ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15; gsap.set(cursorRing, { x: ringX, y: ringY }); });
+            
             document.querySelectorAll('.hover-target, button, a, .menu-card, .process-item').forEach(el => {
-                el.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
-                el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
+                el.addEventListener('mouseenter', () => {
+                    document.body.classList.add('hover-active');
+                    if(el.classList.contains('hover-radio')) document.body.classList.add('hover-no-blur'); // Fix blur over volume
+                });
+                el.addEventListener('mouseleave', () => {
+                    document.body.classList.remove('hover-active');
+                    document.body.classList.remove('hover-no-blur');
+                });
             });
-            document.addEventListener('mousedown', () => {
-                gsap.fromTo(cursorRipple, { x: mouseX, y: mouseY, scale: 0, opacity: 1 }, { scale: 4, opacity: 0, duration: 0.6, ease: "power2.out" });
-            });
+            document.addEventListener('mousedown', () => { gsap.fromTo(cursorRipple, { x: mouseX, y: mouseY, scale: 0, opacity: 1 }, { scale: 4, opacity: 0, duration: 0.6, ease: "power2.out" }); });
 
-            // 3D Magnetic Effect for Menu Cards
+            // 3D Magnetic Effect (Exaggerated slightly)
             document.querySelectorAll('.menu-card').forEach(card => {
                 card.addEventListener('mousemove', (e) => {
                     const rect = card.getBoundingClientRect();
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
-                    const xPct = (x / rect.width - 0.5) * 20; // Max 10 deg tilt
-                    const yPct = (y / rect.height - 0.5) * -20;
-                    gsap.to(card.querySelector('.menu-img'), { rotationY: xPct, rotationX: yPct, transformPerspective: 1000, duration: 0.5, ease: "power2.out" });
+                    const xPct = (x / rect.width - 0.5) * 30; 
+                    const yPct = (y / rect.height - 0.5) * -30;
+                    gsap.to(card.querySelector('.menu-img'), { rotationY: xPct, rotationX: yPct, transformPerspective: 1000, duration: 0.4, ease: "power2.out" });
                 });
                 card.addEventListener('mouseleave', () => {
-                    gsap.to(card.querySelector('.menu-img'), { rotationY: 0, rotationX: 0, duration: 0.5, ease: "power2.out" });
+                    gsap.to(card.querySelector('.menu-img'), { rotationY: 0, rotationX: 0, duration: 0.6, ease: "elastic.out(1, 0.3)" });
                 });
             });
         }
@@ -551,42 +625,41 @@
         let isLightMode = false;
         
         window.initExperience = function(mode) {
-            if(audioCtx.state === 'suspended') audioCtx.resume(); // Unlock audio context
-            
+            if(audioCtx.state === 'suspended') audioCtx.resume(); 
             isLightMode = (mode === 'day');
             
             if(isLightMode) {
                 document.body.classList.add('light-mode');
                 document.getElementById('theme-icon').classList.replace('ph-moon', 'ph-sun');
-                document.getElementById('hero-state-text').innerText = "Fresh";
+                document.getElementById('hero-state-text').innerText = "STAY";
+                document.getElementById('hero-state-word').innerText = "Fresh";
                 document.getElementById('hero-sub-text').innerText = "Bhairahawa's premier morning roastery. Bright flavors, refreshing vibes, delivered hot.";
                 document.getElementById('radio-track').innerText = "Morning Acoustic";
-                document.getElementById('hero-img').src = "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=2000&auto=format&fit=crop"; // Bright coffee image
+                document.getElementById('hero-img').src = "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=2000&auto=format&fit=crop"; 
                 crossfadeAudio(audioDay);
             } else {
                 document.getElementById('theme-icon').classList.replace('ph-sun', 'ph-moon');
-                document.getElementById('hero-img').src = "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=2000&auto=format&fit=crop"; // Dark coffee image
                 crossfadeAudio(audioNight);
             }
 
-            // Hide Selector and start entrance
             gsap.to("#vibe-selector", { opacity: 0, duration: 0.8, onComplete: () => {
                 document.getElementById('vibe-selector').style.display = 'none';
-                // Trigger entry animations
                 const entryTL = gsap.timeline();
                 entryTL.fromTo(".nav-anim", { y: -30, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.2, duration: 1, ease: "power3.out" })
                        .fromTo(".hero-anim", { y: 50, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.15, duration: 1.2, ease: "expo.out" }, "-=0.5");
             }});
         };
 
-        // 6. True Liquid Pour Theme Transition (Dual-Physics Engine)
+        // 6. True Liquid Pour Theme Transition (Scroll to Top added)
         window.triggerLiquidPour = function() {
             const drips = document.querySelectorAll('.pour-drip');
             const icon = document.getElementById('theme-icon');
             
-            // Set drip color based on NEXT theme
             const nextColor = isLightMode ? '#0a0604' : '#fdfaf6'; 
             drips.forEach(d => { d.style.backgroundColor = nextColor; d.style.top = "0"; d.style.bottom = "auto"; });
+
+            // SCROLL TO TOP smoothly during transition
+            lenis.scrollTo(0, { duration: 1.2 });
 
             const tl = gsap.timeline();
             
@@ -596,41 +669,35 @@
                 duration: 1.2,
                 ease: "power2.in",
                 onComplete: () => {
-                    // Swap Theme Engine
                     isLightMode = !isLightMode;
                     document.body.classList.toggle('light-mode');
                     
                     if(isLightMode) {
                         icon.classList.replace('ph-moon', 'ph-sun');
-                        document.getElementById('hero-state-text').innerText = "Fresh";
+                        document.getElementById('hero-state-text').innerText = "STAY";
+                        document.getElementById('hero-state-word').innerText = "Fresh";
                         document.getElementById('hero-sub-text').innerText = "Bhairahawa's premier morning roastery. Bright flavors, refreshing vibes, delivered hot.";
                         document.getElementById('radio-track').innerText = "Morning Acoustic";
                         document.getElementById('hero-img').src = "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=2000&auto=format&fit=crop";
                         crossfadeAudio(audioDay);
                     } else {
                         icon.classList.replace('ph-sun', 'ph-moon');
-                        document.getElementById('hero-state-text').innerText = "Awake";
+                        document.getElementById('hero-state-text').innerText = "STAY";
+                        document.getElementById('hero-state-word').innerText = "Awake";
                         document.getElementById('hero-sub-text').innerText = "Bhairahawa's premier nocturnal roastery. Deep flavors, aesthetic vibes, delivered hot.";
                         document.getElementById('radio-track').innerText = "Midnight Jazz";
                         document.getElementById('hero-img').src = "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=2000&auto=format&fit=crop";
                         crossfadeAudio(audioNight);
                     }
                     
-                    // Reset drips to bottom for exit
                     drips.forEach(d => { d.style.top = "auto"; d.style.bottom = "0"; });
                     
-                    // Drip Away
-                    gsap.to(drips, {
-                        height: "0vh",
-                        stagger: { amount: 0.3, from: "edges" },
-                        duration: 1.2,
-                        ease: "power2.out"
-                    });
+                    gsap.to(drips, { height: "0vh", stagger: { amount: 0.3, from: "edges" }, duration: 1.2, ease: "power2.out" });
                 }
             });
         };
 
-        // 7. Analog Clock & Weather Widget
+        // 7. Analog Clock & Weather
         function updateWidgets() {
             const now = new Date();
             const h = now.getHours(); const m = now.getMinutes(); const s = now.getSeconds();
@@ -639,7 +706,7 @@
             document.getElementById('sec-hand').style.transform = `rotate(${s * 6}deg)`;
             const ampm = h >= 12 ? 'PM' : 'AM';
             document.getElementById('digital-time').innerText = `${h % 12 || 12}:${m.toString().padStart(2,'0')} ${ampm}`;
-
+            
             let icon, temp;
             if (h >= 5 && h < 17) { icon = "ph-sun"; temp = "28°C"; }
             else if (h >= 17 && h < 20) { icon = "ph-cloud-sun"; temp = "24°C"; }
@@ -647,8 +714,7 @@
             document.getElementById('weather-icon').className = `ph ${icon}`;
             document.getElementById('weather-text').innerText = temp;
         }
-        setInterval(updateWidgets, 1000);
-        updateWidgets();
+        setInterval(updateWidgets, 1000); updateWidgets();
 
         // 8. Dynamic Footer Margin Fix
         function updateFooterMargin() {
@@ -662,10 +728,16 @@
             }
             ScrollTrigger.refresh();
         }
-        window.addEventListener('resize', updateFooterMargin);
-        setTimeout(updateFooterMargin, 500);
+        window.addEventListener('resize', updateFooterMargin); setTimeout(updateFooterMargin, 500);
 
-        // 9. Advanced 3D Liquid Fly-to-Cart
+        // 9. Accordion Toggle
+        window.toggleAccordion = function(element) {
+            document.querySelectorAll('.process-item').forEach(item => { if(item !== element) item.classList.remove('active'); });
+            element.classList.toggle('active');
+            setTimeout(ScrollTrigger.refresh, 400); 
+        }
+
+        // 10. Advanced 3D Liquid Fly-to-Cart
         let cart = [];
         const liquidContainer = document.getElementById('liquid-container');
         
@@ -685,8 +757,8 @@
 
             const card = btnElement.closest('.menu-card');
             const img = card.querySelector('.menu-img');
-            const bounceEase = isLightMode ? "back.out(1.7)" : "power2.inOut";
-            gsap.to(img, { y: -20, scale: 1.15, duration: 0.3, yoyo: true, repeat: 1, ease: bounceEase });
+            const easeType = isLightMode ? "back.out(1.7)" : "power2.inOut";
+            gsap.to(img, { y: -20, scale: 1.15, duration: 0.3, yoyo: true, repeat: 1, ease: easeType });
 
             const imgRect = img.getBoundingClientRect();
             const iconRect = document.getElementById('cart-icon').getBoundingClientRect();
@@ -755,7 +827,7 @@
 
         window.checkout = function() {
             if(cart.length === 0) return alert("Add items first.");
-            let msg = "Hello After Hours! 🌙\nOrder for Delivery:\n\n";
+            let msg = "Hello After Hours!\nOrder for Delivery:\n\n";
             let total = 0; const counts = {};
             cart.forEach(i => { counts[i.name] = (counts[i.name] || 0) + 1; total += i.price; });
             for (const [name, count] of Object.entries(counts)) msg += `- ${count}x ${name}\n`;
@@ -763,7 +835,7 @@
             window.open(`https://wa.me/9779705965333?text=${encodeURIComponent(msg)}`, '_blank');
         };
 
-        // 10. Scroll Animations Engine
+        // Scroll Animations Engine
         gsap.utils.toArray('.scroll-anim').forEach(el => {
             gsap.from(el, { y: 60, opacity: 0, duration: 1.2, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 85%" }});
         });
