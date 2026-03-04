@@ -14,466 +14,449 @@
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>After Hours Café | Stay Awake</title>
+    <title>After Hours Café | Liquid Gold</title>
     
-    <!-- Tailwind, GSAP, and Lenis (Smooth Scrolling) -->
+    <!-- Tailwind, GSAP, and Lenis -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
         
         :root {
-            --dark: #050505;
+            /* Rich Dark Mocha Palette */
+            --bg-deep: #0a0705;
+            --bg-surface: #140e0b;
+            --mocha: #3d2616;
             --gold: #d4af37;
-            --light: #f4ece4;
-            --muted: #888888;
+            --gold-glow: rgba(212, 175, 55, 0.4);
+            --text-light: #fdfbf9;
+            --text-muted: #a89f96;
         }
 
-        /* Base Setup & Lenis Smooth Scroll */
+        /* Lenis Smooth Scroll Base */
         html.lenis { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto; }
         .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
         .lenis.lenis-stopped { overflow: hidden; }
 
         body {
-            background-color: var(--dark);
-            color: var(--light);
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-light);
+            font-family: 'Outfit', sans-serif;
             overflow-x: hidden;
-            cursor: none; /* Hide default cursor for custom one */
+            -webkit-font-smoothing: antialiased;
         }
 
         ::selection { background: var(--gold); color: #000; }
 
         .font-serif { font-family: 'Playfair Display', serif; }
-        .text-gold { color: var(--gold); }
 
-        /* Custom Cursor */
-        .cursor-dot {
-            width: 8px; height: 8px; background: var(--gold);
-            border-radius: 50%; position: fixed; top: 0; left: 0;
-            pointer-events: none; z-index: 999999;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s, background 0.3s;
-            mix-blend-mode: difference;
-        }
-        .cursor-hover { width: 60px; height: 60px; background: rgba(212, 175, 55, 0.5); backdrop-filter: blur(2px); }
-
-        /* Preloader */
-        .loader-wrap {
+        /* ========= LIQUID SPLASH PRELOADER ========= */
+        #liquid-loader {
             position: fixed; inset: 0; z-index: 100000;
+            background: var(--bg-deep);
             display: flex; justify-content: center; align-items: center;
-            background: #000; pointer-events: none;
+            overflow: hidden; pointer-events: none;
         }
-        .loader-percent {
-            font-family: 'Playfair Display', serif; font-size: 5rem;
-            color: var(--gold); font-weight: 300; font-style: italic;
+        .drop {
+            width: 12px; height: 12px; background: var(--gold);
+            border-radius: 50%; position: absolute; top: -20px;
+            box-shadow: 0 0 20px var(--gold);
         }
-        .loader-line-wrap { position: absolute; bottom: 20%; width: 200px; height: 1px; background: rgba(255,255,255,0.1); overflow: hidden; }
-        .loader-line { width: 0%; height: 100%; background: var(--gold); }
-
-        /* Grain Overlay */
-        .noise {
-            position: fixed; inset: 0; z-index: 9999; pointer-events: none;
-            background: url('https://grainy-gradients.vercel.app/noise.svg');
-            opacity: 0.04; mix-blend-mode: overlay;
+        .ripple {
+            width: 0px; height: 0px; background: var(--gold);
+            border-radius: 50%; position: absolute;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
         }
 
-        /* Logo Editing */
-        .custom-logo {
-            width: 45px; height: 45px; border-radius: 50%;
-            object-fit: cover; border: 1.5px solid rgba(212, 175, 55, 0.4);
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
-            filter: grayscale(100%) contrast(1.2);
-            transition: all 0.5s ease;
-        }
-        .group:hover .custom-logo {
-            filter: grayscale(0%) contrast(1.1);
-            border-color: var(--gold);
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
-            transform: rotate(5deg);
+        /* ========= AMBIENT LIQUID BACKGROUND ========= */
+        .ambient-bg { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+        .blob { position: absolute; filter: blur(90px); border-radius: 50%; opacity: 0.4; animation: liquidFloat 20s infinite alternate ease-in-out; }
+        .blob-1 { width: 50vw; height: 50vw; background: var(--mocha); top: -20%; left: -10%; }
+        .blob-2 { width: 40vw; height: 40vw; background: rgba(212,175,55,0.1); bottom: -10%; right: -10%; animation-delay: -5s; animation-direction: alternate-reverse; }
+        
+        @keyframes liquidFloat {
+            0% { transform: translate(0, 0) scale(1); border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+            50% { transform: translate(5vw, 10vh) scale(1.1); border-radius: 60% 40% 30% 70% / 50% 60% 40% 50%; }
+            100% { transform: translate(-5vw, -5vh) scale(0.9); border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
         }
 
-        /* Hero Animation Text */
-        .char { display: inline-block; overflow: hidden; vertical-align: bottom; }
-        .char-inner { display: inline-block; transform: translateY(110%); opacity: 0; }
+        /* ========= GLASSMORPHISM & LIQUID UI ========= */
+        .glass-pill {
+            background: rgba(20, 14, 11, 0.6);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
 
-        /* Image Mask Reveal */
-        .img-reveal-wrapper { position: relative; overflow: hidden; border-radius: 12px; }
-        .img-reveal-mask { position: absolute; inset: 0; background: var(--dark); z-index: 2; transform-origin: top; }
-        .parallax-img { width: 100%; height: 120%; object-fit: cover; filter: brightness(0.7); transition: filter 0.5s; }
-        .img-reveal-wrapper:hover .parallax-img { filter: brightness(1.1); }
+        /* The Premium Monogram Logo (Fixes the broken image link) */
+        .ah-monogram {
+            display: flex; align-items: center; justify-content: center;
+            width: 44px; height: 44px; border-radius: 50%;
+            background: linear-gradient(135deg, #fcebb6, #d4af37, #8a6c1c);
+            color: var(--bg-deep); font-family: 'Playfair Display', serif;
+            font-weight: 800; font-size: 1.1rem; letter-spacing: -1px;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .group:hover .ah-monogram { transform: scale(1.1) rotate(5deg); box-shadow: 0 0 25px rgba(212, 175, 55, 0.6); }
 
-        /* Marquee */
-        .marquee-container { border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); overflow: hidden; white-space: nowrap; padding: 20px 0; }
-        .marquee-content { display: inline-block; animation: marquee 20s linear infinite; }
-        .marquee-item { font-family: 'Playfair Display', serif; font-size: 2rem; font-style: italic; color: var(--gold); margin-right: 50px; }
-        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        /* Liquid Cards (Extreme rounded corners + morphing) */
+        .liquid-card {
+            border-radius: 40px; overflow: hidden; position: relative;
+            background: rgba(20, 14, 11, 0.5); border: 1px solid rgba(255,255,255,0.03);
+            transition: all 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .liquid-card:hover {
+            border-radius: 20px 60px 20px 60px; /* Liquid morph effect */
+            border-color: rgba(212, 175, 55, 0.2);
+            background: rgba(20, 14, 11, 0.8);
+            transform: translateY(-10px);
+        }
+        .liquid-card-img { width: 100%; height: 120%; object-fit: cover; opacity: 0.6; transition: 0.7s; }
+        .liquid-card:hover .liquid-card-img { opacity: 1; transform: scale(1.05); }
+
+        /* Hero Text Sweep */
+        .text-sweep { display: inline-block; overflow: hidden; vertical-align: bottom; }
+        .text-sweep-inner { display: inline-block; transform: translateY(110%) rotate(5deg); opacity: 0; transform-origin: top left; }
+
+        /* Floating Add-on Widget */
+        .vibe-widget {
+            position: fixed; bottom: 30px; right: 30px; z-index: 900;
+            display: flex; align-items: center; gap: 12px; padding: 12px 24px;
+            border-radius: 100px;
+            animation: floatWidget 6s infinite ease-in-out;
+        }
+        .pulse-dot { width: 8px; height: 8px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 10px var(--gold); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(0.95); opacity: 0.8; } 50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 20px var(--gold); } 100% { transform: scale(0.95); opacity: 0.8; } }
+        @keyframes floatWidget { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
         /* Giant Phone Number */
         .giant-phone {
             font-family: 'Playfair Display', serif; color: transparent;
-            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            -webkit-text-stroke: 1px rgba(212, 175, 55, 0.4);
+            transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
-        .giant-phone:hover { color: var(--light); -webkit-text-stroke: 0px; text-shadow: 0 0 40px rgba(212, 175, 55, 0.3); transform: scale(1.02); }
+        .giant-phone:hover {
+            color: var(--gold); -webkit-text-stroke: 0px;
+            text-shadow: 0 0 60px rgba(212, 175, 55, 0.4); transform: scale(1.03);
+        }
 
-        /* Main Wrapper for Footer Curtain Effect */
-        #main-content { position: relative; z-index: 2; background: var(--dark); margin-bottom: 60vh; box-shadow: 0 20px 60px rgba(0,0,0,1); }
-        footer { position: fixed; bottom: 0; left: 0; width: 100%; height: 60vh; z-index: 1; background: #020202; display: flex; flex-direction: column; justify-content: center; }
+        /* Footer Curtain Setup */
+        #main-content { position: relative; z-index: 2; background: transparent; margin-bottom: 70vh; box-shadow: 0 30px 80px rgba(0,0,0,1); border-bottom-left-radius: 50px; border-bottom-right-radius: 50px; overflow: hidden; }
+        .content-bg { background: var(--bg-deep); }
+        footer { position: fixed; bottom: 0; left: 0; width: 100%; height: 70vh; z-index: 1; background: #030202; display: flex; flex-direction: column; justify-content: center; }
 
+        /* Mobile specific adjustments */
         @media (max-width: 768px) {
-            #main-content { margin-bottom: auto; }
-            footer { position: relative; height: auto; padding: 80px 20px 40px; }
-            .giant-phone { -webkit-text-stroke: 0px; color: var(--light); }
+            #main-content { margin-bottom: auto; border-radius: 0; }
+            footer { position: relative; height: auto; padding: 100px 20px 40px; }
+            .giant-phone { -webkit-text-stroke: 0px; color: var(--gold); }
+            .vibe-widget { display: none; } /* Hide ambient widget on mobile to save space */
+            .liquid-card { border-radius: 30px; }
+            .liquid-card:hover { border-radius: 30px; transform: none; }
         }
     </style>
 </head>
 <body>
-    
-    <!-- Custom Cursor -->
-    <div class="cursor-dot" id="cursor"></div>
 
-    <!-- Film Grain -->
-    <div class="noise"></div>
-
-    <!-- Cinematic Preloader -->
-    <div class="loader-wrap">
-        <div class="loader-percent" id="loader-percent">0%</div>
-        <div class="loader-line-wrap"><div class="loader-line" id="loader-line"></div></div>
+    <!-- Liquid Preloader -->
+    <div id="liquid-loader">
+        <div class="drop" id="drop"></div>
+        <div class="ripple" id="ripple"></div>
     </div>
 
-    <!-- Navbar -->
-    <nav class="fixed w-full z-50 px-6 md:px-12 py-8 flex justify-between items-center bg-gradient-to-b from-[#050505] to-transparent transition-all duration-500" id="navbar">
-        <div class="flex items-center gap-4 group hover-target">
-            <!-- Provided Custom Logo -->
-            <img src="https://instagram.fbwa1-1.fna.fbcdn.net/v/t51.82787-15/642131465_18057119684437280_53950062771869350_n.jpg?efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=instagram.fbwa1-1.fna.fbcdn.net&_nc_cat=108&_nc_oc=Q6cZ2QFz7lAmMEQ4huhUXqja-ahY8BQnOiSQRppLr6pTOvYx5qPIA7NlhVBA9nT_c071zQWwfala1qHhbBd-LgPscCLr&_nc_ohc=8m_RuybZaTcQ7kNvwHBUeUG&_nc_gid=_X332TTHjUPG-9EUNbvxsg&edm=AP4sbd4BAAAA&ccb=7-5&oh=00_AfxqppF7i3_Wc1djv8ys1aru3FmZNFJgEVgARyN5HqxyHA&oe=69AE851E&_nc_sid=7a9f4b" 
-                 alt="After Hours Logo" 
-                 class="custom-logo">
+    <!-- Ambient Floating Backgrounds -->
+    <div class="ambient-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <!-- Header Navbar -->
+    <nav class="fixed w-full z-50 px-6 md:px-12 py-6 flex justify-between items-center transition-all duration-500" id="navbar">
+        <div class="flex items-center gap-4 group cursor-pointer">
+            <!-- Premium Monogram Logo (Fixes the broken image) -->
+            <div class="ah-monogram">AH</div>
             <div class="flex flex-col">
-                <span class="text-lg font-bold tracking-widest leading-none">AFTER HOURS</span>
+                <span class="text-lg font-bold tracking-widest leading-none text-white">AFTER HOURS</span>
                 <span class="text-[8px] text-gold tracking-[0.4em] uppercase mt-1">Siddharthanagar</span>
             </div>
         </div>
         
-        <div class="hidden md:flex gap-12 text-[10px] font-bold tracking-[0.3em] uppercase text-muted">
-            <a href="#menu" class="hover-target hover:text-gold transition-colors">Menu</a>
-            <a href="#about" class="hover-target hover:text-gold transition-colors">Atmosphere</a>
+        <div class="hidden md:flex gap-12 text-[11px] font-bold tracking-[0.3em] uppercase text-text-muted">
+            <a href="#menu" class="hover:text-gold transition-colors">Menu</a>
+            <a href="#about" class="hover:text-gold transition-colors">Story</a>
         </div>
         
-        <a href="tel:+9779867898711" class="hover-target px-6 py-3 border border-gold/30 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase text-gold hover:bg-gold hover:text-black transition-all duration-300">
+        <!-- Desktop Inquire Button -->
+        <a href="tel:+9779867898711" class="hidden md:inline-block px-8 py-3 glass-pill rounded-full text-[10px] font-bold tracking-[0.2em] uppercase text-gold hover:bg-gold hover:text-black transition-all duration-300">
             Inquire
         </a>
     </nav>
 
+    <!-- Mobile Floating Action Button (Responsive Inquire) -->
+    <a href="tel:+9779867898711" class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 glass-pill px-8 py-4 rounded-full text-xs font-bold tracking-widest uppercase text-gold shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+        Call to Inquire
+    </a>
+
+    <!-- Add-on: Ambient Vibe Widget -->
+    <div class="vibe-widget glass-pill">
+        <div class="pulse-dot"></div>
+        <span class="text-[10px] uppercase tracking-widest font-semibold text-gold">Brewing Nocturnal Magic</span>
+    </div>
+
+    <!-- Main Content Wrapper (For Footer Curtain Effect) -->
     <div id="main-content">
         
         <!-- Hero Section -->
-        <section id="home" class="h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden">
+        <section id="home" class="h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden rounded-b-[40px] md:rounded-b-[80px]">
             <div class="absolute inset-0 z-0">
-                <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?q=80&w=2000&auto=format&fit=crop" 
-                     class="w-full h-full object-cover opacity-20" id="hero-bg" alt="Hero Bg">
-                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/50 to-[#050505]"></div>
+                <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=2000&auto=format&fit=crop" 
+                     class="w-full h-full object-cover opacity-30 mix-blend-luminosity" id="hero-bg" alt="Dark Coffee Background">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-deep)] to-transparent opacity-80"></div>
             </div>
 
-            <div class="text-center z-10 w-full">
-                <p class="text-gold tracking-[0.5em] text-[10px] font-bold mb-6 uppercase opacity-0 hero-elem">Midnight Sanctuary</p>
+            <div class="text-center z-10 w-full relative pt-20">
+                <p class="text-gold tracking-[0.6em] text-[10px] md:text-xs font-bold mb-8 uppercase opacity-0 hero-fade">The Midnight Sanctuary</p>
                 
-                <h1 class="text-6xl md:text-[12rem] font-bold tracking-tighter leading-[0.85] mb-6 flex flex-col items-center uppercase">
-                    <span class="word"><span class="char"><span class="char-inner">S</span></span><span class="char"><span class="char-inner">T</span></span><span class="char"><span class="char-inner">A</span></span><span class="char"><span class="char-inner">Y</span></span></span>
-                    <span class="font-serif italic font-normal text-gold normal-case mt-2 md:mt-0 word"><span class="char"><span class="char-inner">A</span></span><span class="char"><span class="char-inner">w</span></span><span class="char"><span class="char-inner">a</span></span><span class="char"><span class="char-inner">k</span></span><span class="char"><span class="char-inner">e</span></span></span>
+                <h1 class="text-6xl md:text-[13rem] font-bold tracking-tighter leading-[0.85] mb-8 flex flex-col items-center">
+                    <span class="text-sweep"><span class="text-sweep-inner">STAY</span></span>
+                    <span class="font-serif italic font-normal text-gold text-sweep mt-2 md:mt-0"><span class="text-sweep-inner">Awake</span></span>
                 </h1>
                 
-                <p class="text-muted max-w-lg mx-auto text-sm md:text-base font-light leading-relaxed opacity-0 hero-elem">
+                <p class="text-text-muted max-w-lg mx-auto text-sm md:text-lg font-light leading-relaxed opacity-0 hero-fade">
                     Coffee is the quiet anchor in a chaotic world. Breathe deeply, sip slowly, and let the midnight conversations flow.
                 </p>
             </div>
-            
-            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-0 hero-elem">
-                <div class="w-[1px] h-16 bg-white/20 relative overflow-hidden">
-                    <div class="absolute top-0 left-0 w-full h-full bg-gold animate-[scrollDown_2s_infinite]"></div>
-                </div>
-            </div>
         </section>
 
-        <!-- Marquee Ticker -->
-        <div class="marquee-container bg-[#080808]">
-            <div class="marquee-content">
-                <span class="marquee-item">High Altitude Beans ✦</span>
-                <span class="marquee-item">Organic Roasts ✦</span>
-                <span class="marquee-item">Midnight Pours ✦</span>
-                <span class="marquee-item">Bhairahawa's Finest ✦</span>
-                <span class="marquee-item">High Altitude Beans ✦</span>
-                <span class="marquee-item">Organic Roasts ✦</span>
-                <span class="marquee-item">Midnight Pours ✦</span>
-                <span class="marquee-item">Bhairahawa's Finest ✦</span>
-            </div>
-        </div>
-
-        <!-- Menu Section -->
-        <section id="menu" class="py-32 px-6 md:px-20 max-w-[1400px] mx-auto">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
-                <div class="lg:col-span-4 lg:sticky top-40 h-fit">
-                    <h2 class="text-5xl md:text-7xl font-bold tracking-tighter mb-6 scroll-reveal">The <br><span class="font-serif italic text-gold font-normal">Selection</span></h2>
-                    <p class="text-muted text-sm font-light leading-relaxed mb-10 scroll-reveal">
-                        Sourced from organic Himalayan farms and prepared with absolute precision.
-                    </p>
-                </div>
-
-                <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Menu Item 1 -->
-                    <div class="group hover-target scroll-reveal">
-                        <div class="img-reveal-wrapper h-[250px] mb-6">
-                            <div class="img-reveal-mask"></div>
-                            <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=800&auto=format&fit=crop" class="parallax-img menu-img" alt="Americano">
-                        </div>
-                        <div class="flex justify-between items-end border-b border-white/10 pb-4">
-                            <div>
-                                <span class="text-[10px] text-gold tracking-widest uppercase mb-2 block">Black</span>
-                                <h4 class="text-2xl font-bold">Midnight Americano</h4>
-                            </div>
-                            <span class="text-lg font-serif italic text-gold">Rs 180</span>
-                        </div>
-                        <p class="text-sm text-muted mt-4 font-light">Double-shot espresso pulled from 100% Arabica beans over pure spring water.</p>
+        <div class="content-bg pb-32">
+            <!-- Menu Section -->
+            <section id="menu" class="py-32 px-6 md:px-20 max-w-[1400px] mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+                    <div class="lg:col-span-4 lg:sticky top-40 h-fit">
+                        <span class="text-gold tracking-[0.4em] text-[10px] font-bold uppercase block mb-4 scroll-fade">Menu No. 01</span>
+                        <h2 class="text-5xl md:text-7xl font-bold tracking-tighter mb-6 scroll-fade">Liquid <br><span class="font-serif italic text-gold font-normal">Gold</span></h2>
+                        <p class="text-text-muted text-sm md:text-base font-light leading-relaxed mb-10 scroll-fade">
+                            Sourced from organic Himalayan farms and prepared with absolute precision. High altitude roasts for high altitude thoughts.
+                        </p>
                     </div>
 
-                    <!-- Menu Item 2 -->
-                    <div class="group hover-target scroll-reveal md:mt-16">
-                        <div class="img-reveal-wrapper h-[250px] mb-6">
-                            <div class="img-reveal-mask"></div>
-                            <img src="https://images.unsplash.com/photo-1572286258217-40142c1c6a70?q=80&w=800&auto=format&fit=crop" class="parallax-img menu-img" alt="Latte">
-                        </div>
-                        <div class="flex justify-between items-end border-b border-white/10 pb-4">
-                            <div>
-                                <span class="text-[10px] text-gold tracking-widest uppercase mb-2 block">Milk</span>
-                                <h4 class="text-2xl font-bold">Velvet Latte</h4>
+                    <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Liquid Card 1 -->
+                        <div class="liquid-card p-8 h-[400px] flex flex-col justify-end group scroll-fade">
+                            <div class="absolute inset-0 z-0">
+                                <img src="https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?q=80&w=800&auto=format&fit=crop" class="liquid-card-img parallax-img" alt="Americano">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#0a0705] via-[#0a0705]/60 to-transparent"></div>
                             </div>
-                            <span class="text-lg font-serif italic text-gold">Rs 240</span>
+                            <div class="relative z-10">
+                                <div class="flex justify-between items-end mb-4">
+                                    <span class="text-[10px] text-gold tracking-widest uppercase font-bold">Black</span>
+                                    <span class="text-lg font-serif italic text-gold">Rs 180</span>
+                                </div>
+                                <h4 class="text-3xl font-bold mb-2">Midnight Americano</h4>
+                                <p class="text-xs text-text-muted font-light leading-relaxed">Double-shot espresso pulled from 100% Arabica beans over pure spring water.</p>
+                            </div>
                         </div>
-                        <p class="text-sm text-muted mt-4 font-light">Silk micro-foam over a rich espresso base. Smooth, sweet, and balanced.</p>
-                    </div>
 
-                    <!-- Menu Item 3 -->
-                    <div class="group hover-target scroll-reveal">
-                        <div class="img-reveal-wrapper h-[250px] mb-6">
-                            <div class="img-reveal-mask"></div>
-                            <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=800&auto=format&fit=crop" class="parallax-img menu-img" alt="Cold Brew">
-                        </div>
-                        <div class="flex justify-between items-end border-b border-white/10 pb-4">
-                            <div>
-                                <span class="text-[10px] text-gold tracking-widest uppercase mb-2 block">Cold</span>
-                                <h4 class="text-2xl font-bold">Noir Cold Brew</h4>
+                        <!-- Liquid Card 2 -->
+                        <div class="liquid-card p-8 h-[400px] flex flex-col justify-end group scroll-fade md:mt-16">
+                            <div class="absolute inset-0 z-0">
+                                <img src="https://images.unsplash.com/photo-1572286258217-40142c1c6a70?q=80&w=800&auto=format&fit=crop" class="liquid-card-img parallax-img" alt="Latte">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#0a0705] via-[#0a0705]/60 to-transparent"></div>
                             </div>
-                            <span class="text-lg font-serif italic text-gold">Rs 320</span>
+                            <div class="relative z-10">
+                                <div class="flex justify-between items-end mb-4">
+                                    <span class="text-[10px] text-gold tracking-widest uppercase font-bold">Milk</span>
+                                    <span class="text-lg font-serif italic text-gold">Rs 240</span>
+                                </div>
+                                <h4 class="text-3xl font-bold mb-2">Velvet Latte</h4>
+                                <p class="text-xs text-text-muted font-light leading-relaxed">Silk micro-foam over a rich espresso base. Smooth, sweet, and balanced.</p>
+                            </div>
                         </div>
-                        <p class="text-sm text-muted mt-4 font-light">12-hour steeped concentrate infused with nitrogen for a creamy finish.</p>
-                    </div>
 
-                    <!-- Menu Item 4 -->
-                    <div class="group hover-target scroll-reveal md:mt-16">
-                        <div class="img-reveal-wrapper h-[250px] mb-6">
-                            <div class="img-reveal-mask"></div>
-                            <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop" class="parallax-img menu-img" alt="Dessert">
-                        </div>
-                        <div class="flex justify-between items-end border-b border-white/10 pb-4">
-                            <div>
-                                <span class="text-[10px] text-gold tracking-widest uppercase mb-2 block">Sweet</span>
-                                <h4 class="text-2xl font-bold">Moonlit Waffle</h4>
+                        <!-- Liquid Card 3 -->
+                        <div class="liquid-card p-8 h-[400px] flex flex-col justify-end group scroll-fade">
+                            <div class="absolute inset-0 z-0">
+                                <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=800&auto=format&fit=crop" class="liquid-card-img parallax-img" alt="Cold Brew">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#0a0705] via-[#0a0705]/60 to-transparent"></div>
                             </div>
-                            <span class="text-lg font-serif italic text-gold">Rs 350</span>
+                            <div class="relative z-10">
+                                <div class="flex justify-between items-end mb-4">
+                                    <span class="text-[10px] text-gold tracking-widest uppercase font-bold">Cold</span>
+                                    <span class="text-lg font-serif italic text-gold">Rs 320</span>
+                                </div>
+                                <h4 class="text-3xl font-bold mb-2">Noir Cold Brew</h4>
+                                <p class="text-xs text-text-muted font-light leading-relaxed">12-hour steeped concentrate infused with nitrogen for a creamy finish.</p>
+                            </div>
                         </div>
-                        <p class="text-sm text-muted mt-4 font-light">Light waffles topped with wild honey, vanilla cream, and seasonal berries.</p>
+
+                        <!-- Liquid Card 4 -->
+                        <div class="liquid-card p-8 h-[400px] flex flex-col justify-end group scroll-fade md:mt-16">
+                            <div class="absolute inset-0 z-0">
+                                <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop" class="liquid-card-img parallax-img" alt="Dessert">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#0a0705] via-[#0a0705]/60 to-transparent"></div>
+                            </div>
+                            <div class="relative z-10">
+                                <div class="flex justify-between items-end mb-4">
+                                    <span class="text-[10px] text-gold tracking-widest uppercase font-bold">Sweet</span>
+                                    <span class="text-lg font-serif italic text-gold">Rs 350</span>
+                                </div>
+                                <h4 class="text-3xl font-bold mb-2">Moonlit Waffle</h4>
+                                <p class="text-xs text-text-muted font-light leading-relaxed">Light waffles topped with wild honey, vanilla cream, and seasonal berries.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Story Section -->
-        <section id="about" class="py-32 px-6 md:px-20 bg-[#030303]">
-            <div class="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                <div class="img-reveal-wrapper h-[600px] hover-target">
-                    <div class="img-reveal-mask"></div>
-                    <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1200&auto=format&fit=crop" class="parallax-img w-full h-full object-cover" id="story-img" alt="The Roastery">
-                </div>
-                
-                <div class="space-y-10">
-                    <h2 class="text-5xl md:text-6xl font-bold tracking-tighter leading-none scroll-reveal">Crafted for the <br><span class="font-serif font-normal italic text-gold">Nocturnal</span></h2>
-                    <div class="space-y-6 text-muted font-light leading-relaxed text-sm md:text-base scroll-reveal">
-                        <p>After Hours started with a simple observation: Bhairahawa sleeps too early for its thinkers. We built a sanctuary for those who do their best work when the sun is down.</p>
-                        <p>We source 100% organic beans from the high-altitude plantations of Gulmi and Illam, roasting them in small batches to preserve the bold notes unique to Nepali soil. No loud music. No bright lights. Just you and the perfect cup.</p>
+            <!-- Story Section -->
+            <section id="about" class="py-32 px-6 md:px-20">
+                <div class="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                    <!-- Liquid Mask Image -->
+                    <div class="rounded-[50px] overflow-hidden h-[600px] relative border border-white/5 scroll-fade">
+                        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1200&auto=format&fit=crop" class="w-full h-[120%] object-cover parallax-img opacity-60 mix-blend-luminosity" alt="The Roastery">
+                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent,rgba(10,7,5,0.8))]"></div>
+                        <div class="absolute bottom-10 left-10 z-10">
+                            <p class="text-[10px] font-bold tracking-[0.5em] text-gold uppercase glass-pill px-4 py-2 rounded-full">Est. 2023</p>
+                        </div>
                     </div>
                     
-                    <div class="grid grid-cols-2 gap-8 pt-8 border-t border-white/10 scroll-reveal">
-                        <div>
-                            <h5 class="text-3xl font-serif italic text-gold mb-2">100%</h5>
-                            <p class="text-[10px] text-muted tracking-widest uppercase font-bold">Organic Origin</p>
-                        </div>
-                        <div>
-                            <h5 class="text-3xl font-serif italic text-gold mb-2">02 AM</h5>
-                            <p class="text-[10px] text-muted tracking-widest uppercase font-bold">Midnight Closure</p>
+                    <div class="space-y-10">
+                        <h2 class="text-5xl md:text-7xl font-bold tracking-tighter leading-none scroll-fade">Crafted for the <br><span class="font-serif font-normal italic text-gold">Nocturnal</span></h2>
+                        <div class="space-y-6 text-text-muted font-light leading-relaxed text-base md:text-lg scroll-fade">
+                            <p>After Hours started with a simple observation: Bhairahawa sleeps too early for its thinkers. We built a sanctuary for those who do their best work when the sun is down.</p>
+                            <p>We source 100% organic beans from the high-altitude plantations, roasting them in small batches to preserve the bold notes unique to Nepali soil. No loud music. No bright lights. Just you and the perfect cup.</p>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </div>
     </div> <!-- End Main Content -->
 
     <!-- Footer (Curtain Reveal) -->
     <footer class="px-6 md:px-20 text-center relative overflow-hidden">
         <img src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?q=80&w=1500&auto=format&fit=crop" 
-             class="absolute inset-0 w-full h-full object-cover opacity-[0.03]" alt="Footer Bg">
+             class="absolute inset-0 w-full h-full object-cover opacity-[0.05] mix-blend-luminosity" alt="Footer Bg">
         
         <div class="relative z-10 flex flex-col items-center">
-            <span class="text-gold tracking-[0.4em] text-[10px] font-bold uppercase block mb-6">Speak with the Barista</span>
+            <!-- Footer Logo -->
+            <div class="ah-monogram mb-10 scale-150 shadow-[0_0_30px_rgba(212,175,55,0.2)]">AH</div>
+
+            <span class="text-gold tracking-[0.4em] text-[10px] md:text-xs font-bold uppercase block mb-6">Speak with the Barista</span>
             
-            <a href="tel:+9779867898711" class="giant-phone text-5xl md:text-[8rem] font-bold tracking-tighter leading-none block mb-12 hover-target">
+            <a href="tel:+9779867898711" class="giant-phone text-6xl md:text-[9rem] font-bold tracking-tighter leading-none block mb-12">
                 986 789 8711
             </a>
             
-            <a href="https://www.instagram.com/afterhourscafe.bhw/" target="_blank" class="hover-target inline-flex items-center gap-3 px-8 py-4 border border-gold text-gold rounded-full text-xs font-bold tracking-widest uppercase hover:bg-gold hover:text-black transition-all duration-300">
+            <a href="https://www.instagram.com/afterhourscafe.bhw/" target="_blank" class="inline-flex items-center gap-3 px-8 py-4 border border-gold text-gold rounded-full text-xs font-bold tracking-widest uppercase hover:bg-gold hover:text-black shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-300 transform hover:scale-105">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                     <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
                 </svg>
-                Instagram
+                Follow Instagram
             </a>
         </div>
         
-        <div class="w-full max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-2 gap-10 text-[10px] font-bold tracking-[0.2em] text-muted uppercase relative z-10 border-t border-white/10 pt-10 mt-20">
+        <div class="w-full max-w-5xl mx-auto grid grid-cols-2 gap-10 text-[10px] font-bold tracking-[0.2em] text-text-muted uppercase relative z-10 border-t border-white/5 pt-10 mt-20">
             <div class="text-left">
-                <p class="text-white mb-2">Location</p>
+                <p class="text-white mb-2 tracking-[0.4em]">Location</p>
                 <p class="font-light">Siddharthanagar-08<br>Bhairahawa, Nepal</p>
             </div>
             <div class="text-right">
-                <p class="text-white mb-2">Hours</p>
+                <p class="text-white mb-2 tracking-[0.4em]">Hours</p>
                 <p class="font-light">Every Night<br>4:00 PM - 2:00 AM</p>
             </div>
         </div>
+        <p class="text-[9px] tracking-[0.5em] uppercase text-white/20 relative z-10 mt-16">&copy; 2024 After Hours Café.</p>
     </footer>
 
-    <!-- CSS Keyframe for scroll down indicator -->
-    <style>
-        @keyframes scrollDown {
-            0% { transform: translateY(-100%); }
-            50% { transform: translateY(0%); }
-            100% { transform: translateY(100%); }
-        }
-    </style>
-
     <script>
-        // 1. Lenis Smooth Scrolling Initialization
+        // 1. Lenis Smooth Scrolling
         const lenis = new Lenis({
-            duration: 1.2,
+            duration: 1.5,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            direction: 'vertical',
-            gestureDirection: 'vertical',
             smooth: true,
             mouseMultiplier: 1,
-            smoothTouch: false,
-            touchMultiplier: 2,
         });
-
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
         gsap.registerPlugin(ScrollTrigger);
 
-        // 2. Custom Cursor Logic
-        const cursor = document.getElementById('cursor');
-        const hoverTargets = document.querySelectorAll('.hover-target');
-
-        document.addEventListener('mousemove', (e) => {
-            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1, ease: "power2.out" });
-        });
-
-        hoverTargets.forEach(target => {
-            target.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
-            target.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
-        });
-
-        // 3. Preloader & Hero Reveal Sequence
-        let loadPercent = 0;
-        const percentText = document.getElementById('loader-percent');
-        const loaderLine = document.getElementById('loader-line');
-
-        const loadInterval = setInterval(() => {
-            loadPercent += Math.floor(Math.random() * 5) + 1;
-            if(loadPercent > 100) loadPercent = 100;
-            
-            percentText.innerText = loadPercent + '%';
-            loaderLine.style.width = loadPercent + '%';
-
-            if(loadPercent === 100) {
-                clearInterval(loadInterval);
-                finishLoading();
+        // 2. Liquid Splash Preloader Animation
+        const loaderTL = gsap.timeline();
+        
+        // Drop falls
+        loaderTL.to("#drop", {
+            y: "50vh",
+            duration: 0.8,
+            ease: "power2.in"
+        })
+        // Ripple expands to cover screen
+        .to("#ripple", {
+            width: "250vw",
+            height: "250vw",
+            duration: 1.2,
+            ease: "power3.inOut"
+        }, "-=0.1")
+        // Hide loader container
+        .to("#liquid-loader", {
+            opacity: 0,
+            duration: 0.8,
+            ease: "power2.out",
+            onComplete: () => {
+                document.getElementById('liquid-loader').style.display = 'none';
+                startHeroAnimations();
             }
-        }, 30);
+        });
 
-        function finishLoading() {
+        // 3. Hero Reveal Sequence (Triggers after loader)
+        function startHeroAnimations() {
             const tl = gsap.timeline();
             
-            tl.to(".loader-wrap", {
-                yPercent: -100,
-                duration: 1.5,
-                ease: "expo.inOut",
-                delay: 0.3
-            })
-            // Reveal Hero Text characters one by one
-            .to(".char-inner", {
+            // Sweep text up with slight rotation
+            tl.to(".text-sweep-inner", {
                 y: 0,
+                rotation: 0,
                 opacity: 1,
-                stagger: 0.05,
-                duration: 1.2,
+                stagger: 0.15,
+                duration: 1.4,
                 ease: "power4.out"
-            }, "-=0.5")
-            // Fade in paragraph and UI
-            .to(".hero-elem", {
+            })
+            // Fade in paragraph and elements
+            .to(".hero-fade", {
                 opacity: 1,
-                y: -20,
+                y: -10,
                 stagger: 0.2,
-                duration: 1,
-                ease: "power3.out"
-            }, "-=0.8");
+                duration: 1.2,
+                ease: "power2.out"
+            }, "-=1");
         }
 
         // 4. Scroll Animations
         
         // Parallax Hero Background
         gsap.to("#hero-bg", {
-            yPercent: 30,
+            yPercent: 40,
             ease: "none",
-            scrollTrigger: {
-                trigger: "#home",
-                start: "top top",
-                end: "bottom top",
-                scrub: true
+            scrollTrigger: { trigger: "#home", start: "top top", end: "bottom top", scrub: true }
+        });
+
+        // Navbar blur effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if(window.scrollY > 50) {
+                nav.classList.add('bg-[#0a0705]/80', 'backdrop-blur-md', 'border-b', 'border-white/5');
+            } else {
+                nav.classList.remove('bg-[#0a0705]/80', 'backdrop-blur-md', 'border-b', 'border-white/5');
             }
         });
 
-        // Menu Image Masks Reveal
-        gsap.utils.toArray('.img-reveal-wrapper').forEach(wrapper => {
-            const mask = wrapper.querySelector('.img-reveal-mask');
-            const img = wrapper.querySelector('.parallax-img');
-            
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: wrapper,
-                    start: "top 85%",
-                }
-            });
-
-            tl.to(mask, { scaleY: 0, duration: 1.2, ease: "expo.out" })
-              .from(img, { scale: 1.2, duration: 1.5, ease: "expo.out" }, "-=1.2");
-        });
-
-        // Parallax on Menu Images
+        // Image Parallax inside Liquid Cards
         gsap.utils.toArray('.parallax-img').forEach(img => {
             gsap.to(img, {
                 yPercent: 15,
@@ -487,12 +470,12 @@
             });
         });
 
-        // Standard fade up for text elements
-        gsap.utils.toArray('.scroll-reveal').forEach(el => {
+        // Standard fade up for content
+        gsap.utils.toArray('.scroll-fade').forEach(el => {
             gsap.from(el, {
-                y: 50,
+                y: 60,
                 opacity: 0,
-                duration: 1,
+                duration: 1.2,
                 ease: "power3.out",
                 scrollTrigger: {
                     trigger: el,
@@ -501,14 +484,11 @@
             });
         });
 
-        // 5. Smooth Anchor Scrolling with Lenis
+        // 5. Smooth Anchor Scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                lenis.scrollTo(this.getAttribute('href'), {
-                    duration: 1.5,
-                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
-                });
+                lenis.scrollTo(this.getAttribute('href'), { duration: 1.5 });
             });
         });
 
