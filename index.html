@@ -1,9 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K46SX05LJV"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-K46SX05LJV');
+    </script>
+    <meta name="google-site-verification" content="s4x21MIe4t3dngVzEcA4_yO_ezjXqFDAXu3y4Wwp-sU" />
+    <link rel="icon" type="image/png" href="cup.png">
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>After Hours Café | Premium Roasters</title>
+    <title>After Hours Café | Sensory Experience</title>
     
     <!-- Tailwind, GSAP, Lenis, and Phosphor Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -18,79 +29,61 @@
         /* ========= DUAL PHYSICS & THEME VARIABLES ========= */
         :root {
             /* NIGHT MODE (Deep, Slow, Smooth) */
+            --bg-rgb: 8, 5, 4; 
             --bg-deep: #0a0604;
             --bg-card: rgba(20, 12, 8, 0.5);
-            --bg-glass: rgba(10, 6, 4, 0.6);
             --text-main: #f4eade;
             --text-muted: #8c7e73;
             --border-color: rgba(255,255,255,0.05);
             --gold: #c69b6a;
-            --accent-pour: #1f110a; /* Dark Espresso */
-            
-            /* Physics Engine */
-            --anim-speed: 0.8s;
-            --anim-ease: cubic-bezier(0.4, 0, 0.2, 1); /* Smooth & Slow */
-            --card-lift: -8px;
-            --card-shadow: 0 20px 40px rgba(0,0,0,0.8);
-            
-            /* Cart */
+            --accent-pour: #1f110a; 
             --cart-bg: #140c08; --cart-text: #f4eade; --cart-border: rgba(255,255,255,0.1);
         }
 
         body.light-mode {
             /* DAY MODE (Bright, Snappy, Bouncy) */
+            --bg-rgb: 242, 233, 223;
             --bg-deep: #f2e9df;
-            --bg-card: rgba(255, 255, 255, 0.8);
-            --bg-glass: rgba(255, 255, 255, 0.6);
+            --bg-card: rgba(255, 255, 255, 0.7);
             --text-main: #2b1c11;
             --text-muted: #736154;
             --border-color: rgba(0,0,0,0.08);
             --gold: #b0703c;
-            --accent-pour: #fdfaf6; /* Sweet Cream */
-            
-            /* Physics Engine */
-            --anim-speed: 0.4s;
-            --anim-ease: cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy & Fast */
-            --card-lift: -15px;
-            --card-shadow: 0 25px 40px rgba(176, 112, 60, 0.15);
-            
-            /* Cart */
+            --accent-pour: #fdfaf6; 
             --cart-bg: #ffffff; --cart-text: #1a120e; --cart-border: rgba(0,0,0,0.1);
         }
 
         html.lenis { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto; }
-        body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Outfit', sans-serif; overflow-x: hidden; cursor: none; transition: background-color 0.1s, color 0.1s; }
+        body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Outfit', sans-serif; overflow-x: hidden; cursor: none; transition: background-color 0.8s ease, color 0.8s ease; }
         ::selection { background: var(--gold); color: #fff; }
         .font-serif { font-family: 'Playfair Display', serif; }
 
-        /* ========= OLD-SCHOOL FROSTED GLASS ========= */
-        .old-frost {
-            background: var(--bg-card);
-            backdrop-filter: blur(30px) saturate(140%);
-            -webkit-backdrop-filter: blur(30px) saturate(140%);
-            border: 1px solid var(--border-color);
-            transition: all var(--anim-speed) var(--anim-ease);
-        }
+        /* ========= THE VIBE SELECTOR (PRELOADER) ========= */
+        #vibe-selector { position: fixed; inset: 0; background: #0a0604; z-index: 100000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1s; }
+        .vibe-box { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); padding: 50px; border-radius: 40px; text-align: center; }
+        .vibe-btn-container { display: flex; gap: 20px; margin-top: 30px; justify-content: center; flex-wrap: wrap; }
+        .vibe-btn { padding: 15px 30px; border-radius: 30px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; font-size: 0.85rem; display: flex; align-items: center; gap: 10px; transition: 0.4s; cursor: none; }
+        .btn-day { background: #f2e9df; color: #2b1c11; }
+        .btn-day:hover { background: #fff; transform: translateY(-5px); box-shadow: 0 10px 30px rgba(242,233,223,0.3); }
+        .btn-night { background: #1f110a; color: #c69b6a; border: 1px solid #c69b6a; }
+        .btn-night:hover { background: #c69b6a; color: #1f110a; transform: translateY(-5px); box-shadow: 0 10px 30px rgba(198,155,106,0.3); }
 
         /* ========= LIQUID POUR TRANSITION ========= */
         .pour-container { position: fixed; inset: 0; z-index: 99999999; pointer-events: none; display: flex; filter: url('#goo'); }
-        .pour-drip { flex: 1; height: 0vh; background: var(--accent-pour); border-radius: 0 0 100px 100px; transform-origin: top; margin: 0 -5px; } /* Negative margin prevents gaps */
+        .pour-drip { flex: 1; height: 0vh; background: var(--accent-pour); border-radius: 0 0 100px 100px; transform-origin: top; margin: 0 -5px; }
+
+        /* ========= OLD-SCHOOL FROSTED GLASS ========= */
+        .old-frost { background: var(--bg-card); backdrop-filter: blur(30px) saturate(140%); -webkit-backdrop-filter: blur(30px) saturate(140%); border: 1px solid var(--border-color); transition: background 0.8s, border-color 0.8s; }
 
         /* ========= SENSORY CURSOR ========= */
         @media (pointer: fine) {
             .cursor-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999999; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s; }
-            .cursor-ring { width: 34px; height: 34px; border: 1px solid var(--gold); border-radius: 50%; opacity: 0.5; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999998; transform: translate(-50%, -50%); transition: width var(--anim-speed) var(--anim-ease), height var(--anim-speed) var(--anim-ease); }
+            .cursor-ring { width: 34px; height: 34px; border: 1px solid var(--gold); border-radius: 50%; opacity: 0.5; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999998; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s; }
             .cursor-click-ripple { position: fixed; width: 20px; height: 20px; border: 2px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999997; transform: translate(-50%, -50%) scale(0); opacity: 0; }
             .hover-active .cursor-dot { width: 0; height: 0; }
             .hover-active .cursor-ring { width: 60px; height: 60px; opacity: 1; background: rgba(212, 163, 115, 0.1); backdrop-filter: blur(4px); border-width: 2px; }
         }
-
-        /* ========= AWAKENING PRELOADER ========= */
-        #loader { position: fixed; inset: 0; background: var(--bg-deep); z-index: 100000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: background 0.5s; }
-        .loader-cup { width: 80px; height: 60px; border: 3px solid var(--gold); border-top: none; border-radius: 0 0 40px 40px; position: relative; overflow: hidden; margin-bottom: 20px; }
-        .loader-fill { position: absolute; bottom: 0; left: 0; width: 100%; height: 0%; background: var(--gold); }
-        .pulse-text { font-family: 'Playfair Display', serif; font-size: 1.8rem; letter-spacing: 6px; color: var(--gold); opacity: 0; }
 
         /* ========= ANALOG CLOCK ========= */
         .analog-clock { width: 45px; height: 45px; border: 2px solid var(--gold); border-radius: 50%; position: relative; background: transparent; }
@@ -100,60 +93,73 @@
         .sec-hand { width: 1px; height: 18px; background: var(--gold); margin-left: -0.5px; }
         .clock-center { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 
-        /* ========= MENU CARDS & DYNAMIC OFFERS ========= */
-        .menu-card { position: relative; overflow: hidden; border-radius: 24px; z-index: 2; transition: transform var(--anim-speed) var(--anim-ease), box-shadow var(--anim-speed) var(--anim-ease), border-color 0.3s; }
-        .menu-card:hover { transform: translateY(var(--card-lift)); border-color: var(--gold); z-index: 10; box-shadow: var(--card-shadow); }
+        /* ========= MENU CARDS & OFFERS ========= */
+        .menu-card { position: relative; overflow: hidden; border-radius: 24px; z-index: 2; transition: transform 0.5s ease, box-shadow 0.5s ease, border-color 0.5s; }
+        .menu-card:hover { transform: translateY(-10px); border-color: var(--gold); z-index: 10; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+        body.light-mode .menu-card:hover { box-shadow: 0 20px 50px rgba(176, 112, 60, 0.2); }
         .menu-img-wrap { height: 260px; overflow: hidden; position: relative; }
         .menu-img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s ease, filter 0.5s ease; opacity: 0.9; }
         .menu-card:hover .menu-img { transform: scale(1.1); filter: brightness(1.15); opacity: 1; }
         
-        .offer-tag { position: absolute; top: 15px; right: 15px; font-size: 0.7rem; font-weight: 800; padding: 6px 14px; border-radius: 30px; letter-spacing: 1px; z-index: 10; backdrop-filter: blur(10px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        .tag-red { background: rgba(230, 57, 70, 0.9); color: #fff; }
-        .tag-gold { background: rgba(212, 163, 115, 0.9); color: #000; }
+        .offer-tag { position: absolute; top: 15px; right: 15px; font-size: 0.7rem; font-weight: 800; padding: 6px 14px; border-radius: 30px; letter-spacing: 1px; z-index: 10; backdrop-filter: blur(10px); }
+        .tag-red { background: rgba(230, 57, 70, 0.9); color: #fff; box-shadow: 0 5px 15px rgba(230,57,70,0.4); }
+        .tag-gold { background: rgba(198, 155, 106, 0.9); color: #000; box-shadow: 0 5px 15px rgba(198,155,106,0.4); }
         .tag-dark { background: rgba(30, 30, 30, 0.9); color: #fff; border: 1px solid var(--gold); }
-        .tag-green { background: rgba(85, 107, 47, 0.9); color: #fff; }
+        .tag-green { background: rgba(85, 107, 47, 0.9); color: #fff; box-shadow: 0 5px 15px rgba(85,107,47,0.4); }
 
-        .add-btn { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: var(--bg-deep); padding: 14px 28px; border-radius: 40px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; box-shadow: var(--card-shadow); transition: 0.3s; opacity: 0; width: 85%; justify-content: center; z-index: 3; }
+        .add-btn { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: var(--bg-deep); padding: 14px 28px; border-radius: 40px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.3s; opacity: 0; width: 85%; justify-content: center; z-index: 3; }
         .menu-card:hover .add-btn { opacity: 1; background: var(--gold); color: #fff; }
-        @media (max-width: 768px) { .add-btn { opacity: 1; bottom: 15px; } }
+        @media (max-width: 768px) { .add-btn { opacity: 1; bottom: 15px; background: var(--text-main); color: var(--bg-deep); } }
 
         /* ========= 3D LIQUID DROPS (CART ANIMATION) ========= */
         .gooey-filter { filter: url('#goo'); position: fixed; inset: 0; z-index: 999999; pointer-events: none; }
-        .liquid-drop-3d { position: absolute; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #ffeedb, var(--gold) 60%, #8b5e34); box-shadow: 0 10px 20px rgba(0,0,0,0.5), inset -2px -2px 6px rgba(0,0,0,0.4); transform-origin: center; z-index: 999999; }
+        .liquid-drop-3d { 
+            position: absolute; border-radius: 50%; 
+            background: radial-gradient(circle at 30% 30%, #ffeedb, var(--gold) 60%, #8b5e34); 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5), inset -2px -2px 6px rgba(0,0,0,0.4); 
+            transform-origin: center; z-index: 999999; 
+        }
 
         /* ========= DYNAMIC CART SIDEBAR ========= */
-        #cart-sidebar { position: fixed; top: 0; right: -100%; width: 100%; max-width: 420px; height: 100vh; z-index: 10000; transition: 0.6s var(--anim-ease); background: var(--cart-bg); color: var(--cart-text); border-left: 1px solid var(--cart-border); display: flex; flex-direction: column; box-shadow: -20px 0 60px rgba(0,0,0,0.5); backdrop-filter: blur(30px); }
+        #cart-sidebar { position: fixed; top: 0; right: -100%; width: 100%; max-width: 420px; height: 100vh; z-index: 10000; transition: 0.6s cubic-bezier(0.25, 1, 0.5, 1); background: var(--cart-bg); color: var(--cart-text); border-left: 1px solid var(--cart-border); display: flex; flex-direction: column; box-shadow: -20px 0 60px rgba(0,0,0,0.5); backdrop-filter: blur(30px); }
         #cart-sidebar.open { right: 0; }
         .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 9999; opacity: 0; pointer-events: none; transition: 0.4s; }
         .cart-overlay.open { opacity: 1; pointer-events: all; }
 
-        /* ========= EXTRA THINGO: ROASTING JOURNEY ACCORDION ========= */
-        .process-item { border-bottom: 1px solid var(--border-color); padding: 25px 0; cursor: pointer; transition: var(--anim-speed) var(--anim-ease); overflow: hidden; height: 85px; }
+        /* ========= THE ROASTING JOURNEY ACCORDION ========= */
+        .process-item { border-bottom: 1px solid var(--border-color); padding: 25px 0; cursor: pointer; transition: 0.5s ease; overflow: hidden; height: 85px; }
         .process-item.active { height: 220px; border-bottom-color: var(--gold); }
         .process-title { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--text-muted); transition: 0.4s; display: flex; align-items: center; justify-content: space-between; }
         .process-item.active .process-title { color: var(--gold); font-size: 2.5rem; }
         .process-content { opacity: 0; transform: translateY(20px); transition: 0.4s; padding-top: 15px; color: var(--text-main); font-weight: 300; line-height: 1.6; }
         .process-item.active .process-content { opacity: 1; transform: translateY(0); }
 
-        /* ========= EXTRA THINGO: HIMALAYAN ORIGINS PARALLAX ========= */
-        .origin-section { position: relative; height: 70vh; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-top: 100px; }
-        .origin-bg { position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2000&auto=format&fit=crop') center/cover; opacity: 0.4; z-index: 0; }
-        body.light-mode .origin-bg { opacity: 0.2; }
-        .origin-content { position: relative; z-index: 1; text-align: center; padding: 40px; }
+        /* ========= RADIO WIDGET ========= */
+        .radio-widget { position: fixed; bottom: 30px; left: 30px; z-index: 50; display: flex; align-items: center; gap: 15px; padding: 10px 20px 10px 10px; border-radius: 50px; }
+        .vinyl { width: 40px; height: 40px; background: #111; border-radius: 50%; border: 2px solid #333; position: relative; animation: spin 4s linear infinite; display: flex; justify-content: center; align-items: center; }
+        .vinyl::after { content: ''; width: 12px; height: 12px; background: var(--gold); border-radius: 50%; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* ========= FOOTER & MAIN WRAPPER ========= */
-        #main-content { position: relative; z-index: 2; background: var(--bg-deep); margin-bottom: 85vh; box-shadow: 0 40px 100px rgba(0,0,0,1); border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; transition: background 0.8s ease; }
-        footer { position: fixed; bottom: 0; left: 0; width: 100%; height: 85vh; z-index: 1; background: #050302; display: flex; flex-direction: column; justify-content: center; transition: background 0.8s; }
+        /* ========= FOOTER & MAIN WRAPPER (Dynamic Space Fix) ========= */
+        /* Margin-bottom is set dynamically by JS to perfectly match the footer height */
+        #main-content { position: relative; z-index: 2; background: var(--bg-deep); box-shadow: 0 40px 100px rgba(0,0,0,1); border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; transition: background 0.8s ease; }
+        footer { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1; background: #050302; display: flex; flex-direction: column; justify-content: center; transition: background 0.8s; }
         body.light-mode footer { background: #e8ded3; }
 
         @media (max-width: 768px) {
-            #main-content { margin-bottom: auto; border-radius: 0; }
-            footer { position: relative; height: auto; padding: 60px 20px; }
+            #main-content { margin-bottom: 0 !important; border-radius: 0; }
+            footer { position: relative; height: auto !important; padding: 60px 20px; }
             .process-item.active { height: 280px; }
+            .radio-widget { display: none; }
         }
     </style>
 </head>
 <body class="hover-target-container">
+
+    <!-- AUDIO ENGINE (Background Ambience) -->
+    <!-- Using high-quality, reliable Archive.org ambient loops -->
+    <audio id="audio-night" loop src="https://ia800900.us.archive.org/21/items/ambient-piano-music/Ambient%20Piano.mp3" preload="auto"></audio>
+    <audio id="audio-day" loop src="https://ia801402.us.archive.org/34/items/AcousticGuitar_336/Acoustic_Guitar.mp3" preload="auto"></audio>
 
     <!-- SVG Gooey Filter for Liquid Pour -->
     <svg style="display: none;">
@@ -165,6 +171,18 @@
             </filter>
         </defs>
     </svg>
+
+    <!-- THE VIBE SELECTOR (Interactive Preloader) -->
+    <div id="vibe-selector">
+        <div class="vibe-box hover-target">
+            <h1 class="text-4xl font-serif text-gold mb-2">Welcome to After Hours</h1>
+            <p class="text-text-muted mb-8 text-sm">Select your atmosphere to begin.</p>
+            <div class="vibe-btn-container">
+                <button class="vibe-btn btn-day hover-target" onclick="initExperience('day')"><i class="ph ph-sun text-xl"></i> Morning Light</button>
+                <button class="vibe-btn btn-night hover-target" onclick="initExperience('night')"><i class="ph ph-moon-stars text-xl"></i> Midnight Dark</button>
+            </div>
+        </div>
+    </div>
 
     <!-- LIQUID POUR THEME TRANSITION -->
     <div class="pour-container" id="pour-container">
@@ -178,12 +196,6 @@
     <div class="cursor-ring" id="cursor-ring"></div>
     <div class="cursor-click-ripple" id="cursor-ripple"></div>
 
-    <!-- AWAKENING PRELOADER -->
-    <div id="loader">
-        <div class="loader-cup"><div class="loader-fill" id="loader-fill"></div></div>
-        <div class="pulse-text" id="loader-text">Awakening...</div>
-    </div>
-
     <!-- HEADER: FROSTED COMMAND CENTER -->
     <div class="fixed top-0 left-0 w-full z-50 flex justify-between items-start px-6 py-6 pointer-events-none nav-anim opacity-0 translate-y-[-20px]">
         
@@ -196,7 +208,7 @@
                     <line x1="40" y1="55" x2="60" y2="55" stroke="var(--gold)" stroke-width="4" stroke-linecap="round"/>
                 </svg>
                 <div class="flex flex-col">
-                    <span class="text-sm font-bold tracking-[0.2em] leading-none">AFTER HOURS</span>
+                    <span class="text-sm font-bold tracking-[0.2em] leading-none text-[var(--text-main)] transition-colors">AFTER HOURS</span>
                     <span class="text-[8px] tracking-widest text-gold uppercase mt-1">Bhairahawa</span>
                 </div>
             </div>
@@ -210,24 +222,33 @@
                 </div>
                 <div class="flex flex-col">
                     <span class="text-2xl font-bold font-serif text-gold leading-none" id="digital-time">--:--</span>
-                    <span class="text-xs opacity-80 flex items-center gap-1 mt-1"><i id="weather-icon" class="ph ph-moon-stars"></i> <span id="weather-text">22°C</span></span>
+                    <span class="text-xs opacity-80 flex items-center gap-1 mt-1 text-[var(--text-main)] transition-colors"><i id="weather-icon" class="ph ph-moon-stars"></i> <span id="weather-text">22°C</span></span>
                 </div>
             </div>
         </div>
 
-        <!-- Right: Theme & Cart -->
+        <!-- Right: Controls -->
         <div class="flex items-center gap-4 pointer-events-auto">
-            <button onclick="triggerLiquidPour()" class="old-frost hover-target w-14 h-14 rounded-full flex justify-center items-center text-xl hover:text-gold transition-colors shadow-lg" id="theme-btn">
-                <i class="ph ph-sun" id="theme-icon"></i>
+            <button onclick="triggerLiquidPour()" class="old-frost hover-target w-14 h-14 rounded-full flex justify-center items-center text-xl hover:text-gold transition-colors text-[var(--text-main)]" id="theme-btn">
+                <i class="ph ph-moon" id="theme-icon"></i>
             </button>
-            <button onclick="toggleCart()" class="old-frost relative w-14 h-14 rounded-full flex justify-center items-center hover-target hover:bg-gold hover:text-white transition-colors group shadow-lg" id="cart-icon">
+            <button onclick="toggleCart()" class="old-frost relative w-14 h-14 rounded-full flex justify-center items-center hover-target hover:bg-gold hover:text-white transition-colors group text-[var(--text-main)]" id="cart-icon">
                 <i class="ph ph-shopping-bag text-2xl transition-transform group-hover:scale-110"></i>
                 <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-600 text-white text-[11px] font-bold w-6 h-6 flex justify-center items-center rounded-full scale-0 transition-transform duration-300">0</span>
             </button>
         </div>
     </div>
 
-    <!-- DYNAMIC CART SIDEBAR -->
+    <!-- RADIO WIDGET (Bottom Left) -->
+    <div class="radio-widget old-frost hover-target nav-anim opacity-0">
+        <div class="vinyl"></div>
+        <div class="flex flex-col">
+            <span class="text-[9px] uppercase tracking-widest text-gold font-bold">Now Playing</span>
+            <span class="text-sm font-light italic text-[var(--text-main)] transition-colors" id="radio-track">Midnight Jazz</span>
+        </div>
+    </div>
+
+    <!-- BRIGHT CART SIDEBAR -->
     <div class="cart-overlay hover-target" onclick="toggleCart()" id="cart-overlay"></div>
     <div id="cart-sidebar" class="pt-32 pb-8 px-6">
         <div class="flex justify-between items-center mb-6 border-b border-[var(--cart-border)] pb-4">
@@ -254,26 +275,20 @@
     </div>
 
     <div id="main-content">
-        <!-- HERO SECTION (Dynamic Visuals) -->
-        <section class="h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden">
+        <!-- HERO SECTION -->
+        <section class="h-screen flex flex-col items-center justify-center px-6 relative">
             <div class="absolute inset-0 z-0">
-                <!-- Fallback background image, heavily blended -->
-                <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover opacity-30 mix-blend-luminosity parallax-bg" alt="Bg">
-                <div class="absolute inset-0 bg-gradient-to-t from-[var(--bg-deep)] to-transparent opacity-90"></div>
+                <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover opacity-20 mix-blend-luminosity transition-opacity duration-1000" id="hero-img" alt="Bg">
+                <div class="absolute inset-0 bg-gradient-to-t from-[var(--bg-deep)] via-transparent to-[var(--bg-deep)] transition-colors duration-1000"></div>
             </div>
 
-            <!-- EXTRA THINGO: Live Roasting Status Widget -->
-            <div class="old-frost px-6 py-3 rounded-full z-10 mb-8 flex items-center gap-3 animate-fade-in">
-                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                <span class="text-xs tracking-widest uppercase font-semibold text-[var(--text-main)]">Currently Roasting: Ethiopian Yirgacheffe</span>
-            </div>
-
-            <div class="text-center z-10 w-full relative pt-10">
-                <h1 class="text-7xl md:text-[14rem] font-bold tracking-tighter leading-[0.85] mb-4 hero-anim opacity-0 translate-y-10" style="color: var(--text-main);">
-                    STAY<br><span class="font-serif italic font-normal text-gold">Awake</span>
+            <div class="text-center z-10 w-full relative pt-20">
+                <h1 class="text-7xl md:text-[13rem] font-bold tracking-tighter leading-[0.85] mb-4 flex flex-col items-center">
+                    <span class="hero-anim opacity-0 translate-y-10 text-[var(--text-main)] transition-colors" id="hero-main-text">STAY</span>
+                    <span class="font-serif italic font-normal text-gold hero-anim opacity-0 translate-y-10 mt-2">Awake</span>
                 </h1>
-                <p class="max-w-lg mx-auto text-base md:text-lg font-light opacity-90 hero-anim opacity-0 translate-y-10" style="color: var(--text-main);">
-                    Bhairahawa's premier roastery. Deep flavors, old-school aesthetics, delivered hot.
+                <p class="max-w-lg mx-auto text-base md:text-lg font-light opacity-90 hero-anim opacity-0 translate-y-10 text-[var(--text-main)] transition-colors" id="hero-sub-text">
+                    Bhairahawa's premier nocturnal roastery. Exquisite beans, aesthetic vibes, delivered hot.
                 </p>
             </div>
         </section>
@@ -281,7 +296,7 @@
         <!-- MENU SECTION WITH UNIQUE OFFERS -->
         <section id="menu" class="py-24 px-6 md:px-20 max-w-[1300px] mx-auto relative z-10">
             <div class="text-center mb-16">
-                <h2 class="text-5xl md:text-6xl font-bold tracking-tighter mb-2 scroll-anim">Curated <span class="font-serif italic text-gold font-normal">Selections</span></h2>
+                <h2 class="text-5xl md:text-6xl font-bold tracking-tighter mb-2 scroll-anim text-[var(--text-main)] transition-colors">Curated <span class="font-serif italic text-gold font-normal">Selections</span></h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -294,26 +309,26 @@
                     </div>
                     <div class="p-6">
                         <div class="flex justify-between items-start mb-2">
-                            <h4 class="text-2xl font-bold">Midnight Americano</h4>
+                            <h4 class="text-2xl font-bold text-[var(--text-main)] transition-colors">Midnight Americano</h4>
                             <div class="text-right">
-                                <span class="block text-xs line-through opacity-50">Rs 180</span>
+                                <span class="block text-xs line-through opacity-50 text-[var(--text-main)]">Rs 180</span>
                                 <span class="font-serif text-xl font-bold text-gold">Rs 150</span>
                             </div>
                         </div>
-                        <p class="text-sm opacity-70 font-light">Double-shot espresso pulled from 100% Arabica. Pure focus.</p>
+                        <p class="text-sm text-[var(--text-muted)] font-light">Double-shot espresso pulled from 100% Arabica. Pure focus.</p>
                     </div>
                 </div>
 
                 <!-- Item 2 -->
                 <div class="menu-card old-frost group scroll-anim">
-                    <div class="offer-tag tag-gold">Signature Blend</div>
+                    <div class="offer-tag tag-gold">Signature</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1572286258217-40142c1c6a70?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Latte">
                         <button onclick="addToCart('Velvet Latte', 240, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
                     </div>
                     <div class="p-6">
-                        <div class="flex justify-between items-start mb-2"><h4 class="text-2xl font-bold">Velvet Latte</h4><span class="font-serif text-xl font-bold text-gold">Rs 240</span></div>
-                        <p class="text-sm opacity-70 font-light">Silk micro-foam over a rich espresso base. Smooth & balanced.</p>
+                        <div class="flex justify-between items-start mb-2"><h4 class="text-2xl font-bold text-[var(--text-main)] transition-colors">Velvet Latte</h4><span class="font-serif text-xl font-bold text-gold">Rs 240</span></div>
+                        <p class="text-sm text-[var(--text-muted)] font-light">Silk micro-foam over a rich espresso base. Smooth & balanced.</p>
                     </div>
                 </div>
 
@@ -326,13 +341,13 @@
                     </div>
                     <div class="p-6">
                         <div class="flex justify-between items-start mb-2">
-                            <h4 class="text-2xl font-bold">Caramel Macchiato</h4>
+                            <h4 class="text-2xl font-bold text-[var(--text-main)] transition-colors">Caramel Macchiato</h4>
                             <div class="text-right">
-                                <span class="block text-xs line-through opacity-50">Rs 280</span>
+                                <span class="block text-xs line-through opacity-50 text-[var(--text-main)]">Rs 280</span>
                                 <span class="font-serif text-xl font-bold text-gold">Rs 230</span>
                             </div>
                         </div>
-                        <p class="text-sm opacity-70 font-light">Espresso layered with steamed milk and rich caramel.</p>
+                        <p class="text-sm text-[var(--text-muted)] font-light">Espresso layered with steamed milk and rich caramel.</p>
                     </div>
                 </div>
 
@@ -344,8 +359,8 @@
                         <button onclick="addToCart('Noir Cold Brew', 320, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
                     </div>
                     <div class="p-6">
-                        <div class="flex justify-between items-start mb-2"><h4 class="text-2xl font-bold">Noir Cold Brew</h4><span class="font-serif text-xl font-bold text-gold">Rs 320</span></div>
-                        <p class="text-sm opacity-70 font-light">12-hour steeped concentrate infused with nitrogen.</p>
+                        <div class="flex justify-between items-start mb-2"><h4 class="text-2xl font-bold text-[var(--text-main)] transition-colors">Noir Cold Brew</h4><span class="font-serif text-xl font-bold text-gold">Rs 320</span></div>
+                        <p class="text-sm text-[var(--text-muted)] font-light">12-hour steeped concentrate infused with nitrogen.</p>
                     </div>
                 </div>
 
@@ -358,60 +373,34 @@
                     </div>
                     <div class="p-6">
                         <div class="flex justify-between items-start mb-2">
-                            <h4 class="text-2xl font-bold">Waffle Combo</h4>
+                            <h4 class="text-2xl font-bold text-[var(--text-main)] transition-colors">Waffle Combo</h4>
                             <div class="text-right">
-                                <span class="block text-xs line-through opacity-50">Rs 530</span>
+                                <span class="block text-xs line-through opacity-50 text-[var(--text-main)]">Rs 530</span>
                                 <span class="font-serif text-xl font-bold text-gold">Rs 450</span>
                             </div>
                         </div>
-                        <p class="text-sm opacity-70 font-light">Waffles with honey & berries, plus any classic coffee.</p>
+                        <p class="text-sm text-[var(--text-muted)] font-light">Waffles with honey & berries, plus any classic coffee.</p>
                     </div>
                 </div>
                 
-                <!-- Item 6 (Fixed Zen Matcha Image) -->
+                <!-- Item 6 (Fixed Zen Matcha) -->
                 <div class="menu-card old-frost group scroll-anim">
                     <div class="offer-tag tag-green">Vegan Favorite</div>
                     <div class="menu-img-wrap">
-                        <!-- Guaranteed working Matcha image -->
                         <img src="https://images.unsplash.com/photo-1536256263959-770b48d82b0a?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Matcha">
                         <button onclick="addToCart('Zen Matcha Latte', 300, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
                     </div>
                     <div class="p-6">
-                        <div class="flex justify-between items-start mb-2"><h4 class="text-2xl font-bold">Zen Matcha Latte</h4><span class="font-serif text-xl font-bold text-gold">Rs 300</span></div>
-                        <p class="text-sm opacity-70 font-light">Ceremonial grade green tea whisked with creamy oat milk.</p>
+                        <div class="flex justify-between items-start mb-2"><h4 class="text-2xl font-bold text-[var(--text-main)] transition-colors">Zen Matcha Latte</h4><span class="font-serif text-xl font-bold text-gold">Rs 300</span></div>
+                        <p class="text-sm text-[var(--text-muted)] font-light">Ceremonial grade green tea whisked with creamy oat milk.</p>
                     </div>
                 </div>
-                
-                <!-- Extra Item 7 -->
-                <div class="menu-card old-frost group scroll-anim">
-                    <div class="offer-tag tag-dark">Single Origin</div>
-                    <div class="menu-img-wrap">
-                        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Pour Over">
-                        <button onclick="addToCart('Himalayan Pour Over', 350, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-2"><h4 class="text-2xl font-bold">Himalayan Pour Over</h4><span class="font-serif text-xl font-bold text-gold">Rs 350</span></div>
-                        <p class="text-sm opacity-70 font-light">Slow drip process extracting bright, floral notes.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- EXTRA THINGO: HIMALAYAN ORIGINS (Parallax) -->
-        <section class="origin-section scroll-anim">
-            <div class="origin-bg parallax-bg"></div>
-            <div class="origin-content old-frost rounded-3xl">
-                <h2 class="text-4xl md:text-5xl font-bold tracking-tighter mb-4">Roots in the <span class="font-serif italic text-gold font-normal">Himalayas</span></h2>
-                <p class="text-sm md:text-base font-light opacity-80 max-w-lg mx-auto">
-                    We exclusively partner with small-batch farmers in the high-altitude regions of Nepal. 
-                    Every bean is hand-picked, sun-dried, and roasted locally in Bhairahawa to ensure absolute freshness.
-                </p>
             </div>
         </section>
 
         <!-- EXTRA THINGO: THE ROASTING JOURNEY (Interactive Accordion) -->
-        <section class="py-24 px-6 max-w-[1000px] mx-auto z-10 relative scroll-anim">
-            <h2 class="text-4xl md:text-5xl font-bold tracking-tighter mb-10 text-center">The <span class="font-serif italic text-gold font-normal">Journey</span></h2>
+        <section class="py-24 px-6 max-w-[1000px] mx-auto z-10 relative scroll-anim border-t border-[var(--border-color)]">
+            <h2 class="text-4xl md:text-5xl font-bold tracking-tighter mb-10 text-center text-[var(--text-main)] transition-colors">The <span class="font-serif italic text-gold font-normal">Journey</span></h2>
             <div class="old-frost rounded-[40px] p-8 md:p-12">
                 <div class="process-item hover-target active" onclick="toggleAccordion(this)">
                     <h3 class="process-title">01. Sourcing <i class="ph ph-caret-down text-xl opacity-50"></i></h3>
@@ -432,12 +421,13 @@
         <div class="gooey-filter" id="liquid-container"></div>
     </div>
 
-    <!-- FOOTER -->
-    <footer class="px-6 md:px-20 pt-20 pb-10 text-center relative overflow-hidden flex flex-col items-center">
-        <div class="grid grid-cols-1 md:grid-cols-2 w-full max-w-[1200px] gap-20 items-center mb-16 relative z-10">
+    <!-- DYNAMIC FOOTER CURTAIN -->
+    <footer id="footer" class="px-6 md:px-20 pt-20 pb-10 text-center flex flex-col items-center border-t border-[var(--border-color)]">
+        <div class="grid grid-cols-1 md:grid-cols-2 w-full max-w-[1200px] gap-20 items-center mb-16">
             
-            <div class="flex flex-col items-center md:items-start text-left scroll-anim">
-                <h2 class="text-6xl md:text-8xl font-bold tracking-tighter mb-4 font-serif text-[var(--text-main)]">After Hours</h2>
+            <!-- Contact & Socials -->
+            <div class="flex flex-col items-center md:items-start text-left">
+                <h2 class="text-6xl md:text-8xl font-bold tracking-tighter mb-4 font-serif text-[var(--text-main)] transition-colors">After Hours</h2>
                 <a href="tel:+9779705965333" class="font-serif text-4xl md:text-6xl font-bold text-gold mb-10 hover-target transition-transform hover:translate-x-2 inline-block">
                     970 596 5333
                 </a>
@@ -451,17 +441,17 @@
                 </div>
             </div>
 
-            <!-- Get Directions Box -->
-            <div class="flex flex-col items-center w-full scroll-anim old-frost p-10 rounded-[40px]">
+            <!-- Get Directions (Clean Frosted Look) -->
+            <div class="flex flex-col items-center w-full old-frost p-10 rounded-3xl">
                 <i class="ph ph-map-pin text-6xl text-gold mb-4"></i>
-                <p class="text-2xl font-light mb-2">Bhairahawa, Nepal</p>
-                <p class="text-sm opacity-60 mb-8">Delivering hot to your doorstep.</p>
+                <p class="text-2xl font-light mb-2 text-[var(--text-main)] transition-colors">Bhairahawa, Nepal</p>
+                <p class="text-sm opacity-60 mb-8 text-[var(--text-main)]">Delivering hot to your doorstep.</p>
                 <a href="https://maps.app.goo.gl/4KRKkC4Xjv824BLf7" target="_blank" class="px-8 py-4 bg-gold text-white rounded-full text-sm font-bold tracking-widest uppercase hover-target shadow-[0_10px_30px_rgba(212,163,115,0.4)] transition-transform hover:-translate-y-1">
                     Get Directions
                 </a>
             </div>
         </div>
-        <p class="text-[10px] tracking-[0.5em] uppercase opacity-50 relative z-10 text-[var(--text-main)]">&copy; 2024 After Hours Café.</p>
+        <p class="text-[10px] tracking-[0.5em] uppercase opacity-50 text-[var(--text-main)] transition-colors">&copy; 2024 After Hours Café.</p>
     </footer>
 
     <script>
@@ -472,7 +462,7 @@
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
-        // 2. Web Audio API Click Engine (Satisfying tactile sound)
+        // 2. Web Audio API Click Engine (No scrolling clicks)
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playClickSound() {
             if(audioCtx.state === 'suspended') audioCtx.resume();
@@ -482,25 +472,39 @@
             gainNode.connect(audioCtx.destination);
             
             osc.type = 'sine';
-            // Quick drop in frequency creates a nice "bloop/click"
             osc.frequency.setValueAtTime(600, audioCtx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.05);
             
-            gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
             gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
             
             osc.start();
             osc.stop(audioCtx.currentTime + 0.05);
         }
 
-        // Bind sound to clicks, not scroll
+        // Only play sound on explicit clicks on interactive elements
         document.addEventListener('mousedown', (e) => {
-            if(e.target.closest('button, a, .hover-target, .menu-card')) {
+            if(e.target.closest('button, a, .hover-target, .menu-card, .process-item')) {
                 playClickSound();
             }
         });
 
-        // 3. Sensory Cursor (Desktop Only)
+        // 3. Audio Tracks Setup
+        const audioNight = document.getElementById('audio-night');
+        const audioDay = document.getElementById('audio-day');
+        let currentAudio = null;
+
+        function crossfadeAudio(newAudio) {
+            if(currentAudio) {
+                gsap.to(currentAudio, { volume: 0, duration: 1, onComplete: () => currentAudio.pause() });
+            }
+            newAudio.volume = 0;
+            newAudio.play().catch(e => console.log("Autoplay prevented. It's okay."));
+            gsap.to(newAudio, { volume: 0.4, duration: 1 });
+            currentAudio = newAudio;
+        }
+
+        // 4. Sensory Cursor
         const isTouch = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
         if(!isTouch) {
             const cursorDot = document.getElementById('cursor-dot');
@@ -508,73 +512,80 @@
             const cursorRipple = document.getElementById('cursor-ripple');
             let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
 
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX; mouseY = e.clientY;
-                gsap.to(cursorDot, { x: mouseX, y: mouseY, duration: 0.1 });
-            });
-            gsap.ticker.add(() => {
-                ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15;
-                gsap.set(cursorRing, { x: ringX, y: ringY });
-            });
+            document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; gsap.to(cursorDot, { x: mouseX, y: mouseY, duration: 0.1 }); });
+            gsap.ticker.add(() => { ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15; gsap.set(cursorRing, { x: ringX, y: ringY }); });
             document.querySelectorAll('.hover-target, button, a, .menu-card, .process-item').forEach(el => {
                 el.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
                 el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
             });
-            document.addEventListener('mousedown', () => {
-                gsap.fromTo(cursorRipple, { x: mouseX, y: mouseY, scale: 0, opacity: 1 }, { scale: 4, opacity: 0, duration: 0.6, ease: "power2.out" });
-            });
+            document.addEventListener('mousedown', () => { gsap.fromTo(cursorRipple, { x: mouseX, y: mouseY, scale: 0, opacity: 1 }, { scale: 4, opacity: 0, duration: 0.6, ease: "power2.out" }); });
         }
 
-        // 4. Awakening Preloader
-        window.addEventListener('load', () => {
-            const tl = gsap.timeline();
-            tl.to("#loader-fill", { height: "100%", duration: 1.5, ease: "power2.inOut" })
-              .to(".pulse-text", { opacity: 1, duration: 0.5 }, "-=0.5")
-              .to("#loader", { yPercent: -100, duration: 1.2, ease: "expo.inOut", delay: 0.5, onComplete: () => {
-                  document.getElementById('loader').style.display = 'none';
-                  
-                  const entryTL = gsap.timeline();
-                  entryTL.fromTo(".nav-anim", { y: -30, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.2, duration: 1, ease: "power3.out" })
-                         .fromTo(".hero-anim", { y: 50, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.15, duration: 1.2, ease: "expo.out" }, "-=0.5");
-              }});
-        });
-
-        // 5. Dual-Physics Liquid Pour Theme Transition
+        // 5. The Vibe Selector (Entry Logic)
         let isLightMode = false;
-        function initTheme() {
-            const h = new Date().getHours();
-            if (h >= 6 && h < 18) {
-                isLightMode = true;
+        
+        window.initExperience = function(mode) {
+            if(audioCtx.state === 'suspended') audioCtx.resume(); // Unlock audio context
+            
+            isLightMode = (mode === 'day');
+            
+            if(isLightMode) {
                 document.body.classList.add('light-mode');
+                document.getElementById('theme-icon').classList.replace('ph-moon', 'ph-sun');
+                document.getElementById('hero-main-text').innerText = "STAY";
+                document.getElementById('hero-sub-text').innerText = "Bhairahawa's premier morning roastery. Bright flavors, refreshing vibes, delivered hot.";
+                document.getElementById('radio-track').innerText = "Morning Acoustic";
+                crossfadeAudio(audioDay);
+            } else {
                 document.getElementById('theme-icon').classList.replace('ph-sun', 'ph-moon');
+                crossfadeAudio(audioNight);
             }
-        }
-        initTheme();
 
+            // Hide Selector and start entrance
+            gsap.to("#vibe-selector", { opacity: 0, duration: 0.8, onComplete: () => {
+                document.getElementById('vibe-selector').style.display = 'none';
+                // Trigger entry animations
+                const entryTL = gsap.timeline();
+                entryTL.fromTo(".nav-anim", { y: -30, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.2, duration: 1, ease: "power3.out" })
+                       .fromTo(".hero-anim", { y: 50, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.15, duration: 1.2, ease: "expo.out" }, "-=0.5");
+            }});
+        };
+
+        // 6. True Liquid Pour Theme Transition (Day/Night Engine)
         window.triggerLiquidPour = function() {
             const drips = document.querySelectorAll('.pour-drip');
             const icon = document.getElementById('theme-icon');
             
             // Set drip color based on NEXT theme
             const nextColor = isLightMode ? '#0a0604' : '#fdfaf6'; 
-            drips.forEach(d => { 
-                d.style.backgroundColor = nextColor; 
-                d.style.top = "0"; d.style.bottom = "auto"; 
-            });
+            drips.forEach(d => { d.style.backgroundColor = nextColor; d.style.top = "0"; d.style.bottom = "auto"; });
 
             const tl = gsap.timeline();
             
             // Pour Down with staggered heights to create a jagged liquid edge
             tl.to(drips, {
                 height: "120vh",
-                stagger: { amount: 0.3, from: "center" }, // Pours from center outwards
+                stagger: { amount: 0.3, from: "center" }, 
                 duration: 1.2,
                 ease: "power2.in",
                 onComplete: () => {
-                    // Swap Theme
+                    // Swap Theme Engine
                     isLightMode = !isLightMode;
                     document.body.classList.toggle('light-mode');
-                    icon.classList.replace(isLightMode ? 'ph-moon' : 'ph-sun', isLightMode ? 'ph-sun' : 'ph-moon');
+                    
+                    if(isLightMode) {
+                        icon.classList.replace('ph-moon', 'ph-sun');
+                        document.getElementById('hero-main-text').innerText = "STAY";
+                        document.getElementById('hero-sub-text').innerText = "Bhairahawa's premier morning roastery. Bright flavors, refreshing vibes, delivered hot.";
+                        document.getElementById('radio-track').innerText = "Morning Acoustic";
+                        crossfadeAudio(audioDay);
+                    } else {
+                        icon.classList.replace('ph-sun', 'ph-moon');
+                        document.getElementById('hero-main-text').innerText = "STAY";
+                        document.getElementById('hero-sub-text').innerText = "Bhairahawa's premier nocturnal roastery. Deep flavors, aesthetic vibes, delivered hot.";
+                        document.getElementById('radio-track').innerText = "Midnight Jazz";
+                        crossfadeAudio(audioNight);
+                    }
                     
                     // Reset drips to bottom for exit
                     drips.forEach(d => { d.style.top = "auto"; d.style.bottom = "0"; });
@@ -590,15 +601,13 @@
             });
         };
 
-        // 6. Analog Clock & Weather Widget
+        // 7. Analog Clock & Weather
         function updateWidgets() {
             const now = new Date();
             const h = now.getHours(); const m = now.getMinutes(); const s = now.getSeconds();
-            
             document.getElementById('hour-hand').style.transform = `rotate(${(h % 12) * 30 + m * 0.5}deg)`;
             document.getElementById('min-hand').style.transform = `rotate(${m * 6}deg)`;
             document.getElementById('sec-hand').style.transform = `rotate(${s * 6}deg)`;
-            
             const ampm = h >= 12 ? 'PM' : 'AM';
             document.getElementById('digital-time').innerText = `${h % 12 || 12}:${m.toString().padStart(2,'0')} ${ampm}`;
 
@@ -606,22 +615,35 @@
             if (h >= 5 && h < 17) { icon = "ph-sun"; temp = "28°C"; }
             else if (h >= 17 && h < 20) { icon = "ph-cloud-sun"; temp = "24°C"; }
             else { icon = "ph-moon-stars"; temp = "18°C"; }
-            
             document.getElementById('weather-icon').className = `ph ${icon}`;
             document.getElementById('weather-text').innerText = temp;
         }
         setInterval(updateWidgets, 1000);
         updateWidgets();
 
-        // 7. Accordion Toggle
+        // 8. Dynamic Footer Margin Fix
+        function updateFooterMargin() {
+            if(window.innerWidth > 768) {
+                const footerHeight = document.getElementById('footer').offsetHeight;
+                document.getElementById('main-content').style.marginBottom = footerHeight + 'px';
+                document.getElementById('footer').style.height = footerHeight + 'px';
+            } else {
+                document.getElementById('main-content').style.marginBottom = '0';
+                document.getElementById('footer').style.height = 'auto';
+            }
+            ScrollTrigger.refresh();
+        }
+        window.addEventListener('resize', updateFooterMargin);
+        setTimeout(updateFooterMargin, 500);
+
+        // 9. Accordion Toggle
         window.toggleAccordion = function(element) {
-            document.querySelectorAll('.process-item').forEach(item => {
-                if(item !== element) item.classList.remove('active');
-            });
+            document.querySelectorAll('.process-item').forEach(item => { if(item !== element) item.classList.remove('active'); });
             element.classList.toggle('active');
+            setTimeout(ScrollTrigger.refresh, 400); // refresh scroll after height change
         }
 
-        // 8. Advanced 3D Liquid Fly-to-Cart
+        // 10. Advanced 3D Liquid Fly-to-Cart
         let cart = [];
         const liquidContainer = document.getElementById('liquid-container');
         
@@ -639,22 +661,19 @@
             badge.classList.remove('scale-0');
             gsap.fromTo(badge, { scale: 1.5 }, { scale: 1, duration: 0.4, ease: "back.out" });
 
-            // The "Lift" Animation based on Theme Physics
-            const easeType = isLightMode ? "back.out(1.7)" : "power2.inOut";
             const card = btnElement.closest('.menu-card');
             const img = card.querySelector('.menu-img');
-            gsap.to(img, { y: -20, scale: 1.15, duration: 0.3, yoyo: true, repeat: 1, ease: easeType });
+            const bounceEase = isLightMode ? "back.out(1.7)" : "power2.inOut";
+            gsap.to(img, { y: -20, scale: 1.15, duration: 0.3, yoyo: true, repeat: 1, ease: bounceEase });
 
             const imgRect = img.getBoundingClientRect();
             const iconRect = document.getElementById('cart-icon').getBoundingClientRect();
             
-            // Swarm of Drops
             for(let i=0; i<12; i++) {
                 const drop = document.createElement('div');
                 drop.classList.add('liquid-drop-3d');
                 const size = Math.random() * 18 + 8;
                 drop.style.width = size + 'px'; drop.style.height = size + 'px';
-                
                 drop.style.left = (imgRect.left + imgRect.width/2) + 'px';
                 drop.style.top = (imgRect.top + imgRect.height/2) + 'px';
                 liquidContainer.appendChild(drop);
@@ -670,12 +689,7 @@
                 });
 
                 tl.to(drop, { x: randomX, y: randomY, scale: Math.random() * 0.5 + 0.8, duration: 0.35, ease: "power2.out" })
-                  .to(drop, {
-                      left: iconRect.left + 20, top: iconRect.top + 20,
-                      x: 0, y: 0, scale: 0.1,
-                      duration: 0.7 + Math.random()*0.4,
-                      ease: "back.in(1.2)"
-                  });
+                  .to(drop, { left: iconRect.left + 20, top: iconRect.top + 20, x: 0, y: 0, scale: 0.1, duration: 0.7 + Math.random()*0.4, ease: "back.in(1.2)" });
             }
         };
 
@@ -690,7 +704,7 @@
         function renderCart() {
             const container = document.getElementById('cart-items');
             if(cart.length === 0) {
-                container.innerHTML = `<div class="text-center mt-10 text-base italic opacity-50 text-[var(--cart-text)]">Your cart is empty. Add some magic.</div>`;
+                container.innerHTML = `<div class="text-center mt-10 text-base italic opacity-50 text-[var(--cart-text)]">Your cart is empty. Let's brew something.</div>`;
                 document.getElementById('cart-subtotal').innerText = 'Rs 0';
                 document.getElementById('cart-total').innerText = 'Rs 0';
                 return;
@@ -727,14 +741,9 @@
             window.open(`https://wa.me/9779705965333?text=${encodeURIComponent(msg)}`, '_blank');
         };
 
-        // 9. Scroll Animations Engine
+        // Scroll Reveal Animations
         gsap.utils.toArray('.scroll-anim').forEach(el => {
             gsap.from(el, { y: 60, opacity: 0, duration: 1.2, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 85%" }});
-        });
-
-        // Parallax BGs
-        gsap.utils.toArray('.parallax-bg').forEach(bg => {
-            gsap.to(bg, { yPercent: 30, ease: "none", scrollTrigger: { trigger: bg.parentElement, start: "top bottom", end: "bottom top", scrub: true }});
         });
 
     </script>
