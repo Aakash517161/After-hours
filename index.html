@@ -38,19 +38,21 @@
             --gold: #c69b6a;
             --accent-pour: #1f110a; 
             --cart-bg: #140c08; --cart-text: #f4eade; --cart-border: rgba(255,255,255,0.1);
+            --blob-color: var(--gold);
         }
 
         body.light-mode {
-            /* DAY MODE (Bright, Snappy, Bouncy) */
-            --bg-rgb: 242, 233, 223;
-            --bg-deep: #f2e9df;
-            --bg-card: rgba(255, 255, 255, 0.7);
+            /* DAY MODE (Bright, Airy, High-Contrast) */
+            --bg-rgb: 250, 246, 240;
+            --bg-deep: #faf6f0;
+            --bg-card: rgba(255, 255, 255, 0.85);
             --text-main: #2b1c11;
             --text-muted: #736154;
             --border-color: rgba(0,0,0,0.08);
             --gold: #b0703c;
-            --accent-pour: #fdfaf6; 
+            --accent-pour: #ffffff; 
             --cart-bg: #ffffff; --cart-text: #1a120e; --cart-border: rgba(0,0,0,0.1);
+            --blob-color: #ffecd2; /* Sun flare effect */
         }
 
         html.lenis { height: auto; }
@@ -74,7 +76,7 @@
         .pour-drip { flex: 1; height: 0vh; background: var(--accent-pour); border-radius: 0 0 100px 100px; transform-origin: top; margin: 0 -5px; }
 
         /* ========= OLD-SCHOOL FROSTED GLASS ========= */
-        .old-frost { background: var(--bg-card); backdrop-filter: blur(30px) saturate(140%); -webkit-backdrop-filter: blur(30px) saturate(140%); border: 1px solid var(--border-color); transition: background 0.8s, border-color 0.8s; }
+        .old-frost { background: var(--bg-card); backdrop-filter: blur(30px) saturate(140%); -webkit-backdrop-filter: blur(30px) saturate(140%); border: 1px solid var(--border-color); transition: all 0.8s ease; }
 
         /* ========= SENSORY CURSOR ========= */
         @media (pointer: fine) {
@@ -85,71 +87,73 @@
             .hover-active .cursor-ring { width: 60px; height: 60px; opacity: 1; background: rgba(212, 163, 115, 0.1); backdrop-filter: blur(4px); border-width: 2px; }
         }
 
-        /* ========= ANALOG CLOCK ========= */
-        .analog-clock { width: 45px; height: 45px; border: 2px solid var(--gold); border-radius: 50%; position: relative; background: transparent; }
-        .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: var(--text-main); border-radius: 10px; }
-        .hour-hand { width: 3px; height: 12px; margin-left: -1.5px; }
-        .min-hand { width: 2px; height: 16px; margin-left: -1px; }
-        .sec-hand { width: 1px; height: 18px; background: var(--gold); margin-left: -0.5px; }
-        .clock-center { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        /* ========= AMBIENT BLOBS ========= */
+        .ambient-bg { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+        .blob { position: absolute; filter: blur(100px); border-radius: 50%; opacity: 0.15; animation: float 25s infinite alternate ease-in-out; background: var(--blob-color); transition: background 1s ease; }
+        .blob-1 { width: 40vw; height: 40vw; top: -10%; left: -10%; }
+        .blob-2 { width: 30vw; height: 30vw; bottom: 10%; right: -5%; animation-delay: -5s; }
+        @keyframes float { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(10vw, 10vh) scale(1.2); } }
 
-        /* ========= MENU CARDS & OFFERS ========= */
-        .menu-card { position: relative; overflow: hidden; border-radius: 24px; z-index: 2; transition: transform 0.5s ease, box-shadow 0.5s ease, border-color 0.5s; }
-        .menu-card:hover { transform: translateY(-10px); border-color: var(--gold); z-index: 10; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
-        body.light-mode .menu-card:hover { box-shadow: 0 20px 50px rgba(176, 112, 60, 0.2); }
-        .menu-img-wrap { height: 260px; overflow: hidden; position: relative; }
-        .menu-img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s ease, filter 0.5s ease; opacity: 0.9; }
-        .menu-card:hover .menu-img { transform: scale(1.1); filter: brightness(1.15); opacity: 1; }
+        /* ========= RADIO WIDGET & VOLUME SLIDER ========= */
+        .radio-widget { position: fixed; bottom: 30px; left: 30px; z-index: 50; display: flex; align-items: center; gap: 15px; padding: 10px 20px 10px 10px; border-radius: 50px; overflow: hidden; transition: 0.4s ease; }
+        .vinyl { width: 40px; height: 40px; background: #111; border-radius: 50%; border: 2px solid #333; position: relative; animation: spin 4s linear infinite; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
+        .vinyl::after { content: ''; width: 12px; height: 12px; background: var(--gold); border-radius: 50%; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
         
+        .radio-info { display: flex; flex-direction: column; white-space: nowrap; transition: 0.3s; }
+        
+        /* Volume Slider Container */
+        .volume-container { display: flex; align-items: center; gap: 10px; width: 0; opacity: 0; overflow: hidden; transition: 0.4s ease; }
+        .radio-widget:hover .volume-container { width: 100px; opacity: 1; }
+        .radio-widget:hover .radio-info { display: none; } /* Hide text to make room for slider */
+        
+        input[type=range] { -webkit-appearance: none; width: 100px; background: transparent; cursor: none; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 12px; width: 12px; border-radius: 50%; background: var(--gold); margin-top: -4px; box-shadow: 0 0 10px var(--gold); }
+        body.light-mode input[type=range]::-webkit-slider-runnable-track { background: rgba(0,0,0,0.2); }
+
+        /* ========= MENU CARDS (3D MAGNETIC) ========= */
+        .menu-card { position: relative; border-radius: 24px; z-index: 2; border: 1px solid var(--border-color); background: var(--bg-card); transform-style: preserve-3d; transition: border-color 0.3s, box-shadow 0.3s; }
+        .menu-card:hover { border-color: var(--gold); z-index: 10; box-shadow: 0 25px 50px rgba(0,0,0,0.3); }
+        body.light-mode .menu-card:hover { box-shadow: 0 25px 50px rgba(176, 112, 60, 0.2); }
+        
+        .menu-img-wrap { height: 260px; overflow: hidden; position: relative; border-radius: 24px 24px 0 0; }
+        .menu-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease, filter 0.5s ease; opacity: 0.9; }
+        .menu-card:hover .menu-img { transform: scale(1.1); filter: brightness(1.15); opacity: 1; }
+
+        /* Aroma Steam Gimmick */
+        .aroma-steam { position: absolute; bottom: 20%; left: 50%; transform: translateX(-50%); width: 40px; height: 60px; opacity: 0; pointer-events: none; transition: 0.5s; z-index: 20; }
+        .menu-card:hover .aroma-steam { opacity: 0.6; animation: riseUp 2s infinite ease-in; }
+        @keyframes riseUp { 0% { transform: translate(-50%, 0) scale(0.8); opacity: 0; filter: blur(2px); } 50% { opacity: 0.6; } 100% { transform: translate(-50%, -40px) scale(1.2); opacity: 0; filter: blur(6px); } }
+
         .offer-tag { position: absolute; top: 15px; right: 15px; font-size: 0.7rem; font-weight: 800; padding: 6px 14px; border-radius: 30px; letter-spacing: 1px; z-index: 10; backdrop-filter: blur(10px); }
         .tag-red { background: rgba(230, 57, 70, 0.9); color: #fff; box-shadow: 0 5px 15px rgba(230,57,70,0.4); }
         .tag-gold { background: rgba(198, 155, 106, 0.9); color: #000; box-shadow: 0 5px 15px rgba(198,155,106,0.4); }
         .tag-dark { background: rgba(30, 30, 30, 0.9); color: #fff; border: 1px solid var(--gold); }
         .tag-green { background: rgba(85, 107, 47, 0.9); color: #fff; box-shadow: 0 5px 15px rgba(85,107,47,0.4); }
 
-        .add-btn { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: var(--bg-deep); padding: 14px 28px; border-radius: 40px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.3s; opacity: 0; width: 85%; justify-content: center; z-index: 3; }
+        .add-btn { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%) translateZ(30px); background: var(--text-main); color: var(--bg-deep); padding: 12px 28px; border-radius: 40px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: 0.3s; opacity: 0; width: 85%; justify-content: center; z-index: 30; }
         .menu-card:hover .add-btn { opacity: 1; background: var(--gold); color: #fff; }
-        @media (max-width: 768px) { .add-btn { opacity: 1; bottom: 15px; background: var(--text-main); color: var(--bg-deep); } }
+        @media (max-width: 768px) { .add-btn { opacity: 1; bottom: 15px; background: var(--text-main); color: var(--bg-deep); transform: translateX(-50%); } }
 
         /* ========= 3D LIQUID DROPS (CART ANIMATION) ========= */
         .gooey-filter { filter: url('#goo'); position: fixed; inset: 0; z-index: 999999; pointer-events: none; }
-        .liquid-drop-3d { 
-            position: absolute; border-radius: 50%; 
-            background: radial-gradient(circle at 30% 30%, #ffeedb, var(--gold) 60%, #8b5e34); 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5), inset -2px -2px 6px rgba(0,0,0,0.4); 
-            transform-origin: center; z-index: 999999; 
-        }
+        .liquid-drop-3d { position: absolute; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #ffeedb, var(--gold) 60%, #8b5e34); box-shadow: 0 10px 20px rgba(0,0,0,0.5), inset -2px -2px 6px rgba(0,0,0,0.4); transform-origin: center; z-index: 999999; }
 
-        /* ========= DYNAMIC CART SIDEBAR ========= */
-        #cart-sidebar { position: fixed; top: 0; right: -100%; width: 100%; max-width: 420px; height: 100vh; z-index: 10000; transition: 0.6s cubic-bezier(0.25, 1, 0.5, 1); background: var(--cart-bg); color: var(--cart-text); border-left: 1px solid var(--cart-border); display: flex; flex-direction: column; box-shadow: -20px 0 60px rgba(0,0,0,0.5); backdrop-filter: blur(30px); }
+        /* ========= BRIGHT CART SIDEBAR ========= */
+        #cart-sidebar { position: fixed; top: 0; right: -100%; width: 100%; max-width: 420px; height: 100vh; z-index: 10000; transition: 0.6s cubic-bezier(0.25, 1, 0.5, 1); background: var(--cart-bg); color: var(--cart-text); border-left: 1px solid var(--cart-border); display: flex; flex-direction: column; box-shadow: -20px 0 60px rgba(0,0,0,0.3); backdrop-filter: blur(30px); }
         #cart-sidebar.open { right: 0; }
         .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 9999; opacity: 0; pointer-events: none; transition: 0.4s; }
         .cart-overlay.open { opacity: 1; pointer-events: all; }
 
-        /* ========= THE ROASTING JOURNEY ACCORDION ========= */
-        .process-item { border-bottom: 1px solid var(--border-color); padding: 25px 0; cursor: pointer; transition: 0.5s ease; overflow: hidden; height: 85px; }
-        .process-item.active { height: 220px; border-bottom-color: var(--gold); }
-        .process-title { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--text-muted); transition: 0.4s; display: flex; align-items: center; justify-content: space-between; }
-        .process-item.active .process-title { color: var(--gold); font-size: 2.5rem; }
-        .process-content { opacity: 0; transform: translateY(20px); transition: 0.4s; padding-top: 15px; color: var(--text-main); font-weight: 300; line-height: 1.6; }
-        .process-item.active .process-content { opacity: 1; transform: translateY(0); }
-
-        /* ========= RADIO WIDGET ========= */
-        .radio-widget { position: fixed; bottom: 30px; left: 30px; z-index: 50; display: flex; align-items: center; gap: 15px; padding: 10px 20px 10px 10px; border-radius: 50px; }
-        .vinyl { width: 40px; height: 40px; background: #111; border-radius: 50%; border: 2px solid #333; position: relative; animation: spin 4s linear infinite; display: flex; justify-content: center; align-items: center; }
-        .vinyl::after { content: ''; width: 12px; height: 12px; background: var(--gold); border-radius: 50%; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        /* ========= FOOTER & MAIN WRAPPER (Dynamic Space Fix) ========= */
-        /* Margin-bottom is set dynamically by JS to perfectly match the footer height */
+        /* ========= DYNAMIC FOOTER CURTAIN FIX ========= */
         #main-content { position: relative; z-index: 2; background: var(--bg-deep); box-shadow: 0 40px 100px rgba(0,0,0,1); border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; transition: background 0.8s ease; }
         footer { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1; background: #050302; display: flex; flex-direction: column; justify-content: center; transition: background 0.8s; }
-        body.light-mode footer { background: #e8ded3; }
+        body.light-mode footer { background: #e6dfd5; }
 
         @media (max-width: 768px) {
             #main-content { margin-bottom: 0 !important; border-radius: 0; }
             footer { position: relative; height: auto !important; padding: 60px 20px; }
-            .process-item.active { height: 280px; }
             .radio-widget { display: none; }
         }
     </style>
@@ -157,9 +161,8 @@
 <body class="hover-target-container">
 
     <!-- AUDIO ENGINE (Background Ambience) -->
-    <!-- Using high-quality, reliable Archive.org ambient loops -->
-    <audio id="audio-night" loop src="https://ia800900.us.archive.org/21/items/ambient-piano-music/Ambient%20Piano.mp3" preload="auto"></audio>
-    <audio id="audio-day" loop src="https://ia801402.us.archive.org/34/items/AcousticGuitar_336/Acoustic_Guitar.mp3" preload="auto"></audio>
+    <audio id="audio-night" loop src="https://ia800900.us.archive.org/21/items/ambient-piano-music/Ambient%20Piano.mp3" crossorigin="anonymous" preload="auto"></audio>
+    <audio id="audio-day" loop src="https://ia801402.us.archive.org/34/items/AcousticGuitar_336/Acoustic_Guitar.mp3" crossorigin="anonymous" preload="auto"></audio>
 
     <!-- SVG Gooey Filter for Liquid Pour -->
     <svg style="display: none;">
@@ -176,7 +179,7 @@
     <div id="vibe-selector">
         <div class="vibe-box hover-target">
             <h1 class="text-4xl font-serif text-gold mb-2">Welcome to After Hours</h1>
-            <p class="text-text-muted mb-8 text-sm">Select your atmosphere to begin.</p>
+            <p class="text-[#8c7e73] mb-8 text-sm">Select your atmosphere to begin.</p>
             <div class="vibe-btn-container">
                 <button class="vibe-btn btn-day hover-target" onclick="initExperience('day')"><i class="ph ph-sun text-xl"></i> Morning Light</button>
                 <button class="vibe-btn btn-night hover-target" onclick="initExperience('night')"><i class="ph ph-moon-stars text-xl"></i> Midnight Dark</button>
@@ -186,7 +189,6 @@
 
     <!-- LIQUID POUR THEME TRANSITION -->
     <div class="pour-container" id="pour-container">
-        <!-- 6 Drips for smooth screen coverage -->
         <div class="pour-drip"></div><div class="pour-drip"></div><div class="pour-drip"></div>
         <div class="pour-drip"></div><div class="pour-drip"></div><div class="pour-drip"></div>
     </div>
@@ -198,7 +200,6 @@
 
     <!-- HEADER: FROSTED COMMAND CENTER -->
     <div class="fixed top-0 left-0 w-full z-50 flex justify-between items-start px-6 py-6 pointer-events-none nav-anim opacity-0 translate-y-[-20px]">
-        
         <!-- Left: Logo + Clock + Weather -->
         <div class="flex flex-col gap-4 pointer-events-auto">
             <div class="old-frost rounded-full px-6 py-3 flex items-center gap-4 hover-target cursor-pointer" onclick="window.scrollTo(0,0)">
@@ -239,34 +240,38 @@
         </div>
     </div>
 
-    <!-- RADIO WIDGET (Bottom Left) -->
+    <!-- RADIO WIDGET (Bottom Left) WITH VOLUME SLIDER -->
     <div class="radio-widget old-frost hover-target nav-anim opacity-0">
         <div class="vinyl"></div>
-        <div class="flex flex-col">
+        <div class="radio-info">
             <span class="text-[9px] uppercase tracking-widest text-gold font-bold">Now Playing</span>
             <span class="text-sm font-light italic text-[var(--text-main)] transition-colors" id="radio-track">Midnight Jazz</span>
+        </div>
+        <div class="volume-container">
+            <i class="ph ph-speaker-high text-gold text-lg"></i>
+            <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
         </div>
     </div>
 
     <!-- BRIGHT CART SIDEBAR -->
     <div class="cart-overlay hover-target" onclick="toggleCart()" id="cart-overlay"></div>
     <div id="cart-sidebar" class="pt-32 pb-8 px-6">
-        <div class="flex justify-between items-center mb-6 border-b border-[var(--cart-border)] pb-4">
-            <h2 class="text-3xl font-serif font-bold text-[var(--cart-text)]">Your Order</h2>
-            <button onclick="toggleCart()" class="text-3xl text-[var(--cart-text)] hover:text-red-500 hover-target"><i class="ph ph-x"></i></button>
+        <div class="flex justify-between items-center mb-6 border-b border-black/10 pb-4">
+            <h2 class="text-3xl font-serif font-bold text-black">Your Order</h2>
+            <button onclick="toggleCart()" class="text-3xl text-black hover:text-red-500 hover-target"><i class="ph ph-x"></i></button>
         </div>
         
         <div id="cart-items" class="flex-1 overflow-y-auto space-y-3 pr-2">
-            <div class="text-center mt-10 text-base italic text-[var(--cart-text)] opacity-50">Your cart is empty. Let's brew something.</div>
+            <div class="text-center mt-10 text-base italic text-black/50">Your cart is empty. Let's brew something.</div>
         </div>
         
-        <div class="mt-6 border-t border-[var(--cart-border)] pt-6">
-            <div class="flex justify-between text-base mb-2 font-medium text-[var(--cart-text)]"><span>Subtotal:</span> <span id="cart-subtotal">Rs 0</span></div>
-            <div class="flex justify-between text-base mb-4 font-medium text-[var(--cart-text)]">
+        <div class="mt-6 border-t border-black/10 pt-6">
+            <div class="flex justify-between text-base mb-2 font-medium text-black"><span>Subtotal:</span> <span id="cart-subtotal">Rs 0</span></div>
+            <div class="flex justify-between text-base mb-4 font-medium text-black">
                 <span>Delivery:</span> 
                 <span><span class="line-through opacity-50 mr-2">Rs 100</span> <span class="text-[#b07d47] font-bold">Free (On Us 🤎)</span></span>
             </div>
-            <div class="flex justify-between text-2xl font-bold mb-6 border-t border-[var(--cart-border)] pt-4 text-[var(--cart-text)]"><span>Total:</span> <span id="cart-total" class="text-[#b07d47]">Rs 0</span></div>
+            <div class="flex justify-between text-2xl font-bold mb-6 border-t border-black/10 pt-4 text-black"><span>Total:</span> <span id="cart-total" class="text-[#b07d47]">Rs 0</span></div>
             
             <button onclick="checkout()" class="w-full bg-[#111] text-white py-4 rounded-xl font-bold tracking-widest uppercase hover-target hover:bg-[#d4a373] transition-colors flex justify-center items-center gap-2 shadow-lg">
                 <i class="ph ph-whatsapp-logo text-2xl"></i> Checkout via WhatsApp
@@ -275,25 +280,32 @@
     </div>
 
     <div id="main-content">
+        <!-- AMBIENT BACKGROUND -->
+        <div class="ambient-bg" id="ambient-bg">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+        </div>
+
         <!-- HERO SECTION -->
-        <section class="h-screen flex flex-col items-center justify-center px-6 relative">
+        <section class="h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden">
             <div class="absolute inset-0 z-0">
-                <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover opacity-20 mix-blend-luminosity transition-opacity duration-1000" id="hero-img" alt="Bg">
+                <!-- Image changes dynamically in JS -->
+                <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover opacity-30 transition-all duration-1000 parallax-bg" id="hero-img" alt="Bg">
                 <div class="absolute inset-0 bg-gradient-to-t from-[var(--bg-deep)] via-transparent to-[var(--bg-deep)] transition-colors duration-1000"></div>
             </div>
 
             <div class="text-center z-10 w-full relative pt-20">
-                <h1 class="text-7xl md:text-[13rem] font-bold tracking-tighter leading-[0.85] mb-4 flex flex-col items-center">
-                    <span class="hero-anim opacity-0 translate-y-10 text-[var(--text-main)] transition-colors" id="hero-main-text">STAY</span>
-                    <span class="font-serif italic font-normal text-gold hero-anim opacity-0 translate-y-10 mt-2">Awake</span>
+                <h1 class="text-7xl md:text-[14rem] font-bold tracking-tighter leading-[0.85] mb-4 flex flex-col items-center hero-anim opacity-0 translate-y-10">
+                    <span class="text-[var(--text-main)] transition-colors">STAY</span>
+                    <span class="font-serif italic font-normal text-gold mt-2" id="hero-state-text">Awake</span>
                 </h1>
                 <p class="max-w-lg mx-auto text-base md:text-lg font-light opacity-90 hero-anim opacity-0 translate-y-10 text-[var(--text-main)] transition-colors" id="hero-sub-text">
-                    Bhairahawa's premier nocturnal roastery. Exquisite beans, aesthetic vibes, delivered hot.
+                    Bhairahawa's premier nocturnal roastery. Deep flavors, old-school aesthetics, delivered hot.
                 </p>
             </div>
         </section>
 
-        <!-- MENU SECTION WITH UNIQUE OFFERS -->
+        <!-- MENU SECTION -->
         <section id="menu" class="py-24 px-6 md:px-20 max-w-[1300px] mx-auto relative z-10">
             <div class="text-center mb-16">
                 <h2 class="text-5xl md:text-6xl font-bold tracking-tighter mb-2 scroll-anim text-[var(--text-main)] transition-colors">Curated <span class="font-serif italic text-gold font-normal">Selections</span></h2>
@@ -305,6 +317,8 @@
                     <div class="offer-tag tag-red">Night Owl 15% OFF</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Americano">
+                        <!-- Aroma Steam Gimmick -->
+                        <svg class="aroma-steam" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M8 22c0-5 4-5 4-10S8 7 8 2M16 22c0-5-4-5-4-10s4-5 4-10"/></svg>
                         <button onclick="addToCart('Midnight Americano', 150, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
                     </div>
                     <div class="p-6">
@@ -324,6 +338,7 @@
                     <div class="offer-tag tag-gold">Signature</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1572286258217-40142c1c6a70?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Latte">
+                        <svg class="aroma-steam" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M8 22c0-5 4-5 4-10S8 7 8 2M16 22c0-5-4-5-4-10s4-5 4-10"/></svg>
                         <button onclick="addToCart('Velvet Latte', 240, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
                     </div>
                     <div class="p-6">
@@ -337,6 +352,7 @@
                     <div class="offer-tag tag-red">Happy Hour - Rs 50 Off</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1485808191679-5f86510681a2?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Macchiato">
+                        <svg class="aroma-steam" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M8 22c0-5 4-5 4-10S8 7 8 2M16 22c0-5-4-5-4-10s4-5 4-10"/></svg>
                         <button onclick="addToCart('Caramel Macchiato', 230, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
                     </div>
                     <div class="p-6">
@@ -383,7 +399,7 @@
                     </div>
                 </div>
                 
-                <!-- Item 6 (Fixed Zen Matcha) -->
+                <!-- Item 6 -->
                 <div class="menu-card old-frost group scroll-anim">
                     <div class="offer-tag tag-green">Vegan Favorite</div>
                     <div class="menu-img-wrap">
@@ -398,32 +414,13 @@
             </div>
         </section>
 
-        <!-- EXTRA THINGO: THE ROASTING JOURNEY (Interactive Accordion) -->
-        <section class="py-24 px-6 max-w-[1000px] mx-auto z-10 relative scroll-anim border-t border-[var(--border-color)]">
-            <h2 class="text-4xl md:text-5xl font-bold tracking-tighter mb-10 text-center text-[var(--text-main)] transition-colors">The <span class="font-serif italic text-gold font-normal">Journey</span></h2>
-            <div class="old-frost rounded-[40px] p-8 md:p-12">
-                <div class="process-item hover-target active" onclick="toggleAccordion(this)">
-                    <h3 class="process-title">01. Sourcing <i class="ph ph-caret-down text-xl opacity-50"></i></h3>
-                    <p class="process-content">We ethically source 100% organic beans directly from high-altitude farmers, ensuring fair trade and premium quality.</p>
-                </div>
-                <div class="process-item hover-target" onclick="toggleAccordion(this)">
-                    <h3 class="process-title">02. Roasting <i class="ph ph-caret-down text-xl opacity-50"></i></h3>
-                    <p class="process-content">Our master roasters craft small batches daily, carefully controlling temperature profiles to unlock deep, chocolatey notes.</p>
-                </div>
-                <div class="process-item hover-target" onclick="toggleAccordion(this)">
-                    <h3 class="process-title">03. Brewing <i class="ph ph-caret-down text-xl opacity-50"></i></h3>
-                    <p class="process-content">Calibrated water chemistry, perfect pressure, and artisan baristas come together. Every espresso shot is a calculated science experiment.</p>
-                </div>
-            </div>
-        </section>
-
         <!-- Liquid Filter Container for Add-to-Cart -->
         <div class="gooey-filter" id="liquid-container"></div>
     </div>
 
     <!-- DYNAMIC FOOTER CURTAIN -->
-    <footer id="footer" class="px-6 md:px-20 pt-20 pb-10 text-center flex flex-col items-center border-t border-[var(--border-color)]">
-        <div class="grid grid-cols-1 md:grid-cols-2 w-full max-w-[1200px] gap-20 items-center mb-16">
+    <footer id="footer" class="px-6 md:px-20 pt-20 pb-10 text-center flex flex-col items-center">
+        <div class="grid grid-cols-1 md:grid-cols-2 w-full max-w-[1200px] gap-20 items-center mb-16 relative z-10">
             
             <!-- Contact & Socials -->
             <div class="flex flex-col items-center md:items-start text-left">
@@ -489,22 +486,28 @@
             }
         });
 
-        // 3. Audio Tracks Setup
+        // 3. Audio Tracks Setup & Volume Slider Logic
         const audioNight = document.getElementById('audio-night');
         const audioDay = document.getElementById('audio-day');
         let currentAudio = null;
+        let globalVolume = 0.5;
+
+        document.getElementById('volume-slider').addEventListener('input', (e) => {
+            globalVolume = parseFloat(e.target.value);
+            if(currentAudio) currentAudio.volume = globalVolume;
+        });
 
         function crossfadeAudio(newAudio) {
             if(currentAudio) {
-                gsap.to(currentAudio, { volume: 0, duration: 1, onComplete: () => currentAudio.pause() });
+                gsap.to(currentAudio, { volume: 0, duration: 1.5, onComplete: () => currentAudio.pause() });
             }
             newAudio.volume = 0;
-            newAudio.play().catch(e => console.log("Autoplay prevented. It's okay."));
-            gsap.to(newAudio, { volume: 0.4, duration: 1 });
+            newAudio.play().catch(e => console.log("Autoplay prevented."));
+            gsap.to(newAudio, { volume: globalVolume, duration: 1.5 });
             currentAudio = newAudio;
         }
 
-        // 4. Sensory Cursor
+        // 4. Sensory Cursor & 3D Magnetic Cards
         const isTouch = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
         if(!isTouch) {
             const cursorDot = document.getElementById('cursor-dot');
@@ -512,13 +515,36 @@
             const cursorRipple = document.getElementById('cursor-ripple');
             let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
 
-            document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; gsap.to(cursorDot, { x: mouseX, y: mouseY, duration: 0.1 }); });
-            gsap.ticker.add(() => { ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15; gsap.set(cursorRing, { x: ringX, y: ringY }); });
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX; mouseY = e.clientY;
+                gsap.to(cursorDot, { x: mouseX, y: mouseY, duration: 0.1 });
+            });
+            gsap.ticker.add(() => {
+                ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15;
+                gsap.set(cursorRing, { x: ringX, y: ringY });
+            });
             document.querySelectorAll('.hover-target, button, a, .menu-card, .process-item').forEach(el => {
                 el.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
                 el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
             });
-            document.addEventListener('mousedown', () => { gsap.fromTo(cursorRipple, { x: mouseX, y: mouseY, scale: 0, opacity: 1 }, { scale: 4, opacity: 0, duration: 0.6, ease: "power2.out" }); });
+            document.addEventListener('mousedown', () => {
+                gsap.fromTo(cursorRipple, { x: mouseX, y: mouseY, scale: 0, opacity: 1 }, { scale: 4, opacity: 0, duration: 0.6, ease: "power2.out" });
+            });
+
+            // 3D Magnetic Effect for Menu Cards
+            document.querySelectorAll('.menu-card').forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const xPct = (x / rect.width - 0.5) * 20; // Max 10 deg tilt
+                    const yPct = (y / rect.height - 0.5) * -20;
+                    gsap.to(card.querySelector('.menu-img'), { rotationY: xPct, rotationX: yPct, transformPerspective: 1000, duration: 0.5, ease: "power2.out" });
+                });
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card.querySelector('.menu-img'), { rotationY: 0, rotationX: 0, duration: 0.5, ease: "power2.out" });
+                });
+            });
         }
 
         // 5. The Vibe Selector (Entry Logic)
@@ -532,12 +558,14 @@
             if(isLightMode) {
                 document.body.classList.add('light-mode');
                 document.getElementById('theme-icon').classList.replace('ph-moon', 'ph-sun');
-                document.getElementById('hero-main-text').innerText = "STAY";
+                document.getElementById('hero-state-text').innerText = "Fresh";
                 document.getElementById('hero-sub-text').innerText = "Bhairahawa's premier morning roastery. Bright flavors, refreshing vibes, delivered hot.";
                 document.getElementById('radio-track').innerText = "Morning Acoustic";
+                document.getElementById('hero-img').src = "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=2000&auto=format&fit=crop"; // Bright coffee image
                 crossfadeAudio(audioDay);
             } else {
                 document.getElementById('theme-icon').classList.replace('ph-sun', 'ph-moon');
+                document.getElementById('hero-img').src = "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=2000&auto=format&fit=crop"; // Dark coffee image
                 crossfadeAudio(audioNight);
             }
 
@@ -551,7 +579,7 @@
             }});
         };
 
-        // 6. True Liquid Pour Theme Transition (Day/Night Engine)
+        // 6. True Liquid Pour Theme Transition (Dual-Physics Engine)
         window.triggerLiquidPour = function() {
             const drips = document.querySelectorAll('.pour-drip');
             const icon = document.getElementById('theme-icon');
@@ -562,7 +590,6 @@
 
             const tl = gsap.timeline();
             
-            // Pour Down with staggered heights to create a jagged liquid edge
             tl.to(drips, {
                 height: "120vh",
                 stagger: { amount: 0.3, from: "center" }, 
@@ -575,15 +602,17 @@
                     
                     if(isLightMode) {
                         icon.classList.replace('ph-moon', 'ph-sun');
-                        document.getElementById('hero-main-text').innerText = "STAY";
+                        document.getElementById('hero-state-text').innerText = "Fresh";
                         document.getElementById('hero-sub-text').innerText = "Bhairahawa's premier morning roastery. Bright flavors, refreshing vibes, delivered hot.";
                         document.getElementById('radio-track').innerText = "Morning Acoustic";
+                        document.getElementById('hero-img').src = "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=2000&auto=format&fit=crop";
                         crossfadeAudio(audioDay);
                     } else {
                         icon.classList.replace('ph-sun', 'ph-moon');
-                        document.getElementById('hero-main-text').innerText = "STAY";
+                        document.getElementById('hero-state-text').innerText = "Awake";
                         document.getElementById('hero-sub-text').innerText = "Bhairahawa's premier nocturnal roastery. Deep flavors, aesthetic vibes, delivered hot.";
                         document.getElementById('radio-track').innerText = "Midnight Jazz";
+                        document.getElementById('hero-img').src = "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=2000&auto=format&fit=crop";
                         crossfadeAudio(audioNight);
                     }
                     
@@ -601,7 +630,7 @@
             });
         };
 
-        // 7. Analog Clock & Weather
+        // 7. Analog Clock & Weather Widget
         function updateWidgets() {
             const now = new Date();
             const h = now.getHours(); const m = now.getMinutes(); const s = now.getSeconds();
@@ -636,14 +665,7 @@
         window.addEventListener('resize', updateFooterMargin);
         setTimeout(updateFooterMargin, 500);
 
-        // 9. Accordion Toggle
-        window.toggleAccordion = function(element) {
-            document.querySelectorAll('.process-item').forEach(item => { if(item !== element) item.classList.remove('active'); });
-            element.classList.toggle('active');
-            setTimeout(ScrollTrigger.refresh, 400); // refresh scroll after height change
-        }
-
-        // 10. Advanced 3D Liquid Fly-to-Cart
+        // 9. Advanced 3D Liquid Fly-to-Cart
         let cart = [];
         const liquidContainer = document.getElementById('liquid-container');
         
@@ -741,9 +763,13 @@
             window.open(`https://wa.me/9779705965333?text=${encodeURIComponent(msg)}`, '_blank');
         };
 
-        // Scroll Reveal Animations
+        // 10. Scroll Animations Engine
         gsap.utils.toArray('.scroll-anim').forEach(el => {
             gsap.from(el, { y: 60, opacity: 0, duration: 1.2, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 85%" }});
+        });
+
+        gsap.utils.toArray('.parallax-bg').forEach(bg => {
+            gsap.to(bg, { yPercent: 30, ease: "none", scrollTrigger: { trigger: bg.parentElement, start: "top bottom", end: "bottom top", scrub: true }});
         });
 
     </script>
