@@ -14,482 +14,511 @@
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>After Hours Café | Liquid Gold</title>
+    <title>After Hours Café | Delivery & Live Orders</title>
     
-    <!-- Tailwind, GSAP, and Lenis -->
+    <!-- Tailwind, GSAP, Lenis, and Phosphor Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&display=swap');
         
         :root {
-            /* Rich Dark Mocha Palette */
-            --bg-deep: #0a0705;
-            --bg-surface: #140e0b;
-            --mocha: #3d2616;
+            --bg-deep: #080504;
+            --bg-surface: #120b08;
             --gold: #d4af37;
-            --gold-glow: rgba(212, 175, 55, 0.4);
+            --gold-glow: rgba(212, 175, 55, 0.5);
             --text-light: #fdfbf9;
             --text-muted: #a89f96;
         }
 
-        /* Lenis Smooth Scroll Base */
+        /* Lenis Smooth Scroll */
         html.lenis { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto; }
-        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-        .lenis.lenis-stopped { overflow: hidden; }
-
-        body {
-            background-color: var(--bg-deep);
-            color: var(--text-light);
-            font-family: 'Outfit', sans-serif;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
-
+        body { background-color: var(--bg-deep); color: var(--text-light); font-family: 'Outfit', sans-serif; overflow-x: hidden; }
         ::selection { background: var(--gold); color: #000; }
-
         .font-serif { font-family: 'Playfair Display', serif; }
 
-        /* ========= LIQUID SPLASH PRELOADER ========= */
+        /* SVG Gooey Filter CSS */
+        .gooey-container { filter: url('#goo'); }
+
+        /* ========= TRUE LIQUID PRELOADER ========= */
         #liquid-loader {
-            position: fixed; inset: 0; z-index: 100000;
-            background: var(--bg-deep);
+            position: fixed; inset: 0; z-index: 100000; background: var(--bg-deep);
             display: flex; justify-content: center; align-items: center;
-            overflow: hidden; pointer-events: none;
         }
-        .drop {
-            width: 12px; height: 12px; background: var(--gold);
-            border-radius: 50%; position: absolute; top: -20px;
-            box-shadow: 0 0 20px var(--gold);
+        .liquid-pool {
+            position: absolute; bottom: 30%; width: 150px; height: 40px;
+            background: var(--gold); border-radius: 50%;
+            transform: scale(0); opacity: 0;
         }
-        .ripple {
-            width: 0px; height: 0px; background: var(--gold);
-            border-radius: 50%; position: absolute;
-            top: 50%; left: 50%; transform: translate(-50%, -50%);
+        .liquid-drop {
+            width: 40px; height: 40px; background: var(--gold); border-radius: 50%;
+            position: absolute; top: -50px;
         }
 
-        /* ========= AMBIENT LIQUID BACKGROUND ========= */
-        .ambient-bg { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
-        .blob { position: absolute; filter: blur(90px); border-radius: 50%; opacity: 0.4; animation: liquidFloat 20s infinite alternate ease-in-out; }
-        .blob-1 { width: 50vw; height: 50vw; background: var(--mocha); top: -20%; left: -10%; }
-        .blob-2 { width: 40vw; height: 40vw; background: rgba(212,175,55,0.1); bottom: -10%; right: -10%; animation-delay: -5s; animation-direction: alternate-reverse; }
+        /* ========= LIQUID LOGO ========= */
+        .liquid-logo-wrap {
+            position: relative; width: 60px; height: 60px;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .logo-blob {
+            position: absolute; background: var(--gold); border-radius: 50%;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .blob-main { width: 45px; height: 45px; z-index: 2; box-shadow: 0 0 20px var(--gold-glow); }
+        .blob-sub { width: 25px; height: 25px; z-index: 1; }
         
-        @keyframes liquidFloat {
-            0% { transform: translate(0, 0) scale(1); border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
-            50% { transform: translate(5vw, 10vh) scale(1.1); border-radius: 60% 40% 30% 70% / 50% 60% 40% 50%; }
-            100% { transform: translate(-5vw, -5vh) scale(0.9); border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
-        }
+        .liquid-logo-wrap:hover .blob-sub:nth-child(2) { transform: translate(-25px, -15px) scale(1.2); }
+        .liquid-logo-wrap:hover .blob-sub:nth-child(3) { transform: translate(25px, 15px) scale(1.2); }
+        .logo-text { position: relative; z-index: 3; font-family: 'Playfair Display', serif; font-weight: 700; color: var(--bg-deep); font-size: 1.2rem; }
 
-        /* ========= GLASSMORPHISM & LIQUID UI ========= */
-        .glass-pill {
-            background: rgba(20, 14, 11, 0.6);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(212, 175, 55, 0.1);
+        /* ========= GLASSMORPHISM & UTILS ========= */
+        .glass-panel {
+            background: rgba(18, 11, 8, 0.6); backdrop-filter: blur(24px);
+            border: 1px solid rgba(212, 175, 55, 0.15); box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
+        
+        /* Floating Delivery Marquee */
+        .marquee-banner {
+            background: var(--gold); color: #000; padding: 10px 0;
+            font-size: 0.8rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+            overflow: hidden; white-space: nowrap; position: relative; z-index: 40;
+        }
+        .marquee-content { display: inline-block; animation: marquee 15s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* The Premium Monogram Logo (Fixes the broken image link) */
-        .ah-monogram {
-            display: flex; align-items: center; justify-content: center;
-            width: 44px; height: 44px; border-radius: 50%;
-            background: linear-gradient(135deg, #fcebb6, #d4af37, #8a6c1c);
-            color: var(--bg-deep); font-family: 'Playfair Display', serif;
-            font-weight: 800; font-size: 1.1rem; letter-spacing: -1px;
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
-            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+        /* ========= MENU CARDS & CART ========= */
+        .menu-card {
+            border-radius: 30px; overflow: hidden; position: relative;
+            background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
-        .group:hover .ah-monogram { transform: scale(1.1) rotate(5deg); box-shadow: 0 0 25px rgba(212, 175, 55, 0.6); }
+        .menu-card:hover {
+            transform: translateY(-10px); border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.1);
+        }
+        .menu-img-wrap { height: 250px; overflow: hidden; position: relative; }
+        .menu-img { width: 100%; height: 100%; object-fit: cover; transition: 0.7s; opacity: 0.7; }
+        .menu-card:hover .menu-img { transform: scale(1.1); opacity: 1; }
+        
+        .add-to-cart-btn {
+            position: absolute; bottom: -50px; left: 50%; transform: translateX(-50%);
+            background: var(--gold); color: #000; padding: 12px 24px; border-radius: 30px;
+            font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;
+            transition: 0.4s; opacity: 0;
+        }
+        .menu-card:hover .add-to-cart-btn { bottom: 20px; opacity: 1; }
+        .add-to-cart-btn:hover { background: #fff; transform: translateX(-50%) scale(1.05); }
 
-        /* Liquid Cards (Extreme rounded corners + morphing) */
-        .liquid-card {
-            border-radius: 40px; overflow: hidden; position: relative;
-            background: rgba(20, 14, 11, 0.5); border: 1px solid rgba(255,255,255,0.03);
-            transition: all 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+        /* Cart Sidebar */
+        #cart-sidebar {
+            position: fixed; top: 0; right: -100%; width: 100%; max-width: 400px; height: 100vh;
+            z-index: 10000; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .liquid-card:hover {
-            border-radius: 20px 60px 20px 60px; /* Liquid morph effect */
-            border-color: rgba(212, 175, 55, 0.2);
-            background: rgba(20, 14, 11, 0.8);
-            transform: translateY(-10px);
-        }
-        .liquid-card-img { width: 100%; height: 120%; object-fit: cover; opacity: 0.6; transition: 0.7s; }
-        .liquid-card:hover .liquid-card-img { opacity: 1; transform: scale(1.05); }
+        #cart-sidebar.open { right: 0; }
+        .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 9999; opacity: 0; pointer-events: none; transition: 0.4s; }
+        .cart-overlay.open { opacity: 1; pointer-events: all; }
 
-        /* Hero Text Sweep */
-        .text-sweep { display: inline-block; overflow: hidden; vertical-align: bottom; }
-        .text-sweep-inner { display: inline-block; transform: translateY(110%) rotate(5deg); opacity: 0; transform-origin: top left; }
+        /* Fly to cart clone */
+        .fly-clone { position: fixed; z-index: 999999; border-radius: 50%; object-fit: cover; pointer-events: none; transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
 
-        /* Floating Add-on Widget */
-        .vibe-widget {
-            position: fixed; bottom: 30px; right: 30px; z-index: 900;
-            display: flex; align-items: center; gap: 12px; padding: 12px 24px;
-            border-radius: 100px;
-            animation: floatWidget 6s infinite ease-in-out;
-        }
-        .pulse-dot { width: 8px; height: 8px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 10px var(--gold); animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(0.95); opacity: 0.8; } 50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 20px var(--gold); } 100% { transform: scale(0.95); opacity: 0.8; } }
-        @keyframes floatWidget { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
-        /* Giant Phone Number */
-        .giant-phone {
-            font-family: 'Playfair Display', serif; color: transparent;
-            -webkit-text-stroke: 1px rgba(212, 175, 55, 0.4);
-            transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-        .giant-phone:hover {
-            color: var(--gold); -webkit-text-stroke: 0px;
-            text-shadow: 0 0 60px rgba(212, 175, 55, 0.4); transform: scale(1.03);
-        }
-
-        /* Footer Curtain Setup */
-        #main-content { position: relative; z-index: 2; background: transparent; margin-bottom: 70vh; box-shadow: 0 30px 80px rgba(0,0,0,1); border-bottom-left-radius: 50px; border-bottom-right-radius: 50px; overflow: hidden; }
-        .content-bg { background: var(--bg-deep); }
+        /* Main Wrapper for Curtain */
+        #main-content { position: relative; z-index: 2; background: var(--bg-deep); margin-bottom: 70vh; box-shadow: 0 30px 80px rgba(0,0,0,1); border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; }
         footer { position: fixed; bottom: 0; left: 0; width: 100%; height: 70vh; z-index: 1; background: #030202; display: flex; flex-direction: column; justify-content: center; }
 
-        /* Mobile specific adjustments */
         @media (max-width: 768px) {
             #main-content { margin-bottom: auto; border-radius: 0; }
-            footer { position: relative; height: auto; padding: 100px 20px 40px; }
-            .giant-phone { -webkit-text-stroke: 0px; color: var(--gold); }
-            .vibe-widget { display: none; } /* Hide ambient widget on mobile to save space */
-            .liquid-card { border-radius: 30px; }
-            .liquid-card:hover { border-radius: 30px; transform: none; }
+            footer { position: relative; height: auto; padding: 80px 20px 40px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- SVG Filters for Liquid Math -->
+    <svg style="display: none;">
+        <defs>
+            <filter id="goo">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -9" result="goo" />
+                <feBlend in="SourceGraphic" in2="goo" />
+            </filter>
+        </defs>
+    </svg>
+
     <!-- Liquid Preloader -->
-    <div id="liquid-loader">
-        <div class="drop" id="drop"></div>
-        <div class="ripple" id="ripple"></div>
+    <div id="liquid-loader" class="gooey-container">
+        <div class="liquid-drop" id="loader-drop"></div>
+        <div class="liquid-pool" id="loader-pool"></div>
     </div>
 
-    <!-- Ambient Floating Backgrounds -->
-    <div class="ambient-bg">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
+    <!-- Delivery Banner -->
+    <div class="marquee-banner">
+        <div class="marquee-content">
+            <span>🚀 HOME DELIVERY WITHIN 25KM OF BHAIRAHAWA • 🌙 MIDNIGHT CRAVINGS DELIVERED TO YOUR DOORSTEP • ☕ FRESH & HOT GUARANTEE • </span>
+            <span>🚀 HOME DELIVERY WITHIN 25KM OF BHAIRAHAWA • 🌙 MIDNIGHT CRAVINGS DELIVERED TO YOUR DOORSTEP • ☕ FRESH & HOT GUARANTEE • </span>
+        </div>
     </div>
 
-    <!-- Header Navbar -->
-    <nav class="fixed w-full z-50 px-6 md:px-12 py-6 flex justify-between items-center transition-all duration-500" id="navbar">
-        <div class="flex items-center gap-4 group cursor-pointer">
-            <!-- Premium Monogram Logo (Fixes the broken image) -->
-            <div class="ah-monogram">AH</div>
-            <div class="flex flex-col">
-                <span class="text-lg font-bold tracking-widest leading-none text-white">AFTER HOURS</span>
-                <span class="text-[8px] text-gold tracking-[0.4em] uppercase mt-1">Siddharthanagar</span>
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 px-6 py-4 flex justify-between items-center transition-all duration-500 top-10" id="navbar">
+        <!-- Liquid Logo -->
+        <div class="flex items-center gap-4 group cursor-pointer gooey-container" onclick="window.scrollTo(0,0)">
+            <div class="liquid-logo-wrap">
+                <div class="logo-blob blob-sub"></div>
+                <div class="logo-blob blob-sub"></div>
+                <div class="logo-blob blob-main flex items-center justify-center">
+                    <span class="logo-text">AH</span>
+                </div>
             </div>
         </div>
         
-        <div class="hidden md:flex gap-12 text-[11px] font-bold tracking-[0.3em] uppercase text-text-muted">
-            <a href="#menu" class="hover:text-gold transition-colors">Menu</a>
-            <a href="#about" class="hover:text-gold transition-colors">Story</a>
+        <!-- Cart & Info -->
+        <div class="flex items-center gap-6">
+            <div class="hidden md:flex flex-col text-right">
+                <span class="text-xs text-gold font-bold tracking-widest"><i class="ph ph-phone-call"></i> 9867898711</span>
+                <span class="text-[10px] text-text-muted">Bhairahawa, Nepal</span>
+            </div>
+            
+            <!-- Cart Button -->
+            <button onclick="toggleCart()" class="relative glass-panel w-14 h-14 rounded-full flex justify-center items-center group hover:bg-gold transition-colors" id="cart-icon">
+                <i class="ph ph-shopping-bag text-2xl text-gold group-hover:text-black"></i>
+                <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold w-6 h-6 flex justify-center items-center rounded-full scale-0 transition-transform">0</span>
+            </button>
         </div>
-        
-        <!-- Desktop Inquire Button -->
-        <a href="tel:+9779867898711" class="hidden md:inline-block px-8 py-3 glass-pill rounded-full text-[10px] font-bold tracking-[0.2em] uppercase text-gold hover:bg-gold hover:text-black transition-all duration-300">
-            Inquire
-        </a>
     </nav>
 
-    <!-- Mobile Floating Action Button (Responsive Inquire) -->
-    <a href="tel:+9779867898711" class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 glass-pill px-8 py-4 rounded-full text-xs font-bold tracking-widest uppercase text-gold shadow-[0_0_20px_rgba(212,175,55,0.2)]">
-        Call to Inquire
-    </a>
-
-    <!-- Add-on: Ambient Vibe Widget -->
-    <div class="vibe-widget glass-pill">
-        <div class="pulse-dot"></div>
-        <span class="text-[10px] uppercase tracking-widest font-semibold text-gold">Brewing Nocturnal Magic</span>
+    <!-- Cart Overlay & Sidebar -->
+    <div class="cart-overlay" onclick="toggleCart()"></div>
+    <div id="cart-sidebar" class="glass-panel flex flex-col pt-24 pb-8 px-6">
+        <div class="flex justify-between items-center mb-8 border-b border-white/10 pb-4">
+            <h2 class="text-2xl font-serif font-bold text-gold">Your Order</h2>
+            <button onclick="toggleCart()" class="text-2xl hover:text-gold"><i class="ph ph-x"></i></button>
+        </div>
+        
+        <div id="cart-items" class="flex-1 overflow-y-auto space-y-4 pr-2">
+            <div class="text-center text-text-muted mt-10 text-sm">Your cart is empty. Add some midnight magic.</div>
+        </div>
+        
+        <div class="mt-6 border-t border-white/10 pt-4">
+            <div class="flex justify-between text-lg font-bold mb-2"><span>Total:</span> <span class="text-gold" id="cart-total">Rs 0</span></div>
+            <p class="text-[10px] text-green-400 mb-4 tracking-widest uppercase"><i class="ph ph-moped"></i> 25km Delivery Available</p>
+            <button onclick="checkout()" class="w-full bg-gold text-black py-4 rounded-xl font-bold tracking-widest uppercase hover:bg-white transition-colors flex justify-center items-center gap-2">
+                <i class="ph ph-whatsapp-logo text-xl"></i> Order via WhatsApp
+            </button>
+        </div>
     </div>
 
-    <!-- Main Content Wrapper (For Footer Curtain Effect) -->
     <div id="main-content">
-        
-        <!-- Hero Section -->
-        <section id="home" class="h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden rounded-b-[40px] md:rounded-b-[80px]">
+        <!-- Hero Section with Smart Widget -->
+        <section class="h-screen flex flex-col items-center justify-center px-6 relative">
             <div class="absolute inset-0 z-0">
-                <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=2000&auto=format&fit=crop" 
-                     class="w-full h-full object-cover opacity-30 mix-blend-luminosity" id="hero-bg" alt="Dark Coffee Background">
-                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-deep)] to-transparent opacity-80"></div>
+                <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover opacity-20" alt="Bg">
+                <div class="absolute inset-0 bg-gradient-to-t from-[var(--bg-deep)] to-transparent"></div>
             </div>
 
-            <div class="text-center z-10 w-full relative pt-20">
-                <p class="text-gold tracking-[0.6em] text-[10px] md:text-xs font-bold mb-8 uppercase opacity-0 hero-fade">The Midnight Sanctuary</p>
-                
-                <h1 class="text-6xl md:text-[13rem] font-bold tracking-tighter leading-[0.85] mb-8 flex flex-col items-center">
-                    <span class="text-sweep"><span class="text-sweep-inner">STAY</span></span>
-                    <span class="font-serif italic font-normal text-gold text-sweep mt-2 md:mt-0"><span class="text-sweep-inner">Awake</span></span>
+            <!-- SMART WEATHER/TIME WIDGET -->
+            <div class="glass-panel px-6 py-4 rounded-2xl z-10 mb-8 flex flex-col items-center gap-2 animate-fade-in border-gold/30">
+                <div class="flex items-center gap-4 text-sm font-semibold tracking-widest text-gold uppercase">
+                    <span class="flex items-center gap-1"><i class="ph ph-clock"></i> <span id="live-time">--:--</span></span>
+                    <span>|</span>
+                    <span class="flex items-center gap-1"><i id="weather-icon" class="ph ph-cloud-moon"></i> <span id="live-weather">22°C</span></span>
+                </div>
+                <p id="smart-prompt" class="text-xs text-text-muted font-light italic">Analyzing atmosphere...</p>
+            </div>
+
+            <div class="text-center z-10 w-full">
+                <h1 class="text-7xl md:text-[11rem] font-bold tracking-tighter leading-[0.85] mb-6 flex flex-col items-center">
+                    <span class="anim-up">LIQUID</span>
+                    <span class="font-serif italic font-normal text-gold anim-up mt-2">Gold</span>
                 </h1>
-                
-                <p class="text-text-muted max-w-lg mx-auto text-sm md:text-lg font-light leading-relaxed opacity-0 hero-fade">
-                    Coffee is the quiet anchor in a chaotic world. Breathe deeply, sip slowly, and let the midnight conversations flow.
+                <p class="text-text-muted max-w-lg mx-auto text-sm md:text-base font-light leading-relaxed anim-up">
+                    Crafted exclusively for the thinkers of Bhairahawa. Order online, delivered hot within 25km.
                 </p>
             </div>
         </section>
 
-        <div class="content-bg pb-32">
-            <!-- Menu Section -->
-            <section id="menu" class="py-32 px-6 md:px-20 max-w-[1400px] mx-auto">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
-                    <div class="lg:col-span-4 lg:sticky top-40 h-fit">
-                        <span class="text-gold tracking-[0.4em] text-[10px] font-bold uppercase block mb-4 scroll-fade">Menu No. 01</span>
-                        <h2 class="text-5xl md:text-7xl font-bold tracking-tighter mb-6 scroll-fade">Liquid <br><span class="font-serif italic text-gold font-normal">Gold</span></h2>
-                        <p class="text-text-muted text-sm md:text-base font-light leading-relaxed mb-10 scroll-fade">
-                            Sourced from organic Himalayan farms and prepared with absolute precision. High altitude roasts for high altitude thoughts.
-                        </p>
+        <!-- Menu Section (Interactive) -->
+        <section id="menu" class="py-20 px-6 md:px-20 max-w-[1400px] mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl md:text-6xl font-bold tracking-tighter mb-4 anim-scroll">Curated <span class="font-serif italic text-gold font-normal">Selections</span></h2>
+                <p class="text-text-muted">Click to add items to your live order.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Item 1 -->
+                <div class="menu-card anim-scroll group">
+                    <div class="absolute top-4 left-4 z-10 bg-red-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">Most Sold</div>
+                    <div class="menu-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Americano">
+                        <!-- Add to Cart Button -->
+                        <button onclick="addToCart('Midnight Americano', 180, this)" class="add-to-cart-btn"><i class="ph ph-shopping-cart-simple"></i> Add to Order</button>
                     </div>
-
-                    <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <!-- Liquid Card 1 -->
-                        <div class="liquid-card p-8 h-[400px] flex flex-col justify-end group scroll-fade">
-                            <div class="absolute inset-0 z-0">
-                                <img src="https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?q=80&w=800&auto=format&fit=crop" class="liquid-card-img parallax-img" alt="Americano">
-                                <div class="absolute inset-0 bg-gradient-to-t from-[#0a0705] via-[#0a0705]/60 to-transparent"></div>
-                            </div>
-                            <div class="relative z-10">
-                                <div class="flex justify-between items-end mb-4">
-                                    <span class="text-[10px] text-gold tracking-widest uppercase font-bold">Black</span>
-                                    <span class="text-lg font-serif italic text-gold">Rs 180</span>
-                                </div>
-                                <h4 class="text-3xl font-bold mb-2">Midnight Americano</h4>
-                                <p class="text-xs text-text-muted font-light leading-relaxed">Double-shot espresso pulled from 100% Arabica beans over pure spring water.</p>
-                            </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="text-2xl font-bold">Midnight Americano</h4>
+                            <span class="text-lg font-serif italic text-gold">Rs 180</span>
                         </div>
-
-                        <!-- Liquid Card 2 -->
-                        <div class="liquid-card p-8 h-[400px] flex flex-col justify-end group scroll-fade md:mt-16">
-                            <div class="absolute inset-0 z-0">
-                                <img src="https://images.unsplash.com/photo-1572286258217-40142c1c6a70?q=80&w=800&auto=format&fit=crop" class="liquid-card-img parallax-img" alt="Latte">
-                                <div class="absolute inset-0 bg-gradient-to-t from-[#0a0705] via-[#0a0705]/60 to-transparent"></div>
-                            </div>
-                            <div class="relative z-10">
-                                <div class="flex justify-between items-end mb-4">
-                                    <span class="text-[10px] text-gold tracking-widest uppercase font-bold">Milk</span>
-                                    <span class="text-lg font-serif italic text-gold">Rs 240</span>
-                                </div>
-                                <h4 class="text-3xl font-bold mb-2">Velvet Latte</h4>
-                                <p class="text-xs text-text-muted font-light leading-relaxed">Silk micro-foam over a rich espresso base. Smooth, sweet, and balanced.</p>
-                            </div>
-                        </div>
-
-                        <!-- Liquid Card 3 -->
-                        <div class="liquid-card p-8 h-[400px] flex flex-col justify-end group scroll-fade">
-                            <div class="absolute inset-0 z-0">
-                                <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=800&auto=format&fit=crop" class="liquid-card-img parallax-img" alt="Cold Brew">
-                                <div class="absolute inset-0 bg-gradient-to-t from-[#0a0705] via-[#0a0705]/60 to-transparent"></div>
-                            </div>
-                            <div class="relative z-10">
-                                <div class="flex justify-between items-end mb-4">
-                                    <span class="text-[10px] text-gold tracking-widest uppercase font-bold">Cold</span>
-                                    <span class="text-lg font-serif italic text-gold">Rs 320</span>
-                                </div>
-                                <h4 class="text-3xl font-bold mb-2">Noir Cold Brew</h4>
-                                <p class="text-xs text-text-muted font-light leading-relaxed">12-hour steeped concentrate infused with nitrogen for a creamy finish.</p>
-                            </div>
-                        </div>
-
-                        <!-- Liquid Card 4 -->
-                        <div class="liquid-card p-8 h-[400px] flex flex-col justify-end group scroll-fade md:mt-16">
-                            <div class="absolute inset-0 z-0">
-                                <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop" class="liquid-card-img parallax-img" alt="Dessert">
-                                <div class="absolute inset-0 bg-gradient-to-t from-[#0a0705] via-[#0a0705]/60 to-transparent"></div>
-                            </div>
-                            <div class="relative z-10">
-                                <div class="flex justify-between items-end mb-4">
-                                    <span class="text-[10px] text-gold tracking-widest uppercase font-bold">Sweet</span>
-                                    <span class="text-lg font-serif italic text-gold">Rs 350</span>
-                                </div>
-                                <h4 class="text-3xl font-bold mb-2">Moonlit Waffle</h4>
-                                <p class="text-xs text-text-muted font-light leading-relaxed">Light waffles topped with wild honey, vanilla cream, and seasonal berries.</p>
-                            </div>
-                        </div>
+                        <p class="text-xs text-text-muted font-light leading-relaxed">Double-shot espresso pulled from 100% Arabica beans. Pure energy.</p>
                     </div>
                 </div>
-            </section>
 
-            <!-- Story Section -->
-            <section id="about" class="py-32 px-6 md:px-20">
-                <div class="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                    <!-- Liquid Mask Image -->
-                    <div class="rounded-[50px] overflow-hidden h-[600px] relative border border-white/5 scroll-fade">
-                        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1200&auto=format&fit=crop" class="w-full h-[120%] object-cover parallax-img opacity-60 mix-blend-luminosity" alt="The Roastery">
-                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent,rgba(10,7,5,0.8))]"></div>
-                        <div class="absolute bottom-10 left-10 z-10">
-                            <p class="text-[10px] font-bold tracking-[0.5em] text-gold uppercase glass-pill px-4 py-2 rounded-full">Est. 2023</p>
-                        </div>
+                <!-- Item 2 -->
+                <div class="menu-card anim-scroll group">
+                    <div class="absolute top-4 left-4 z-10 bg-gold text-black text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">Chef's Pick</div>
+                    <div class="menu-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1572286258217-40142c1c6a70?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Latte">
+                        <button onclick="addToCart('Velvet Latte', 240, this)" class="add-to-cart-btn"><i class="ph ph-shopping-cart-simple"></i> Add to Order</button>
                     </div>
-                    
-                    <div class="space-y-10">
-                        <h2 class="text-5xl md:text-7xl font-bold tracking-tighter leading-none scroll-fade">Crafted for the <br><span class="font-serif font-normal italic text-gold">Nocturnal</span></h2>
-                        <div class="space-y-6 text-text-muted font-light leading-relaxed text-base md:text-lg scroll-fade">
-                            <p>After Hours started with a simple observation: Bhairahawa sleeps too early for its thinkers. We built a sanctuary for those who do their best work when the sun is down.</p>
-                            <p>We source 100% organic beans from the high-altitude plantations, roasting them in small batches to preserve the bold notes unique to Nepali soil. No loud music. No bright lights. Just you and the perfect cup.</p>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="text-2xl font-bold">Velvet Latte</h4>
+                            <span class="text-lg font-serif italic text-gold">Rs 240</span>
                         </div>
+                        <p class="text-xs text-text-muted font-light leading-relaxed">Silk micro-foam over a rich espresso base. Smooth and sweet.</p>
                     </div>
                 </div>
-            </section>
-        </div>
+
+                <!-- Item 3 -->
+                <div class="menu-card anim-scroll group">
+                    <div class="absolute top-4 left-4 z-10 bg-purple-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">Limited Time</div>
+                    <div class="menu-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Cold Brew">
+                        <button onclick="addToCart('Noir Cold Brew', 320, this)" class="add-to-cart-btn"><i class="ph ph-shopping-cart-simple"></i> Add to Order</button>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="text-2xl font-bold">Noir Cold Brew</h4>
+                            <span class="text-lg font-serif italic text-gold">Rs 320</span>
+                        </div>
+                        <p class="text-xs text-text-muted font-light leading-relaxed">12-hour steeped concentrate infused with nitrogen. Creamy finish.</p>
+                    </div>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="menu-card anim-scroll group">
+                    <div class="absolute top-4 left-4 z-10 bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">Special</div>
+                    <div class="menu-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Waffle">
+                        <button onclick="addToCart('Moonlit Waffle', 350, this)" class="add-to-cart-btn"><i class="ph ph-shopping-cart-simple"></i> Add to Order</button>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="text-2xl font-bold">Moonlit Waffle</h4>
+                            <span class="text-lg font-serif italic text-gold">Rs 350</span>
+                        </div>
+                        <p class="text-xs text-text-muted font-light leading-relaxed">Light waffles topped with wild honey, vanilla cream, and berries.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div> <!-- End Main Content -->
 
-    <!-- Footer (Curtain Reveal) -->
+    <!-- Footer Curtain -->
     <footer class="px-6 md:px-20 text-center relative overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?q=80&w=1500&auto=format&fit=crop" 
-             class="absolute inset-0 w-full h-full object-cover opacity-[0.05] mix-blend-luminosity" alt="Footer Bg">
-        
         <div class="relative z-10 flex flex-col items-center">
-            <!-- Footer Logo -->
-            <div class="ah-monogram mb-10 scale-150 shadow-[0_0_30px_rgba(212,175,55,0.2)]">AH</div>
+            <!-- Footer Liquid Logo -->
+            <div class="gooey-container mb-10 scale-150">
+                <div class="liquid-logo-wrap group cursor-pointer">
+                    <div class="logo-blob blob-sub"></div><div class="logo-blob blob-sub"></div>
+                    <div class="logo-blob blob-main flex items-center justify-center"><span class="logo-text">AH</span></div>
+                </div>
+            </div>
 
-            <span class="text-gold tracking-[0.4em] text-[10px] md:text-xs font-bold uppercase block mb-6">Speak with the Barista</span>
+            <span class="text-gold tracking-[0.4em] text-[10px] font-bold uppercase block mb-6">Home Delivery within 25km</span>
             
-            <a href="tel:+9779867898711" class="giant-phone text-6xl md:text-[9rem] font-bold tracking-tighter leading-none block mb-12">
+            <a href="tel:+9779867898711" class="giant-phone text-5xl md:text-[8rem] font-bold tracking-tighter leading-none block mb-12">
                 986 789 8711
             </a>
             
-            <a href="https://www.instagram.com/afterhourscafe.bhw/" target="_blank" class="inline-flex items-center gap-3 px-8 py-4 border border-gold text-gold rounded-full text-xs font-bold tracking-widest uppercase hover:bg-gold hover:text-black shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-300 transform hover:scale-105">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
-                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
-                </svg>
-                Follow Instagram
+            <a href="https://www.instagram.com/afterhourscafe.bhw/" target="_blank" class="inline-flex items-center gap-3 px-8 py-4 border border-gold text-gold rounded-full text-xs font-bold tracking-widest uppercase hover:bg-gold hover:text-black transition-all">
+                <i class="ph ph-instagram-logo text-lg"></i> Follow Instagram
             </a>
         </div>
-        
-        <div class="w-full max-w-5xl mx-auto grid grid-cols-2 gap-10 text-[10px] font-bold tracking-[0.2em] text-text-muted uppercase relative z-10 border-t border-white/5 pt-10 mt-20">
-            <div class="text-left">
-                <p class="text-white mb-2 tracking-[0.4em]">Location</p>
-                <p class="font-light">Siddharthanagar-08<br>Bhairahawa, Nepal</p>
-            </div>
-            <div class="text-right">
-                <p class="text-white mb-2 tracking-[0.4em]">Hours</p>
-                <p class="font-light">Every Night<br>4:00 PM - 2:00 AM</p>
-            </div>
-        </div>
-        <p class="text-[9px] tracking-[0.5em] uppercase text-white/20 relative z-10 mt-16">&copy; 2024 After Hours Café.</p>
     </footer>
 
     <script>
-        // 1. Lenis Smooth Scrolling
-        const lenis = new Lenis({
-            duration: 1.5,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            smooth: true,
-            mouseMultiplier: 1,
-        });
+        gsap.registerPlugin(ScrollTrigger);
+
+        // 1. Lenis Smooth Scroll
+        const lenis = new Lenis({ duration: 1.2, smooth: true });
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
-        gsap.registerPlugin(ScrollTrigger);
-
-        // 2. Liquid Splash Preloader Animation
+        // 2. Liquid Preloader Animation
         const loaderTL = gsap.timeline();
-        
-        // Drop falls
-        loaderTL.to("#drop", {
-            y: "50vh",
-            duration: 0.8,
-            ease: "power2.in"
-        })
-        // Ripple expands to cover screen
-        .to("#ripple", {
-            width: "250vw",
-            height: "250vw",
-            duration: 1.2,
-            ease: "power3.inOut"
-        }, "-=0.1")
-        // Hide loader container
-        .to("#liquid-loader", {
-            opacity: 0,
-            duration: 0.8,
-            ease: "power2.out",
-            onComplete: () => {
-                document.getElementById('liquid-loader').style.display = 'none';
-                startHeroAnimations();
-            }
-        });
+        loaderTL.to("#loader-drop", { y: "45vh", duration: 0.8, ease: "power2.in" })
+                .to("#loader-drop", { scaleY: 0.5, scaleX: 1.5, duration: 0.1 })
+                .to("#loader-pool", { scale: 15, opacity: 1, duration: 1.2, ease: "power3.inOut" }, "-=0.1")
+                .to("#liquid-loader", { opacity: 0, duration: 0.6, onComplete: () => {
+                    document.getElementById('liquid-loader').style.display = 'none';
+                    // Hero Text Sweep Up
+                    gsap.fromTo(".anim-up", { y: 50, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.2, duration: 1.2, ease: "power3.out" });
+                }});
 
-        // 3. Hero Reveal Sequence (Triggers after loader)
-        function startHeroAnimations() {
-            const tl = gsap.timeline();
+        // 3. Smart Time & Weather Engine (Simulated for Nepal)
+        function updateSmartWidget() {
+            // Get current UTC time, add 5 hours 45 mins for Nepal
+            const now = new Date();
+            const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
+            const nepalTime = new Date(utcTime + (3600000 * 5.75));
             
-            // Sweep text up with slight rotation
-            tl.to(".text-sweep-inner", {
-                y: 0,
-                rotation: 0,
-                opacity: 1,
-                stagger: 0.15,
-                duration: 1.4,
-                ease: "power4.out"
-            })
-            // Fade in paragraph and elements
-            .to(".hero-fade", {
-                opacity: 1,
-                y: -10,
-                stagger: 0.2,
-                duration: 1.2,
-                ease: "power2.out"
-            }, "-=1");
+            const hours = nepalTime.getHours();
+            const minutes = nepalTime.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const displayHours = hours % 12 || 12;
+            
+            document.getElementById('live-time').innerText = `${displayHours}:${minutes} ${ampm}`;
+
+            // Logic to simulate weather and smart suggestions based on time of day
+            let icon, temp, prompt;
+            
+            if (hours >= 5 && hours < 17) {
+                // Daytime
+                icon = "ph-sun"; temp = "28°C";
+                prompt = "A warm afternoon in Bhairahawa. Perfect for a Noir Cold Brew.";
+            } else if (hours >= 17 && hours < 20) {
+                // Evening
+                icon = "ph-cloud-sun"; temp = "24°C";
+                prompt = "The sun is setting. Ease into the evening with a Velvet Latte.";
+            } else {
+                // Night / Late Night
+                icon = "ph-moon-stars"; temp = "18°C";
+                prompt = "A chilly nocturnal breeze. Warm up with our Midnight Americano.";
+            }
+
+            document.getElementById('weather-icon').className = `ph ${icon} text-lg`;
+            document.getElementById('live-weather').innerText = temp;
+            document.getElementById('smart-prompt').innerText = prompt;
+        }
+        setInterval(updateSmartWidget, 60000);
+        updateSmartWidget(); // Init call
+
+        // 4. Cart & Fly-to-Cart System
+        let cart = [];
+        
+        function toggleCart() {
+            document.getElementById('cart-sidebar').classList.toggle('open');
+            document.querySelector('.cart-overlay').classList.toggle('open');
+            renderCart();
         }
 
-        // 4. Scroll Animations
-        
-        // Parallax Hero Background
-        gsap.to("#hero-bg", {
-            yPercent: 40,
-            ease: "none",
-            scrollTrigger: { trigger: "#home", start: "top top", end: "bottom top", scrub: true }
+        function addToCart(name, price, btnElement) {
+            cart.push({ name, price });
+            
+            // Update Badge
+            const badge = document.getElementById('cart-badge');
+            badge.innerText = cart.length;
+            badge.classList.remove('scale-0');
+            gsap.fromTo(badge, { scale: 1.5 }, { scale: 1, duration: 0.4, ease: "back.out" });
+
+            // Fly-to-Cart Animation
+            const imgToClone = btnElement.parentElement.querySelector('img');
+            const cartIcon = document.getElementById('cart-icon');
+            
+            if(imgToClone && cartIcon) {
+                const imgRect = imgToClone.getBoundingClientRect();
+                const iconRect = cartIcon.getBoundingClientRect();
+                
+                const clone = imgToClone.cloneNode(true);
+                clone.classList.add('fly-clone');
+                clone.style.top = imgRect.top + 'px';
+                clone.style.left = imgRect.left + 'px';
+                clone.style.width = imgRect.width + 'px';
+                clone.style.height = imgRect.height + 'px';
+                document.body.appendChild(clone);
+
+                // Animate clone to cart icon
+                gsap.to(clone, {
+                    top: iconRect.top + 10,
+                    left: iconRect.left + 10,
+                    width: 20,
+                    height: 20,
+                    opacity: 0.5,
+                    duration: 0.8,
+                    ease: "power3.inOut",
+                    onComplete: () => clone.remove()
+                });
+            }
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items');
+            const totalEl = document.getElementById('cart-total');
+            
+            if(cart.length === 0) {
+                container.innerHTML = `<div class="text-center text-text-muted mt-10 text-sm">Your cart is empty. Add some midnight magic.</div>`;
+                totalEl.innerText = 'Rs 0';
+                return;
+            }
+
+            let html = '';
+            let total = 0;
+            
+            // Group identical items
+            const counts = {};
+            cart.forEach(item => {
+                counts[item.name] = (counts[item.name] || 0) + 1;
+                total += item.price;
+            });
+
+            for (const [name, count] of Object.entries(counts)) {
+                const itemPrice = cart.find(i => i.name === name).price;
+                html += `
+                    <div class="flex justify-between items-center bg-black/30 p-4 rounded-xl border border-white/5">
+                        <div>
+                            <h5 class="font-bold text-sm text-white">${name}</h5>
+                            <p class="text-xs text-gold">Rs ${itemPrice} x ${count}</p>
+                        </div>
+                        <div class="font-bold">Rs ${itemPrice * count}</div>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+            totalEl.innerText = `Rs ${total}`;
+        }
+
+        // WhatsApp Checkout
+        function checkout() {
+            if(cart.length === 0) {
+                alert("Please add items to your order first.");
+                return;
+            }
+            
+            let message = "Hello After Hours! 🌙\nI would like to order for Home Delivery:\n\n";
+            const counts = {};
+            let total = 0;
+            
+            cart.forEach(item => {
+                counts[item.name] = (counts[item.name] || 0) + 1;
+                total += item.price;
+            });
+
+            for (const [name, count] of Object.entries(counts)) {
+                message += `- ${count}x ${name}\n`;
+            }
+            
+            message += `\nTotal: Rs ${total}\n\nPlease confirm my order!`;
+            
+            const whatsappUrl = `https://wa.me/9779867898711?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // 5. Scroll Animations
+        gsap.utils.toArray('.anim-scroll').forEach(el => {
+            gsap.from(el, { y: 60, opacity: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 85%" }});
         });
 
-        // Navbar blur effect
+        // Navbar bg on scroll
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
-            if(window.scrollY > 50) {
-                nav.classList.add('bg-[#0a0705]/80', 'backdrop-blur-md', 'border-b', 'border-white/5');
-            } else {
-                nav.classList.remove('bg-[#0a0705]/80', 'backdrop-blur-md', 'border-b', 'border-white/5');
-            }
-        });
-
-        // Image Parallax inside Liquid Cards
-        gsap.utils.toArray('.parallax-img').forEach(img => {
-            gsap.to(img, {
-                yPercent: 15,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: img.parentElement,
-                    start: "top bottom",
-                    end: "bottom top",
-                    scrub: true
-                }
-            });
-        });
-
-        // Standard fade up for content
-        gsap.utils.toArray('.scroll-fade').forEach(el => {
-            gsap.from(el, {
-                y: 60,
-                opacity: 0,
-                duration: 1.2,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: el,
-                    start: "top 85%"
-                }
-            });
-        });
-
-        // 5. Smooth Anchor Scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                lenis.scrollTo(this.getAttribute('href'), { duration: 1.5 });
-            });
+            if(window.scrollY > 100) nav.classList.add('bg-[#080504]/90', 'backdrop-blur-md', 'border-b', 'border-white/5');
+            else nav.classList.remove('bg-[#080504]/90', 'backdrop-blur-md', 'border-b', 'border-white/5');
         });
 
     </script>
