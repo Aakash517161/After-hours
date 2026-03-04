@@ -14,7 +14,7 @@
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>After Hours Café | Premium Roasts</title>
+    <title>After Hours Café | Bhairahawa</title>
     
     <!-- Tailwind, GSAP, Lenis, and Phosphor Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -24,27 +24,25 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&display=swap');
         
         /* ========= THEME VARIABLES ========= */
         :root {
-            /* Dark Mode (Default) */
-            --bg-deep: #0a0706;
-            --bg-card: #120d0a;
-            --bg-glass: rgba(18, 13, 10, 0.7);
+            --bg-deep: #080504;
+            --bg-card: #120b08;
+            --bg-glass: rgba(18, 11, 8, 0.6);
             --text-main: #f9f6f0;
             --text-muted: #8c827a;
             --border-color: rgba(255,255,255,0.08);
             --gold: #d4a373;
-            --cart-bg: rgba(245, 240, 235, 0.95); /* Light cart for visibility */
+            --cart-bg: rgba(245, 240, 235, 0.95);
             --cart-text: #1a120e;
         }
 
         body.light-mode {
-            /* Light Mode */
             --bg-deep: #f5f0eb;
             --bg-card: #ffffff;
-            --bg-glass: rgba(255, 255, 255, 0.8);
+            --bg-glass: rgba(255, 255, 255, 0.7);
             --text-main: #1a120e;
             --text-muted: #6b5a50;
             --border-color: rgba(0,0,0,0.08);
@@ -53,106 +51,99 @@
             --cart-text: #1a120e;
         }
 
-        /* Base Setup */
         html.lenis { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto; }
-        body { 
-            background-color: var(--bg-deep); color: var(--text-main); 
-            font-family: 'Outfit', sans-serif; overflow-x: hidden; cursor: none; 
-            transition: background-color 0.5s ease, color 0.5s ease;
-        }
+        body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Outfit', sans-serif; overflow-x: hidden; cursor: none; transition: 0.5s ease; }
         ::selection { background: var(--gold); color: #fff; }
         .font-serif { font-family: 'Playfair Display', serif; }
 
-        /* ========= SENSORY CUSTOM CURSOR ========= */
-        .cursor-dot {
-            width: 6px; height: 6px; background: var(--gold); border-radius: 50%;
-            position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999999;
-            transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s;
-        }
-        .cursor-ring {
-            width: 34px; height: 34px; border: 1px solid var(--gold); border-radius: 50%; opacity: 0.5;
-            position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999998;
-            transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s;
-        }
-        .cursor-click-ripple {
-            position: fixed; width: 20px; height: 20px; border: 2px solid var(--gold);
-            border-radius: 50%; pointer-events: none; z-index: 9999997;
-            transform: translate(-50%, -50%) scale(0); opacity: 0;
-        }
+        /* ========= CUSTOM SENSORY CURSOR ========= */
+        .cursor-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999999; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s; }
+        .cursor-ring { width: 34px; height: 34px; border: 1px solid var(--gold); border-radius: 50%; opacity: 0.5; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999998; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s; }
+        .cursor-click-ripple { position: fixed; width: 20px; height: 20px; border: 2px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999997; transform: translate(-50%, -50%) scale(0); opacity: 0; }
         .hover-active .cursor-dot { width: 0; height: 0; }
-        .hover-active .cursor-ring { width: 60px; height: 60px; opacity: 1; background: rgba(212, 163, 115, 0.1); backdrop-filter: blur(2px); }
+        .hover-active .cursor-ring { width: 60px; height: 60px; opacity: 1; background: rgba(212, 163, 115, 0.1); backdrop-filter: blur(4px); }
 
-        /* ========= SIMPLE PRELOADER ========= */
-        #loader {
-            position: fixed; inset: 0; background: var(--bg-deep); z-index: 100000;
-            display: flex; justify-content: center; align-items: center; transition: background-color 0.5s;
-        }
-        .pulse-logo {
-            font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold);
-            letter-spacing: 4px; animation: pulse 1.5s infinite alternate;
-        }
-        @keyframes pulse { 0% { opacity: 0.4; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1.05); } }
+        /* ========= GLASSMORPHISM & UTILS ========= */
+        .glass { background: var(--bg-glass); backdrop-filter: blur(24px); border: 1px solid var(--border-color); }
+        .ambient-glow { position: absolute; width: 40vw; height: 40vw; background: var(--gold); filter: blur(150px); opacity: 0.05; border-radius: 50%; pointer-events: none; z-index: 0; }
 
-        /* ========= ANALOG CLOCK ========= */
+        /* ========= BIG ANALOG CLOCK (Top Left) ========= */
+        .big-clock-widget {
+            position: fixed; top: 100px; left: 24px; z-index: 40;
+            display: flex; items-center; gap: 20px;
+            padding: 20px 24px; border-radius: 30px;
+        }
         .analog-clock {
-            width: 24px; height: 24px; border: 1.5px solid var(--text-main); border-radius: 50%;
-            position: relative; display: inline-block;
+            width: 50px; height: 50px; border: 2px solid var(--gold); border-radius: 50%;
+            position: relative; display: block; box-shadow: 0 0 20px rgba(212, 163, 115, 0.2);
         }
         .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: var(--text-main); border-radius: 10px; }
-        .hour-hand { width: 2px; height: 6px; margin-left: -1px; }
-        .min-hand { width: 1.5px; height: 9px; margin-left: -0.75px; }
-        .sec-hand { width: 1px; height: 10px; background: var(--gold); margin-left: -0.5px; }
-        .clock-center { width: 3px; height: 3px; background: var(--gold); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .hour-hand { width: 3px; height: 14px; margin-left: -1.5px; }
+        .min-hand { width: 2px; height: 20px; margin-left: -1px; }
+        .sec-hand { width: 1px; height: 22px; background: var(--gold); margin-left: -0.5px; }
+        .clock-center { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 
-        /* ========= GLASS & CARDS ========= */
-        .glass { background: var(--bg-glass); backdrop-filter: blur(20px); border: 1px solid var(--border-color); transition: background-color 0.5s, border-color 0.5s; }
-        
+        /* ========= MENU CARDS ========= */
         .menu-card {
-            background: var(--bg-card); border-radius: 20px; border: 1px solid var(--border-color);
-            overflow: hidden; transition: all 0.4s ease; position: relative;
+            background: var(--bg-card); border-radius: 30px; border: 1px solid var(--border-color);
+            overflow: hidden; transition: 0.5s ease; position: relative;
         }
-        .menu-card:hover { transform: translateY(-8px); border-color: var(--gold); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
-        .menu-img-wrap { height: 240px; overflow: hidden; position: relative; }
+        .menu-card:hover { transform: translateY(-10px); border-color: var(--gold); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .menu-img-wrap { height: 260px; overflow: hidden; position: relative; }
         .menu-img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s ease; }
-        .menu-card:hover .menu-img { transform: scale(1.08); }
+        .menu-card:hover .menu-img { transform: scale(1.1); filter: brightness(1.1); }
         
-        /* Highly Visible Order Button */
         .add-btn {
-            position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%);
-            background: #ffffff; color: #000; padding: 12px 24px; border-radius: 30px;
-            font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 8px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3); transition: 0.3s; opacity: 0.95; width: 80%; justify-content: center;
+            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: #ffffff; color: #000; padding: 14px 28px; border-radius: 40px;
+            font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: 0.3s; opacity: 0.95; width: 85%; justify-content: center;
         }
         body.light-mode .add-btn { background: var(--bg-deep); color: var(--text-main); }
         .menu-card:hover .add-btn { opacity: 1; transform: translateX(-50%) scale(1.05); background: var(--gold); color: #fff; }
 
-        /* ========= FLY-TO-CART CLONE ========= */
-        .fly-clone { position: fixed; z-index: 999999; border-radius: 50%; object-fit: cover; pointer-events: none; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-
-        /* ========= BRIGHT CART SIDEBAR ========= */
-        #cart-sidebar {
-            position: fixed; top: 0; right: -100%; width: 100%; max-width: 400px; height: 100vh;
-            z-index: 10000; transition: 0.5s cubic-bezier(0.25, 1, 0.5, 1); background: var(--cart-bg);
-            color: var(--cart-text); border-left: 1px solid var(--border-color); display: flex; flex-direction: column;
-            box-shadow: -10px 0 50px rgba(0,0,0,0.2); backdrop-filter: blur(30px);
+        /* ========= LIQUID FLY-TO-CART ANIMATION ========= */
+        .liquid-drop {
+            position: fixed; z-index: 999999; background: var(--gold);
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; /* Organic liquid shape */
+            box-shadow: 0 0 20px var(--gold); pointer-events: none;
+            animation: liquidWobble 0.5s infinite alternate ease-in-out;
         }
-        #cart-sidebar.open { right: 0; }
-        .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 9999; opacity: 0; pointer-events: none; transition: 0.4s; }
-        .cart-overlay.open { opacity: 1; pointer-events: all; }
+        @keyframes liquidWobble {
+            0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+            100% { border-radius: 60% 40% 30% 70% / 50% 60% 40% 50%; }
+        }
 
-        /* ========= NEON LOCATION FOOTER ========= */
-        .neon-text { transition: opacity 0.5s ease; color: #fff; text-shadow: 0 0 5px #fff, 0 0 10px var(--gold), 0 0 20px var(--gold), 0 0 40px var(--gold); }
-        body.light-mode .neon-text { color: var(--gold); text-shadow: none; font-weight: 800; }
+        /* ========= NEON FOOTER MAP ========= */
+        .neon-map {
+            width: 100%; max-width: 400px; height: 200px; margin: 0 auto;
+            background-image: 
+                linear-gradient(rgba(212, 163, 115, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(212, 163, 115, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px; border-radius: 20px; position: relative;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.8); border: 1px solid rgba(212, 163, 115, 0.2);
+            overflow: hidden;
+        }
+        .map-path { position: absolute; top: 50%; left: 10%; width: 80%; height: 2px; background: rgba(212,163,115,0.3); transform: rotate(-10deg); }
+        .map-path::after { content: ''; position: absolute; left: 50%; top: -40px; width: 2px; height: 80px; background: rgba(212,163,115,0.3); transform: rotate(20deg); }
+        .neon-pulse {
+            position: absolute; top: 40%; left: 55%; width: 12px; height: 12px;
+            background: var(--gold); border-radius: 50%;
+            box-shadow: 0 0 15px var(--gold), 0 0 30px var(--gold);
+            animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+        @keyframes ping { 75%, 100% { transform: scale(3); opacity: 0; } }
 
-        #main-content { position: relative; z-index: 2; background: var(--bg-deep); margin-bottom: 60vh; box-shadow: 0 30px 60px rgba(0,0,0,0.5); border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; transition: background-color 0.5s; }
-        footer { position: fixed; bottom: 0; left: 0; width: 100%; height: 60vh; z-index: 1; background: var(--bg-deep); display: flex; flex-direction: column; justify-content: center; transition: background-color 0.5s; }
+        #main-content { position: relative; z-index: 2; background: var(--bg-deep); margin-bottom: 75vh; box-shadow: 0 40px 100px rgba(0,0,0,1); border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; transition: 0.5s; }
+        footer { position: fixed; bottom: 0; left: 0; width: 100%; height: 75vh; z-index: 1; background: var(--bg-deep); display: flex; flex-direction: column; justify-content: center; transition: 0.5s; }
 
         @media (max-width: 768px) {
             #main-content { margin-bottom: auto; border-radius: 0; }
-            footer { position: relative; height: auto; padding: 80px 20px 40px; }
+            footer { position: relative; height: auto; padding: 60px 20px; }
             .cursor-dot, .cursor-ring { display: none !important; }
             body { cursor: auto; }
+            .big-clock-widget { top: 80px; left: 50%; transform: translateX(-50%); width: 90%; justify-content: center; }
         }
     </style>
 </head>
@@ -163,197 +154,151 @@
     <div class="cursor-ring" id="cursor-ring"></div>
     <div class="cursor-click-ripple" id="cursor-ripple"></div>
 
-    <!-- SIMPLE PRELOADER -->
-    <div id="loader">
-        <div class="pulse-logo">Brewing...</div>
-    </div>
-
     <!-- NAVBAR -->
-    <nav class="fixed w-full z-50 px-6 py-4 flex justify-between items-center transition-all duration-500 top-0 glass" style="border-radius: 0 0 20px 20px; border-top: none;" id="navbar">
+    <nav class="fixed w-full z-50 px-6 py-4 flex justify-between items-center transition-all duration-500 top-0 glass" style="border-radius: 0 0 30px 30px; border-top: none;" id="navbar">
         <!-- Logo -->
         <div class="flex items-center gap-3 hover-target" onclick="window.scrollTo(0,0)">
-            <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="45" height="45" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="50" cy="50" r="48" stroke="currentColor" stroke-width="2"/>
                 <path d="M30 70 L50 30 L70 70" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
                 <line x1="40" y1="55" x2="60" y2="55" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
             </svg>
             <div class="flex flex-col hidden sm:flex">
-                <span class="text-sm font-bold tracking-[0.2em] leading-none">AFTER HOURS</span>
+                <span class="text-lg font-bold tracking-[0.2em] leading-none">AFTER HOURS</span>
             </div>
         </div>
         
-        <!-- Controls: Theme, Contact, Cart -->
-        <div class="flex items-center gap-4 sm:gap-6">
-            <!-- Theme Toggle -->
-            <button onclick="toggleTheme()" class="hover-target text-xl hover:text-gold transition-colors">
-                <i class="ph ph-moon" id="theme-icon"></i>
-            </button>
-
-            <!-- Desktop Inquire -->
-            <a href="tel:+9779705965333" class="hidden md:flex items-center gap-2 text-xs font-bold tracking-widest hover:text-gold hover-target">
-                <i class="ph ph-phone"></i> 9705965333
-            </a>
-            
-            <!-- Cart Button -->
-            <button onclick="toggleCart()" class="relative w-12 h-12 rounded-full flex justify-center items-center hover-target hover:bg-black/10 transition-colors" id="cart-icon">
-                <i class="ph ph-shopping-bag text-2xl"></i>
-                <span id="cart-badge" class="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold w-5 h-5 flex justify-center items-center rounded-full scale-0 transition-transform duration-300">0</span>
+        <div class="flex items-center gap-6">
+            <button onclick="toggleTheme()" class="hover-target text-2xl hover:text-gold transition-colors"><i class="ph ph-moon" id="theme-icon"></i></button>
+            <button onclick="toggleCart()" class="relative w-14 h-14 rounded-full flex justify-center items-center hover-target hover:bg-black/10 transition-colors" id="cart-icon">
+                <i class="ph ph-shopping-bag text-3xl"></i>
+                <span id="cart-badge" class="absolute top-0 right-0 bg-red-600 text-white text-[11px] font-bold w-6 h-6 flex justify-center items-center rounded-full scale-0 transition-transform duration-300">0</span>
             </button>
         </div>
     </nav>
 
+    <!-- BIG CLOCK & WEATHER WIDGET (Top Left) -->
+    <div class="big-clock-widget glass hover-target">
+        <div class="analog-clock">
+            <div class="hand hour-hand" id="hour-hand"></div>
+            <div class="hand min-hand" id="min-hand"></div>
+            <div class="hand sec-hand" id="sec-hand"></div>
+            <div class="clock-center"></div>
+        </div>
+        <div class="flex flex-col">
+            <span class="text-3xl font-bold font-serif text-gold leading-none" id="digital-time">--:--</span>
+            <span class="text-sm opacity-80 flex items-center gap-2 mt-1"><i id="weather-icon" class="ph ph-moon-stars text-xl"></i> <span id="weather-text">22°C Clear</span></span>
+        </div>
+    </div>
+
     <!-- BRIGHT CART SIDEBAR -->
-    <div class="cart-overlay hover-target" onclick="toggleCart()"></div>
+    <div class="cart-overlay hover-target" onclick="toggleCart()" id="cart-overlay"></div>
     <div id="cart-sidebar" class="pt-24 pb-8 px-6">
         <div class="flex justify-between items-center mb-6 border-b border-black/10 pb-4">
-            <h2 class="text-2xl font-serif font-bold">Your Order</h2>
-            <button onclick="toggleCart()" class="text-2xl hover:text-red-500 hover-target"><i class="ph ph-x"></i></button>
+            <h2 class="text-3xl font-serif font-bold">Your Order</h2>
+            <button onclick="toggleCart()" class="text-3xl hover:text-red-500 hover-target"><i class="ph ph-x"></i></button>
         </div>
         
         <div id="cart-items" class="flex-1 overflow-y-auto space-y-3 pr-2">
-            <div class="text-center mt-10 text-sm italic font-light opacity-60">Your cart is empty. Add some magic.</div>
+            <div class="text-center mt-10 text-base italic font-light opacity-60">Your cart is empty. Add some magic.</div>
         </div>
         
         <div class="mt-6 border-t border-black/10 pt-6">
-            <div class="flex justify-between text-sm mb-2 font-medium"><span>Subtotal:</span> <span id="cart-subtotal">Rs 0</span></div>
-            <div class="flex justify-between text-sm mb-4 font-medium">
+            <div class="flex justify-between text-base mb-2 font-medium"><span>Subtotal:</span> <span id="cart-subtotal">Rs 0</span></div>
+            <div class="flex justify-between text-base mb-4 font-medium">
                 <span>Delivery:</span> 
                 <span><span class="line-through opacity-50 mr-2">Rs 100</span> <span class="text-[#d4a373] font-bold">Free (On Us 🤎)</span></span>
             </div>
-            <div class="flex justify-between text-xl font-bold mb-6 border-t border-black/10 pt-4"><span>Total:</span> <span id="cart-total">Rs 0</span></div>
+            <div class="flex justify-between text-2xl font-bold mb-6 border-t border-black/10 pt-4"><span>Total:</span> <span id="cart-total" class="text-[#d4a373]">Rs 0</span></div>
             
             <button onclick="checkout()" class="w-full bg-[#d4a373] text-white py-4 rounded-xl font-bold tracking-widest uppercase hover-target hover:bg-[#b07d47] transition-colors flex justify-center items-center gap-2 shadow-lg">
-                <i class="ph ph-whatsapp-logo text-xl"></i> Order via WhatsApp
+                <i class="ph ph-whatsapp-logo text-2xl"></i> Checkout via WhatsApp
             </button>
         </div>
     </div>
 
     <div id="main-content">
+        <div class="ambient-glow top-20 left-10"></div>
+        <div class="ambient-glow bottom-20 right-10"></div>
+
         <!-- HERO SECTION -->
         <section class="h-screen flex flex-col items-center justify-center px-6 relative">
-            <div class="absolute inset-0 z-0 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover opacity-20 mix-blend-luminosity" alt="Bg">
-            </div>
-
-            <!-- Smart Widget with Analog Clock -->
-            <div class="glass px-6 py-3 rounded-full z-10 mb-8 flex items-center gap-4 animate-fade-in">
-                <!-- Analog Clock -->
-                <div class="analog-clock">
-                    <div class="hand hour-hand" id="hour-hand"></div>
-                    <div class="hand min-hand" id="min-hand"></div>
-                    <div class="hand sec-hand" id="sec-hand"></div>
-                    <div class="clock-center"></div>
-                </div>
-                <span class="w-1 h-1 bg-gold rounded-full"></span>
-                <span class="text-xs font-light italic" id="smart-prompt">Analyzing atmosphere...</span>
-            </div>
-
-            <div class="text-center z-10 w-full relative">
-                <h1 class="text-6xl md:text-[10rem] font-bold tracking-tighter leading-[0.9] mb-4">
+            <div class="text-center z-10 w-full relative pt-20">
+                <h1 class="text-7xl md:text-[12rem] font-bold tracking-tighter leading-[0.9] mb-4">
                     STAY<br><span class="font-serif italic font-normal text-gold">Awake</span>
                 </h1>
-                <p class="max-w-md mx-auto text-sm md:text-base font-light opacity-80">
+                <p class="max-w-md mx-auto text-base md:text-lg font-light opacity-80">
                     Bhairahawa's premier roastery. Exquisite beans, delivered to your door.
                 </p>
             </div>
         </section>
 
         <!-- MENU SECTION -->
-        <section id="menu" class="py-24 px-6 md:px-20 max-w-[1200px] mx-auto relative z-10">
+        <section id="menu" class="py-24 px-6 md:px-20 max-w-[1300px] mx-auto relative z-10">
             <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-bold tracking-tighter mb-2">The <span class="font-serif italic text-gold font-normal">Selection</span></h2>
-                <p class="opacity-70 text-sm">Click to build your order.</p>
+                <h2 class="text-5xl md:text-6xl font-bold tracking-tighter mb-2">The <span class="font-serif italic text-gold font-normal">Selection</span></h2>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 
-                <!-- Item 1 -->
+                <!-- Midnight Americano -->
                 <div class="menu-card group">
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Americano">
-                        <button onclick="addToCart('Midnight Americano', 180, this)" class="add-btn hover-target"><i class="ph ph-plus"></i> Add to Order</button>
+                        <button onclick="addToCart('Midnight Americano', 180, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
                     </div>
                     <div class="p-6">
-                        <div class="flex justify-between items-start mb-1">
-                            <h4 class="text-xl font-bold">Midnight Americano</h4>
-                            <span class="font-serif font-bold text-gold">Rs 180</span>
-                        </div>
-                        <p class="text-xs opacity-70 font-light">Double-shot espresso pulled from 100% Arabica. Pure energy.</p>
+                        <div class="flex justify-between items-start mb-2"><h4 class="text-2xl font-bold">Midnight Americano</h4><span class="font-serif text-xl font-bold text-gold">Rs 180</span></div>
+                        <p class="text-sm opacity-70 font-light">Double-shot espresso pulled from 100% Arabica. Pure energy.</p>
                     </div>
                 </div>
 
-                <!-- Item 2 -->
+                <!-- Velvet Latte -->
                 <div class="menu-card group">
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1572286258217-40142c1c6a70?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Latte">
-                        <button onclick="addToCart('Velvet Latte', 240, this)" class="add-btn hover-target"><i class="ph ph-plus"></i> Add to Order</button>
+                        <button onclick="addToCart('Velvet Latte', 240, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
                     </div>
                     <div class="p-6">
-                        <div class="flex justify-between items-start mb-1">
-                            <h4 class="text-xl font-bold">Velvet Latte</h4>
-                            <span class="font-serif font-bold text-gold">Rs 240</span>
-                        </div>
-                        <p class="text-xs opacity-70 font-light">Silk micro-foam over a rich espresso base. Smooth & sweet.</p>
+                        <div class="flex justify-between items-start mb-2"><h4 class="text-2xl font-bold">Velvet Latte</h4><span class="font-serif text-xl font-bold text-gold">Rs 240</span></div>
+                        <p class="text-sm opacity-70 font-light">Silk micro-foam over a rich espresso base. Smooth & sweet.</p>
                     </div>
                 </div>
 
-                <!-- Item 3 -->
+                <!-- Caramel Macchiato (UPDATED IMAGE) -->
+                <div class="menu-card group">
+                    <div class="menu-img-wrap">
+                        <!-- New High-Quality Caramel Macchiato Image -->
+                        <img src="https://images.unsplash.com/photo-1485808191679-5f86510681a2?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Macchiato">
+                        <button onclick="addToCart('Caramel Macchiato', 280, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2"><h4 class="text-2xl font-bold">Caramel Macchiato</h4><span class="font-serif text-xl font-bold text-gold">Rs 280</span></div>
+                        <p class="text-sm opacity-70 font-light">Espresso layered with steamed milk and a rich caramel drizzle.</p>
+                    </div>
+                </div>
+
+                <!-- Noir Cold Brew -->
                 <div class="menu-card group">
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Cold Brew">
-                        <button onclick="addToCart('Noir Cold Brew', 320, this)" class="add-btn hover-target"><i class="ph ph-plus"></i> Add to Order</button>
+                        <button onclick="addToCart('Noir Cold Brew', 320, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
                     </div>
                     <div class="p-6">
-                        <div class="flex justify-between items-start mb-1">
-                            <h4 class="text-xl font-bold">Noir Cold Brew</h4>
-                            <span class="font-serif font-bold text-gold">Rs 320</span>
-                        </div>
-                        <p class="text-xs opacity-70 font-light">12-hour steeped concentrate infused with nitrogen.</p>
+                        <div class="flex justify-between items-start mb-2"><h4 class="text-2xl font-bold">Noir Cold Brew</h4><span class="font-serif text-xl font-bold text-gold">Rs 320</span></div>
+                        <p class="text-sm opacity-70 font-light">12-hour steeped concentrate infused with nitrogen.</p>
                     </div>
                 </div>
 
-                <!-- Item 4 -->
-                <div class="menu-card group">
-                    <div class="menu-img-wrap">
-                        <img src="https://images.unsplash.com/photo-1557006021-b85faa2cae45?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Macchiato">
-                        <button onclick="addToCart('Caramel Macchiato', 280, this)" class="add-btn hover-target"><i class="ph ph-plus"></i> Add to Order</button>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-1">
-                            <h4 class="text-xl font-bold">Caramel Macchiato</h4>
-                            <span class="font-serif font-bold text-gold">Rs 280</span>
-                        </div>
-                        <p class="text-xs opacity-70 font-light">Espresso layered with steamed milk and rich caramel drizzle.</p>
-                    </div>
-                </div>
-
-                <!-- Item 5 -->
-                <div class="menu-card group">
-                    <div class="menu-img-wrap">
-                        <img src="https://images.unsplash.com/photo-1536256263959-770b48d82b0a?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Matcha">
-                        <button onclick="addToCart('Zen Matcha Latte', 300, this)" class="add-btn hover-target"><i class="ph ph-plus"></i> Add to Order</button>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-1">
-                            <h4 class="text-xl font-bold">Zen Matcha Latte</h4>
-                            <span class="font-serif font-bold text-gold">Rs 300</span>
-                        </div>
-                        <p class="text-xs opacity-70 font-light">Ceremonial grade green tea whisked with creamy oat milk.</p>
-                    </div>
-                </div>
-
-                <!-- Item 6 -->
+                <!-- Moonlit Waffle -->
                 <div class="menu-card group">
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Waffle">
-                        <button onclick="addToCart('Moonlit Waffle', 350, this)" class="add-btn hover-target"><i class="ph ph-plus"></i> Add to Order</button>
+                        <button onclick="addToCart('Moonlit Waffle', 350, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
                     </div>
                     <div class="p-6">
-                        <div class="flex justify-between items-start mb-1">
-                            <h4 class="text-xl font-bold">Moonlit Waffle</h4>
-                            <span class="font-serif font-bold text-gold">Rs 350</span>
-                        </div>
-                        <p class="text-xs opacity-70 font-light">Light waffles topped with wild honey and seasonal berries.</p>
+                        <div class="flex justify-between items-start mb-2"><h4 class="text-2xl font-bold">Moonlit Waffle</h4><span class="font-serif text-xl font-bold text-gold">Rs 350</span></div>
+                        <p class="text-sm opacity-70 font-light">Light waffles topped with wild honey and seasonal berries.</p>
                     </div>
                 </div>
 
@@ -362,26 +307,33 @@
     </div>
 
     <!-- FOOTER CURTAIN -->
-    <footer class="px-6 md:px-20 text-center relative overflow-hidden">
-        <div class="relative z-10 flex flex-col items-center">
-            
-            <a href="tel:+9779705965333" class="font-serif text-5xl md:text-[7rem] font-bold tracking-tighter leading-none block mb-8 hover-target transition-transform hover:scale-105">
-                970 596 5333
+    <footer class="px-6 md:px-20 text-center relative overflow-hidden flex flex-col items-center">
+        <h2 class="text-5xl md:text-7xl font-bold tracking-tighter mb-10">After Hours</h2>
+        
+        <!-- Interactive Social Buttons -->
+        <div class="flex flex-wrap justify-center gap-6 mb-16">
+            <a href="https://www.instagram.com/afterhourscafe.bhw/" target="_blank" class="hover-target flex items-center gap-3 px-8 py-4 bg-transparent border-2 border-[#E1306C] text-[#E1306C] rounded-full text-sm font-bold tracking-widest uppercase hover:bg-[#E1306C] hover:text-white transition-all transform hover:-translate-y-2">
+                <i class="ph ph-instagram-logo text-2xl"></i> Instagram
             </a>
             
-            <a href="https://wa.me/9779705965333" target="_blank" class="hover-target inline-flex items-center gap-3 px-8 py-3 border border-[var(--text-main)] rounded-full text-xs font-bold tracking-widest uppercase hover:bg-[var(--text-main)] hover:text-[var(--bg-deep)] transition-all mb-12">
-                <i class="ph ph-whatsapp-logo text-lg"></i> WhatsApp
+            <a href="https://wa.me/9779705965333" target="_blank" class="hover-target flex items-center gap-3 px-8 py-4 bg-transparent border-2 border-[#25D366] text-[#25D366] rounded-full text-sm font-bold tracking-widest uppercase hover:bg-[#25D366] hover:text-white transition-all transform hover:-translate-y-2">
+                <i class="ph ph-whatsapp-logo text-2xl"></i> WhatsApp
             </a>
+        </div>
 
-            <!-- Location Details & Neon Text -->
-            <div class="text-[10px] font-bold tracking-[0.2em] uppercase opacity-70 border-t border-[var(--border-color)] pt-8 w-full max-w-lg">
-                <p class="mb-2">Bhairahawa, Nepal</p>
-                <div class="mt-4">
-                    <span>Delivering hot at: </span>
-                    <span id="neon-location" class="neon-text text-sm ml-2">Buddha Chowk</span>
-                </div>
+        <!-- Neon Map Section -->
+        <div class="w-full max-w-lg mb-10">
+            <span class="text-gold tracking-[0.4em] text-[10px] font-bold uppercase block mb-4">Location</span>
+            <p class="text-xl font-light mb-6">Bhairahawa, Nepal</p>
+            
+            <div class="neon-map">
+                <div class="map-path"></div>
+                <div class="neon-pulse"></div>
+                <div class="absolute bottom-4 left-0 w-full text-center text-[10px] font-bold tracking-widest text-gold uppercase" id="neon-text">Delivering to: Buddha Chowk</div>
             </div>
         </div>
+
+        <p class="text-[10px] tracking-[0.5em] uppercase opacity-50">&copy; 2024 After Hours Café.</p>
     </footer>
 
     <script>
@@ -392,7 +344,7 @@
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
-        // 2. Sensory Cursor
+        // 2. Sensory Cursor & Click Ripple
         const cursorDot = document.getElementById('cursor-dot');
         const cursorRing = document.getElementById('cursor-ring');
         const cursorRipple = document.getElementById('cursor-ripple');
@@ -406,24 +358,18 @@
             ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15;
             gsap.set(cursorRing, { x: ringX, y: ringY });
         });
-        document.querySelectorAll('.hover-target, button, a').forEach(el => {
+        document.querySelectorAll('.hover-target, button, a, .menu-card').forEach(el => {
             el.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
             el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
         });
         document.addEventListener('mousedown', () => {
-            gsap.fromTo(cursorRipple, { x: mouseX, y: mouseY, scale: 0, opacity: 1 }, { scale: 3, opacity: 0, duration: 0.5 });
+            gsap.fromTo(cursorRipple, { x: mouseX, y: mouseY, scale: 0, opacity: 1 }, { scale: 4, opacity: 0, duration: 0.6, ease: "power2.out" });
         });
 
-        // 3. Simple Preloader
-        setTimeout(() => {
-            gsap.to("#loader", { opacity: 0, duration: 0.8, onComplete: () => document.getElementById('loader').style.display = 'none' });
-        }, 1500);
-
-        // 4. Auto Light/Dark Theme & Manual Toggle
+        // 3. Auto Theme & Manual Toggle
         function initTheme() {
-            const hours = new Date().getHours();
-            const isDay = hours >= 6 && hours < 18;
-            if (isDay) {
+            const h = new Date().getHours();
+            if (h >= 6 && h < 18) {
                 document.body.classList.add('light-mode');
                 document.getElementById('theme-icon').classList.replace('ph-moon', 'ph-sun');
             }
@@ -437,41 +383,46 @@
             else icon.classList.replace('ph-sun', 'ph-moon');
         };
 
-        // 5. Analog Clock & Smart Widget
-        function updateAnalogClock() {
+        // 4. Analog Clock & Weather
+        function updateWidgets() {
             const now = new Date();
             const h = now.getHours(); const m = now.getMinutes(); const s = now.getSeconds();
+            
+            // Analog
             document.getElementById('hour-hand').style.transform = `rotate(${(h % 12) * 30 + m * 0.5}deg)`;
             document.getElementById('min-hand').style.transform = `rotate(${m * 6}deg)`;
             document.getElementById('sec-hand').style.transform = `rotate(${s * 6}deg)`;
+            
+            // Digital
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            document.getElementById('digital-time').innerText = `${h % 12 || 12}:${m.toString().padStart(2,'0')} ${ampm}`;
 
-            let prompt;
-            if (h >= 5 && h < 17) prompt = "Warm day. Grab an Iced Mocha.";
-            else if (h >= 17 && h < 20) prompt = "Sunset hours. Try a Velvet Latte.";
-            else prompt = "Late night focus. Midnight Americano.";
-            document.getElementById('smart-prompt').innerText = prompt;
+            // Weather & Prompt
+            let icon, temp;
+            if (h >= 5 && h < 17) { icon = "ph-sun"; temp = "28°C Warm"; }
+            else if (h >= 17 && h < 20) { icon = "ph-cloud-sun"; temp = "24°C Mild"; }
+            else { icon = "ph-moon-stars"; temp = "18°C Cool"; }
+            
+            document.getElementById('weather-icon').className = `ph ${icon} text-xl`;
+            document.getElementById('weather-text').innerText = temp;
         }
-        setInterval(updateAnalogClock, 1000);
-        updateAnalogClock();
+        setInterval(updateWidgets, 1000);
+        updateWidgets();
 
-        // 6. Neon Random Location Footer
-        const locations = ["Buddha Chowk", "Milan Chowk", "Bank Road", "Devkota Chowk", "Lumbini Road", "Airport"];
+        // 5. Neon Map Locations
+        const locations = ["Buddha Chowk", "Milan Chowk", "Bank Road", "Devkota Chowk", "Airport"];
         let locIndex = 0;
         setInterval(() => {
-            const el = document.getElementById('neon-location');
-            el.style.opacity = 0;
-            setTimeout(() => {
-                locIndex = (locIndex + 1) % locations.length;
-                el.innerText = locations[locIndex];
-                el.style.opacity = 1;
-            }, 500);
-        }, 3500);
+            locIndex = (locIndex + 1) % locations.length;
+            document.getElementById('neon-text').innerText = "Delivering to: " + locations[locIndex];
+        }, 3000);
 
-        // 7. Advanced Parabolic Cart System
+        // 6. Liquid Fly-to-Cart & Cart Logic
         let cart = [];
+        
         window.toggleCart = function() {
             document.getElementById('cart-sidebar').classList.toggle('open');
-            document.querySelector('.cart-overlay').classList.toggle('open');
+            document.getElementById('cart-overlay').classList.toggle('open');
             renderCart();
         };
 
@@ -483,26 +434,26 @@
             badge.classList.remove('scale-0');
             gsap.fromTo(badge, { scale: 1.5 }, { scale: 1, duration: 0.4, ease: "back.out" });
 
-            const imgToClone = btnElement.parentElement.querySelector('img');
-            const cartIcon = document.getElementById('cart-icon');
+            // LIQUID FLY ANIMATION
+            const btnRect = btnElement.getBoundingClientRect();
+            const iconRect = document.getElementById('cart-icon').getBoundingClientRect();
             
-            if(imgToClone && cartIcon) {
-                const imgRect = imgToClone.getBoundingClientRect();
-                const iconRect = cartIcon.getBoundingClientRect();
-                const clone = imgToClone.cloneNode(true);
-                clone.classList.add('fly-clone');
-                clone.style.top = imgRect.top + 'px'; clone.style.left = imgRect.left + 'px';
-                clone.style.width = imgRect.width + 'px'; clone.style.height = imgRect.height + 'px';
-                document.body.appendChild(clone);
+            const drop = document.createElement('div');
+            drop.classList.add('liquid-drop');
+            drop.style.left = btnRect.left + (btnRect.width/2) + 'px';
+            drop.style.top = btnRect.top + 'px';
+            document.body.appendChild(drop);
 
-                // Parabolic Flight
-                gsap.to(clone, { left: iconRect.left + 10, duration: 0.8, ease: "power1.inOut" });
-                gsap.to(clone, {
-                    top: iconRect.top + 10, width: 20, height: 20, rotation: 180, opacity: 0.5,
-                    duration: 0.8, ease: "back.in(1.2)",
-                    onComplete: () => { clone.remove(); gsap.fromTo(cartIcon, { scale: 0.9 }, { scale: 1, duration: 0.3 }); }
-                });
-            }
+            // Parabolic Flight
+            gsap.to(drop, { left: iconRect.left + 15, duration: 0.8, ease: "power1.inOut" });
+            gsap.to(drop, {
+                top: iconRect.top + 15, width: 10, height: 10,
+                duration: 0.8, ease: "back.in(1.5)",
+                onComplete: () => { 
+                    drop.remove(); 
+                    gsap.fromTo('#cart-icon', { scale: 0.8 }, { scale: 1, duration: 0.4, ease: "elastic.out" }); 
+                }
+            });
         };
 
         window.removeFromCart = function(id) {
@@ -516,7 +467,7 @@
         function renderCart() {
             const container = document.getElementById('cart-items');
             if(cart.length === 0) {
-                container.innerHTML = `<div class="text-center mt-10 text-sm italic opacity-60">Your cart is empty. Add some magic.</div>`;
+                container.innerHTML = `<div class="text-center mt-10 text-base italic opacity-60">Your cart is empty. Add some magic.</div>`;
                 document.getElementById('cart-subtotal').innerText = 'Rs 0';
                 document.getElementById('cart-total').innerText = 'Rs 0';
                 return;
@@ -530,11 +481,11 @@
 
             for (const [name, data] of Object.entries(counts)) {
                 html += `
-                    <div class="flex justify-between items-center bg-black/5 p-3 rounded-lg border border-black/10">
-                        <div><h5 class="font-bold text-sm">${name}</h5><p class="text-xs opacity-70">Rs ${data.price} x ${data.count}</p></div>
-                        <div class="flex items-center gap-3">
-                            <span class="font-bold">Rs ${data.price * data.count}</span>
-                            <button onclick="removeFromCart(${data.ids[0]})" class="text-red-500 hover:bg-red-100 p-1.5 rounded-md transition-colors hover-target"><i class="ph ph-trash"></i></button>
+                    <div class="flex justify-between items-center bg-black/5 p-4 rounded-xl border border-black/10">
+                        <div><h5 class="font-bold text-base">${name}</h5><p class="text-sm opacity-70">Rs ${data.price} x ${data.count}</p></div>
+                        <div class="flex items-center gap-4">
+                            <span class="font-bold text-lg">Rs ${data.price * data.count}</span>
+                            <button onclick="removeFromCart(${data.ids[0]})" class="text-red-500 hover:bg-red-100 p-2 rounded-full transition-colors hover-target"><i class="ph ph-trash text-lg"></i></button>
                         </div>
                     </div>`;
             }
@@ -549,9 +500,10 @@
             let total = 0; const counts = {};
             cart.forEach(i => { counts[i.name] = (counts[i.name] || 0) + 1; total += i.price; });
             for (const [name, count] of Object.entries(counts)) msg += `- ${count}x ${name}\n`;
-            msg += `\nDelivery: Free\nTotal: Rs ${total}\n\nPlease confirm!`;
+            msg += `\nDelivery: Free (On Us)\nTotal: Rs ${total}\n\nPlease confirm!`;
             window.open(`https://wa.me/9779705965333?text=${encodeURIComponent(msg)}`, '_blank');
         };
+
     </script>
 </body>
 </html>
