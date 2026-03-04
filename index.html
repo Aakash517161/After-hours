@@ -39,7 +39,6 @@
             --gold: #c69b6a;
             --accent-pour: #1f110a; 
             
-            /* Physics Engine */
             --anim-speed: 0.8s;
             --anim-ease: cubic-bezier(0.4, 0, 0.2, 1); 
             --card-lift: -8px;
@@ -63,7 +62,6 @@
             --gold: #b0703c;
             --accent-pour: #fdfaf6; 
             
-            /* Physics Engine */
             --anim-speed: 0.4s;
             --anim-ease: cubic-bezier(0.34, 1.56, 0.64, 1); 
             --card-lift: -15px;
@@ -109,10 +107,11 @@
             .cursor-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999999; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s; }
             .cursor-ring { width: 34px; height: 34px; border: 1px solid var(--gold); border-radius: 50%; opacity: 0.5; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999998; transform: translate(-50%, -50%); transition: width var(--anim-speed) var(--anim-ease), height var(--anim-speed) var(--anim-ease), backdrop-filter 0.2s; }
             .cursor-click-ripple { position: fixed; width: 20px; height: 20px; border: 2px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999997; transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            
             .hover-active .cursor-dot { width: 0; height: 0; }
             .hover-active .cursor-ring { width: 60px; height: 60px; opacity: 1; background: rgba(212, 163, 115, 0.1); backdrop-filter: blur(4px); border-width: 2px; }
             
-            /* Fix for volume slider blur issue */
+            /* FIXED: Remove blur when hovering the radio/volume so it's readable */
             .hover-no-blur .cursor-ring { backdrop-filter: none !important; background: transparent !important; border-color: var(--gold) !important; width: 30px !important; height: 30px !important; }
         }
 
@@ -124,19 +123,19 @@
         .sec-hand { width: 1px; height: 18px; background: var(--gold); margin-left: -0.5px; }
         .clock-center { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 
-        /* ========= MENU CARDS (3D Magnetic & Aroma) ========= */
-        .menu-card { position: relative; overflow: hidden; border-radius: 24px; z-index: 2; transition: transform var(--anim-speed) var(--anim-ease), box-shadow var(--anim-speed) var(--anim-ease), border-color 0.3s; transform-style: preserve-3d; }
-        .menu-card:hover { transform: translateY(var(--card-lift)); border-color: var(--gold); z-index: 10; box-shadow: var(--card-shadow); }
+        /* ========= MENU CARDS (3D Magnetic & Aroma Gimmick) ========= */
+        .menu-card { position: relative; overflow: visible; border-radius: 24px; z-index: 2; transition: transform var(--anim-speed) var(--anim-ease), box-shadow var(--anim-speed) var(--anim-ease), border-color 0.3s; transform-style: preserve-3d; background: var(--bg-card); border: 1px solid var(--border-color); }
+        .menu-card:hover { border-color: var(--gold); z-index: 10; box-shadow: var(--card-shadow); }
+        
         .menu-img-wrap { height: 260px; overflow: hidden; position: relative; border-radius: 24px 24px 0 0; }
         .menu-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease, filter 0.5s ease; opacity: 0.9; }
         .menu-card:hover .menu-img { transform: scale(1.1); filter: brightness(1.15); opacity: 1; }
         
-        /* The Aroma Steam Gimmick */
-        .aroma-steam { position: absolute; bottom: 10%; left: 50%; transform: translateX(-50%); width: 60px; height: 80px; opacity: 0; pointer-events: none; transition: 0.5s; z-index: 20; stroke: #fff; stroke-width: 3; }
-        .menu-card:hover .aroma-steam { opacity: 0.7; animation: riseUp 2s infinite ease-in; }
-        @keyframes riseUp { 0% { transform: translate(-50%, 0) scale(0.8); opacity: 0; filter: blur(1px); } 50% { opacity: 0.7; } 100% { transform: translate(-50%, -60px) scale(1.3); opacity: 0; filter: blur(5px); } }
+        /* Fixed Gimmick: Aroma Steam */
+        .aroma-steam { position: absolute; bottom: 10%; left: 50%; transform: translateX(-50%); width: 60px; height: 80px; opacity: 0; pointer-events: none; transition: 0.5s; z-index: 20; stroke: var(--gold); stroke-width: 3; }
+        .menu-card:hover .aroma-steam { opacity: 0.8; animation: riseUp 2s infinite ease-in; }
+        @keyframes riseUp { 0% { transform: translate(-50%, 0) scale(0.8); opacity: 0; filter: blur(1px); } 50% { opacity: 0.8; } 100% { transform: translate(-50%, -60px) scale(1.3); opacity: 0; filter: blur(4px); } }
         
-        /* Unique Offers */
         .offer-tag { position: absolute; top: 15px; right: 15px; font-size: 0.7rem; font-weight: 800; padding: 6px 14px; border-radius: 30px; letter-spacing: 1px; z-index: 10; backdrop-filter: blur(10px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
         .tag-red { background: rgba(230, 57, 70, 0.9); color: #fff; }
         .tag-gold { background: rgba(212, 163, 115, 0.9); color: #000; }
@@ -151,16 +150,11 @@
         .gooey-filter { filter: url('#goo'); position: fixed; inset: 0; z-index: 999999; pointer-events: none; }
         .liquid-drop-3d { position: absolute; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #ffeedb, var(--gold) 60%, #8b5e34); box-shadow: 0 10px 20px rgba(0,0,0,0.5), inset -2px -2px 6px rgba(0,0,0,0.4); transform-origin: center; z-index: 999999; }
 
-        /* ========= ALWAYS BRIGHT CART SIDEBAR ========= */
+        /* ========= BRIGHT CART SIDEBAR ========= */
         #cart-sidebar { position: fixed; top: 0; right: -100%; width: 100%; max-width: 420px; height: 100vh; z-index: 10000; transition: 0.6s var(--anim-ease); background: var(--cart-bg); color: var(--cart-text); border-left: 1px solid var(--cart-border); display: flex; flex-direction: column; box-shadow: -20px 0 60px rgba(0,0,0,0.5); backdrop-filter: blur(30px); }
         #cart-sidebar.open { right: 0; }
         .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 9999; opacity: 0; pointer-events: none; transition: 0.4s; }
         .cart-overlay.open { opacity: 1; pointer-events: all; }
-
-        /* ========= EXTRA THINGO: HIMALAYAN ORIGINS ========= */
-        .origin-section { position: relative; height: 60vh; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-top: 50px; }
-        .origin-bg { position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2000&auto=format&fit=crop') center/cover; opacity: 0.4; z-index: 0; filter: grayscale(50%); }
-        body.light-mode .origin-bg { opacity: 0.2; filter: grayscale(0%); }
 
         /* ========= THE ROASTING JOURNEY ACCORDION ========= */
         .process-item { border-bottom: 1px solid var(--border-color); padding: 25px 0; cursor: pointer; transition: var(--anim-speed) var(--anim-ease); overflow: hidden; height: 85px; }
@@ -169,6 +163,11 @@
         .process-item.active .process-title { color: var(--gold); font-size: 2.5rem; }
         .process-content { opacity: 0; transform: translateY(20px); transition: 0.4s; padding-top: 15px; color: var(--text-main); font-weight: 300; line-height: 1.6; }
         .process-item.active .process-content { opacity: 1; transform: translateY(0); }
+
+        /* ========= HIMALAYAN ORIGINS PARALLAX ========= */
+        .origin-section { position: relative; height: 60vh; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-top: 50px; }
+        .origin-bg { position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2000&auto=format&fit=crop') center/cover; opacity: 0.4; z-index: 0; filter: grayscale(50%); }
+        body.light-mode .origin-bg { opacity: 0.2; filter: grayscale(0%); }
 
         /* ========= RADIO WIDGET & VOLUME SLIDER ========= */
         .radio-widget { position: fixed; bottom: 30px; left: 30px; z-index: 50; display: flex; align-items: center; gap: 15px; padding: 10px 20px 10px 10px; border-radius: 50px; overflow: hidden; transition: 0.4s ease; }
@@ -186,14 +185,9 @@
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 12px; width: 12px; border-radius: 50%; background: var(--gold); margin-top: -4px; box-shadow: 0 0 10px var(--gold); }
         body.light-mode input[type=range]::-webkit-slider-runnable-track { background: rgba(0,0,0,0.2); }
 
-        /* ========= GET DIRECTIONS BUTTON (DAY MODE FIX) ========= */
-        .get-dir-btn { background: var(--bg-card); color: var(--gold); border: 1px solid var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
-        body.light-mode .get-dir-btn { background: #1a120e; color: var(--gold); border: 2px solid var(--gold); }
-        .get-dir-btn:hover { background: var(--gold); color: #fff; transform: translateY(-5px); }
-
-        /* ========= FOOTER & MAIN WRAPPER ========= */
-        #main-content { position: relative; z-index: 2; background: var(--bg-deep); margin-bottom: 85vh; box-shadow: 0 40px 100px rgba(0,0,0,1); border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; transition: background 0.8s ease; }
-        footer { position: fixed; bottom: 0; left: 0; width: 100%; height: 85vh; z-index: 1; background: #050302; display: flex; flex-direction: column; justify-content: center; transition: 0.8s; }
+        /* ========= FOOTER & MAIN WRAPPER (Dynamic Fix) ========= */
+        #main-content { position: relative; z-index: 2; background: var(--bg-deep); box-shadow: 0 40px 100px rgba(0,0,0,1); border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; transition: background 0.8s ease; }
+        footer { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1; background: #050302; display: flex; flex-direction: column; justify-content: center; transition: background 0.8s; }
         body.light-mode footer { background: #e6dfd5; }
 
         @media (max-width: 768px) {
@@ -206,9 +200,9 @@
 </head>
 <body class="hover-target-container">
 
-    <!-- RELIABLE AUDIO ENGINE (Pixabay CDNs) -->
-    <audio id="audio-night" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3" crossorigin="anonymous" preload="auto"></audio>
-    <audio id="audio-day" loop src="https://cdn.pixabay.com/download/audio/2022/02/07/audio_6774e1d670.mp3?filename=acoustic-guitars-112349.mp3" crossorigin="anonymous" preload="auto"></audio>
+    <!-- GUARANTEED WORKING AUDIO ENGINE -->
+    <audio id="audio-night" loop src="https://ia800900.us.archive.org/21/items/ambient-piano-music/Ambient%20Piano.mp3" crossorigin="anonymous" preload="auto"></audio>
+    <audio id="audio-day" loop src="https://ia801400.us.archive.org/10/items/bensound-acoustic-breeze/bensound-acousticbreeze.mp3" crossorigin="anonymous" preload="auto"></audio>
 
     <!-- SVG Gooey Filter for Liquid Pour -->
     <svg style="display: none;">
@@ -235,7 +229,6 @@
 
     <!-- LIQUID POUR THEME TRANSITION -->
     <div class="pour-container" id="pour-container">
-        <!-- 6 Drips for smooth screen coverage -->
         <div class="pour-drip"></div><div class="pour-drip"></div><div class="pour-drip"></div>
         <div class="pour-drip"></div><div class="pour-drip"></div><div class="pour-drip"></div>
     </div>
@@ -279,7 +272,7 @@
         <!-- Right: Controls -->
         <div class="flex items-center gap-4 pointer-events-auto">
             <button onclick="triggerLiquidPour()" class="old-frost hover-target w-14 h-14 rounded-full flex justify-center items-center text-xl hover:text-gold transition-colors text-[var(--text-main)]" id="theme-btn">
-                <i class="ph ph-sun" id="theme-icon"></i>
+                <i class="ph ph-moon" id="theme-icon"></i>
             </button>
             <button onclick="toggleCart()" class="old-frost relative w-14 h-14 rounded-full flex justify-center items-center hover-target hover:bg-gold hover:text-white transition-colors group text-[var(--text-main)]" id="cart-icon">
                 <i class="ph ph-shopping-bag text-2xl transition-transform group-hover:scale-110"></i>
@@ -288,7 +281,7 @@
         </div>
     </div>
 
-    <!-- RADIO WIDGET (Bottom Left) WITH VOLUME SLIDER -->
+    <!-- RADIO WIDGET (Bottom Left) WITH FIXED HOVER VOLUME SLIDER -->
     <div class="radio-widget old-frost hover-target hover-radio nav-anim opacity-0">
         <div class="vinyl"></div>
         <div class="radio-info">
@@ -301,7 +294,7 @@
         </div>
     </div>
 
-    <!-- BRIGHT CART SIDEBAR (ALWAYS LIGHT/READABLE) -->
+    <!-- BRIGHT CART SIDEBAR (ALWAYS VISIBLE) -->
     <div class="cart-overlay hover-target" onclick="toggleCart()" id="cart-overlay"></div>
     <div id="cart-sidebar" class="pt-32 pb-8 px-6">
         <div class="flex justify-between items-center mb-6 border-b border-black/10 pb-4">
@@ -346,7 +339,7 @@
             </div>
         </section>
 
-        <!-- MENU SECTION -->
+        <!-- MENU SECTION WITH UNIQUE OFFERS & 3D GIMMICKS -->
         <section id="menu" class="py-24 px-6 md:px-20 max-w-[1300px] mx-auto relative z-10">
             <div class="text-center mb-16">
                 <h2 class="text-5xl md:text-6xl font-bold tracking-tighter mb-2 scroll-anim text-[var(--text-main)] transition-colors">Curated <span class="font-serif italic text-gold font-normal">Selections</span></h2>
@@ -359,7 +352,7 @@
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Americano">
                         <!-- Aroma Steam Gimmick -->
-                        <svg class="aroma-steam" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M8 22c0-5 4-5 4-10S8 7 8 2M16 22c0-5-4-5-4-10s4-5 4-10"/></svg>
+                        <svg class="aroma-steam" viewBox="0 0 24 24" fill="none"><path d="M8 22c0-5 4-5 4-10S8 7 8 2M16 22c0-5-4-5-4-10s4-5 4-10"/></svg>
                         <button onclick="addToCart('Midnight Americano', 150, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
                     </div>
                     <div class="p-6">
@@ -379,7 +372,7 @@
                     <div class="offer-tag tag-gold">Signature</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1572286258217-40142c1c6a70?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Latte">
-                        <svg class="aroma-steam" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M8 22c0-5 4-5 4-10S8 7 8 2M16 22c0-5-4-5-4-10s4-5 4-10"/></svg>
+                        <svg class="aroma-steam" viewBox="0 0 24 24" fill="none"><path d="M8 22c0-5 4-5 4-10S8 7 8 2M16 22c0-5-4-5-4-10s4-5 4-10"/></svg>
                         <button onclick="addToCart('Velvet Latte', 240, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
                     </div>
                     <div class="p-6">
@@ -393,7 +386,7 @@
                     <div class="offer-tag tag-red">Happy Hour - Rs 50 Off</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1485808191679-5f86510681a2?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Macchiato">
-                        <svg class="aroma-steam" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M8 22c0-5 4-5 4-10S8 7 8 2M16 22c0-5-4-5-4-10s4-5 4-10"/></svg>
+                        <svg class="aroma-steam" viewBox="0 0 24 24" fill="none"><path d="M8 22c0-5 4-5 4-10S8 7 8 2M16 22c0-5-4-5-4-10s4-5 4-10"/></svg>
                         <button onclick="addToCart('Caramel Macchiato', 230, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
                     </div>
                     <div class="p-6">
@@ -455,19 +448,19 @@
             </div>
         </section>
 
-        <!-- EXTRA THINGO: HIMALAYAN ORIGINS (Parallax Mountain Idea) -->
+        <!-- EXTRA THINGO: HIMALAYAN ORIGINS -->
         <section class="origin-section scroll-anim">
             <div class="origin-bg parallax-bg"></div>
-            <div class="origin-content old-frost rounded-[40px]">
-                <h2 class="text-4xl md:text-5xl font-bold tracking-tighter mb-4 text-[var(--text-main)]">Roots in the <span class="font-serif italic text-gold font-normal">Himalayas</span></h2>
-                <p class="text-sm md:text-base font-light opacity-80 max-w-lg mx-auto text-[var(--text-main)]">
+            <div class="origin-content old-frost rounded-3xl p-10 text-center relative z-10 mx-6">
+                <h2 class="text-4xl md:text-5xl font-bold tracking-tighter mb-4 text-[var(--text-main)] transition-colors">Roots in the <span class="font-serif italic text-gold font-normal">Himalayas</span></h2>
+                <p class="text-sm md:text-base font-light opacity-80 max-w-lg mx-auto text-[var(--text-main)] transition-colors">
                     We exclusively partner with small-batch farmers in the high-altitude regions of Nepal. 
                     Every bean is hand-picked, sun-dried, and roasted locally in Bhairahawa to ensure absolute freshness.
                 </p>
             </div>
         </section>
 
-        <!-- EXTRA THINGO: THE ROASTING JOURNEY -->
+        <!-- EXTRA THINGO: THE ROASTING JOURNEY ACCORDION -->
         <section class="py-24 px-6 max-w-[1000px] mx-auto z-10 relative scroll-anim">
             <h2 class="text-4xl md:text-5xl font-bold tracking-tighter mb-10 text-center text-[var(--text-main)] transition-colors">The <span class="font-serif italic text-gold font-normal">Journey</span></h2>
             <div class="old-frost rounded-[40px] p-8 md:p-12">
@@ -491,7 +484,7 @@
     </div>
 
     <!-- DYNAMIC FOOTER CURTAIN -->
-    <footer id="footer" class="px-6 md:px-20 pt-20 pb-10 text-center flex flex-col items-center">
+    <footer id="footer" class="px-6 md:px-20 pt-20 pb-10 text-center flex flex-col items-center border-t border-[var(--border-color)]">
         <div class="grid grid-cols-1 md:grid-cols-2 w-full max-w-[1200px] gap-20 items-center mb-16 relative z-10">
             
             <div class="flex flex-col items-center md:items-start text-left scroll-anim">
@@ -509,12 +502,12 @@
                 </div>
             </div>
 
-            <div class="flex flex-col items-center w-full scroll-anim old-frost p-10 rounded-[40px]">
+            <!-- Get Directions Box (Fixed for Day Mode visibility) -->
+            <div class="flex flex-col items-center w-full old-frost p-10 rounded-[40px] scroll-anim bg-[#1a120e] text-white">
                 <i class="ph ph-map-pin text-6xl text-gold mb-4"></i>
-                <p class="text-2xl font-light mb-2 text-[var(--text-main)] transition-colors">Bhairahawa, Nepal</p>
-                <p class="text-sm opacity-60 mb-8 text-[var(--text-main)]">Delivering hot to your doorstep.</p>
-                <!-- FIXED DAY MODE BUTTON COLOR -->
-                <a href="https://maps.app.goo.gl/4KRKkC4Xjv824BLf7" target="_blank" class="get-dir-btn px-8 py-4 rounded-full text-sm font-bold tracking-widest uppercase hover-target transition-transform hover:-translate-y-1">
+                <p class="text-2xl font-light mb-2">Bhairahawa, Nepal</p>
+                <p class="text-sm opacity-60 mb-8">Delivering hot to your doorstep.</p>
+                <a href="https://maps.app.goo.gl/4KRKkC4Xjv824BLf7" target="_blank" class="px-8 py-4 bg-gold text-white rounded-full text-sm font-bold tracking-widest uppercase hover-target shadow-[0_10px_30px_rgba(212,163,115,0.4)] transition-transform hover:-translate-y-1 border border-transparent hover:border-white">
                     Get Directions
                 </a>
             </div>
@@ -530,7 +523,7 @@
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
-        // 2. Web Audio API Tactile Click Engine
+        // 2. Web Audio API Tactile Click Engine (Subtle 50% Volume)
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playClickSound() {
             if(audioCtx.state === 'suspended') audioCtx.resume();
@@ -540,24 +533,24 @@
             gainNode.connect(audioCtx.destination);
             
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.05);
+            osc.frequency.setValueAtTime(400, audioCtx.currentTime); // Lower pitch for soft bloop
+            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.05);
             
-            gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime); // 50% Quieter
             gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
             
             osc.start();
             osc.stop(audioCtx.currentTime + 0.05);
         }
 
-        // Only play sound on explicit interactive elements
+        // Only play sound on clicks
         document.addEventListener('mousedown', (e) => {
             if(e.target.closest('button, a, .hover-target, .menu-card, .process-item')) {
                 playClickSound();
             }
         });
 
-        // 3. Audio Tracks Setup & Volume Logic
+        // 3. Reliable Audio Tracks Setup
         const audioNight = document.getElementById('audio-night');
         const audioDay = document.getElementById('audio-day');
         let currentAudio = null;
@@ -575,51 +568,57 @@
             newAudio.volume = 0;
             let playPromise = newAudio.play();
             if (playPromise !== undefined) {
-                playPromise.then(_ => {
+                playPromise.then(() => {
                     gsap.to(newAudio, { volume: globalVolume, duration: 1.5 });
-                }).catch(error => console.log("Audio play prevented."));
+                }).catch(error => console.log("Audio play prevented. User must interact."));
             }
             currentAudio = newAudio;
         }
 
-        // 4. Sensory Cursor & 3D Magnetic Cards
-        const isTouch = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
-        if(!isTouch) {
-            const cursorDot = document.getElementById('cursor-dot');
-            const cursorRing = document.getElementById('cursor-ring');
-            const cursorRipple = document.getElementById('cursor-ripple');
-            let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+        // 4. Sensory Cursor & 3D Magnetic Cards (FIXED GIMMICKS)
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorRing = document.getElementById('cursor-ring');
+        const cursorRipple = document.getElementById('cursor-ripple');
+        let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
 
-            document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; gsap.to(cursorDot, { x: mouseX, y: mouseY, duration: 0.1 }); });
-            gsap.ticker.add(() => { ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15; gsap.set(cursorRing, { x: ringX, y: ringY }); });
-            
-            document.querySelectorAll('.hover-target, button, a, .menu-card, .process-item').forEach(el => {
-                el.addEventListener('mouseenter', () => {
-                    document.body.classList.add('hover-active');
-                    if(el.classList.contains('hover-radio')) document.body.classList.add('hover-no-blur'); // Fix blur over volume
-                });
-                el.addEventListener('mouseleave', () => {
-                    document.body.classList.remove('hover-active');
-                    document.body.classList.remove('hover-no-blur');
-                });
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX; mouseY = e.clientY;
+            gsap.to(cursorDot, { x: mouseX, y: mouseY, duration: 0.1 });
+        });
+        gsap.ticker.add(() => {
+            ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15;
+            gsap.set(cursorRing, { x: ringX, y: ringY });
+        });
+        
+        // Fix for Volume slider blur
+        document.querySelectorAll('.hover-target, button, a, .menu-card, .process-item').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                document.body.classList.add('hover-active');
+                if(el.classList.contains('hover-radio')) document.body.classList.add('hover-no-blur'); 
             });
-            document.addEventListener('mousedown', () => { gsap.fromTo(cursorRipple, { x: mouseX, y: mouseY, scale: 0, opacity: 1 }, { scale: 4, opacity: 0, duration: 0.6, ease: "power2.out" }); });
+            el.addEventListener('mouseleave', () => {
+                document.body.classList.remove('hover-active');
+                document.body.classList.remove('hover-no-blur');
+            });
+        });
+        document.addEventListener('mousedown', () => {
+            gsap.fromTo(cursorRipple, { x: mouseX, y: mouseY, scale: 0, opacity: 1 }, { scale: 4, opacity: 0, duration: 0.6, ease: "power2.out" });
+        });
 
-            // 3D Magnetic Effect (Exaggerated slightly)
-            document.querySelectorAll('.menu-card').forEach(card => {
-                card.addEventListener('mousemove', (e) => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const xPct = (x / rect.width - 0.5) * 30; 
-                    const yPct = (y / rect.height - 0.5) * -30;
-                    gsap.to(card.querySelector('.menu-img'), { rotationY: xPct, rotationX: yPct, transformPerspective: 1000, duration: 0.4, ease: "power2.out" });
-                });
-                card.addEventListener('mouseleave', () => {
-                    gsap.to(card.querySelector('.menu-img'), { rotationY: 0, rotationX: 0, duration: 0.6, ease: "elastic.out(1, 0.3)" });
-                });
+        // 3D Magnetic Effect (Applied directly to the card parent so it works everywhere)
+        document.querySelectorAll('.menu-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const xPct = (x / rect.width - 0.5) * 20; 
+                const yPct = (y / rect.height - 0.5) * -20;
+                gsap.to(card, { rotationY: xPct, rotationX: yPct, transformPerspective: 1000, duration: 0.4, ease: "power2.out" });
             });
-        }
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, { rotationY: 0, rotationX: 0, duration: 0.6, ease: "elastic.out(1, 0.3)" });
+            });
+        });
 
         // 5. The Vibe Selector (Entry Logic)
         let isLightMode = false;
@@ -650,7 +649,7 @@
             }});
         };
 
-        // 6. True Liquid Pour Theme Transition (Scroll to Top added)
+        // 6. True Liquid Pour Theme Transition
         window.triggerLiquidPour = function() {
             const drips = document.querySelectorAll('.pour-drip');
             const icon = document.getElementById('theme-icon');
@@ -658,7 +657,7 @@
             const nextColor = isLightMode ? '#0a0604' : '#fdfaf6'; 
             drips.forEach(d => { d.style.backgroundColor = nextColor; d.style.top = "0"; d.style.bottom = "auto"; });
 
-            // SCROLL TO TOP smoothly during transition
+            // Always scroll to top during theme change
             lenis.scrollTo(0, { duration: 1.2 });
 
             const tl = gsap.timeline();
@@ -692,7 +691,12 @@
                     
                     drips.forEach(d => { d.style.top = "auto"; d.style.bottom = "0"; });
                     
-                    gsap.to(drips, { height: "0vh", stagger: { amount: 0.3, from: "edges" }, duration: 1.2, ease: "power2.out" });
+                    gsap.to(drips, {
+                        height: "0vh",
+                        stagger: { amount: 0.3, from: "edges" },
+                        duration: 1.2,
+                        ease: "power2.out"
+                    });
                 }
             });
         };
@@ -706,7 +710,7 @@
             document.getElementById('sec-hand').style.transform = `rotate(${s * 6}deg)`;
             const ampm = h >= 12 ? 'PM' : 'AM';
             document.getElementById('digital-time').innerText = `${h % 12 || 12}:${m.toString().padStart(2,'0')} ${ampm}`;
-            
+
             let icon, temp;
             if (h >= 5 && h < 17) { icon = "ph-sun"; temp = "28°C"; }
             else if (h >= 17 && h < 20) { icon = "ph-cloud-sun"; temp = "24°C"; }
@@ -755,12 +759,7 @@
             badge.classList.remove('scale-0');
             gsap.fromTo(badge, { scale: 1.5 }, { scale: 1, duration: 0.4, ease: "back.out" });
 
-            const card = btnElement.closest('.menu-card');
-            const img = card.querySelector('.menu-img');
-            const easeType = isLightMode ? "back.out(1.7)" : "power2.inOut";
-            gsap.to(img, { y: -20, scale: 1.15, duration: 0.3, yoyo: true, repeat: 1, ease: easeType });
-
-            const imgRect = img.getBoundingClientRect();
+            const imgRect = btnElement.getBoundingClientRect();
             const iconRect = document.getElementById('cart-icon').getBoundingClientRect();
             
             for(let i=0; i<12; i++) {
@@ -769,7 +768,7 @@
                 const size = Math.random() * 18 + 8;
                 drop.style.width = size + 'px'; drop.style.height = size + 'px';
                 drop.style.left = (imgRect.left + imgRect.width/2) + 'px';
-                drop.style.top = (imgRect.top + imgRect.height/2) + 'px';
+                drop.style.top = (imgRect.top - 20) + 'px';
                 liquidContainer.appendChild(drop);
 
                 const randomX = (Math.random() - 0.5) * 250;
@@ -815,7 +814,7 @@
                     <div class="flex justify-between items-center bg-black/5 p-4 rounded-xl border border-[var(--cart-border)] text-[var(--cart-text)] shadow-sm">
                         <div><h5 class="font-bold text-base">${name}</h5><p class="text-sm opacity-70">Rs ${data.price} x ${data.count}</p></div>
                         <div class="flex items-center gap-4">
-                            <span class="font-bold text-lg text-[var(--cart-text)]">Rs ${data.price * data.count}</span>
+                            <span class="font-bold text-lg">Rs ${data.price * data.count}</span>
                             <button onclick="removeFromCart(${data.ids[0]})" class="text-red-500 hover:bg-red-100 p-2 rounded-full transition-colors hover-target"><i class="ph ph-trash text-lg"></i></button>
                         </div>
                     </div>`;
@@ -827,7 +826,7 @@
 
         window.checkout = function() {
             if(cart.length === 0) return alert("Add items first.");
-            let msg = "Hello After Hours!\nOrder for Delivery:\n\n";
+            let msg = "Hello After Hours! 🌙\nOrder for Delivery:\n\n";
             let total = 0; const counts = {};
             cart.forEach(i => { counts[i.name] = (counts[i.name] || 0) + 1; total += i.price; });
             for (const [name, count] of Object.entries(counts)) msg += `- ${count}x ${name}\n`;
