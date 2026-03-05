@@ -28,7 +28,7 @@
         
         /* ========= DUAL PHYSICS & THEME VARIABLES ========= */
         :root {
-            /* NIGHT MODE */
+            /* NIGHT MODE (Deep, Slow, Smooth) */
             --bg-rgb: 8, 5, 4; 
             --bg-deep: #0a0604;
             --bg-card: rgba(20, 12, 8, 0.5);
@@ -39,6 +39,7 @@
             --gold: #c69b6a;
             --accent-pour: #1f110a; 
             
+            /* Physics Engine */
             --anim-speed: 0.8s;
             --anim-ease: cubic-bezier(0.4, 0, 0.2, 1); 
             --card-lift: -8px;
@@ -51,7 +52,7 @@
         }
 
         body.light-mode {
-            /* DAY MODE */
+            /* DAY MODE (Bright, Snappy, Bouncy) */
             --bg-rgb: 242, 233, 223;
             --bg-deep: #f2e9df;
             --bg-card: rgba(255, 255, 255, 0.8);
@@ -62,6 +63,7 @@
             --gold: #b0703c;
             --accent-pour: #fdfaf6; 
             
+            /* Physics Engine */
             --anim-speed: 0.4s;
             --anim-ease: cubic-bezier(0.34, 1.56, 0.64, 1); 
             --card-lift: -15px;
@@ -124,16 +126,14 @@
         .clock-center { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 
         /* ========= MENU CARDS (3D Magnetic & Aroma Gimmick) ========= */
-        .menu-card { position: relative; overflow: visible; border-radius: 24px; z-index: 2; transition: transform var(--anim-speed) var(--anim-ease), box-shadow var(--anim-speed) var(--anim-ease), border-color 0.3s; transform-style: preserve-3d; background: var(--bg-card); border: 1px solid var(--border-color); }
-        .menu-card:hover { border-color: var(--gold); z-index: 10; box-shadow: var(--card-shadow); }
+        .menu-card { position: relative; overflow: visible; border-radius: 24px; z-index: 2; transform-style: preserve-3d; background: var(--bg-card); border: 1px solid var(--border-color); }
+        /* CSS hover removed to prevent conflicts with GSAP 3D logic. GSAP handles everything now! */
         
         .menu-img-wrap { height: 260px; overflow: hidden; position: relative; border-radius: 24px 24px 0 0; }
-        .menu-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease, filter 0.5s ease; opacity: 0.9; }
-        .menu-card:hover .menu-img { transform: scale(1.1); filter: brightness(1.15); opacity: 1; }
+        .menu-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; }
         
         /* Fixed Gimmick: Aroma Steam */
-        .aroma-steam { position: absolute; bottom: 10%; left: 50%; transform: translateX(-50%); width: 60px; height: 80px; opacity: 0; pointer-events: none; transition: 0.5s; z-index: 20; stroke: var(--gold); stroke-width: 3; }
-        .menu-card:hover .aroma-steam { opacity: 0.8; animation: riseUp 2s infinite ease-in; }
+        .aroma-steam { position: absolute; bottom: 10%; left: 50%; transform: translateX(-50%); width: 60px; height: 80px; opacity: 0; pointer-events: none; z-index: 20; stroke: var(--gold); stroke-width: 3; }
         @keyframes riseUp { 0% { transform: translate(-50%, 0) scale(0.8); opacity: 0; filter: blur(1px); } 50% { opacity: 0.8; } 100% { transform: translate(-50%, -60px) scale(1.3); opacity: 0; filter: blur(4px); } }
         
         .offer-tag { position: absolute; top: 15px; right: 15px; font-size: 0.7rem; font-weight: 800; padding: 6px 14px; border-radius: 30px; letter-spacing: 1px; z-index: 10; backdrop-filter: blur(10px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
@@ -142,9 +142,10 @@
         .tag-dark { background: rgba(30, 30, 30, 0.9); color: #fff; border: 1px solid var(--gold); }
         .tag-green { background: rgba(85, 107, 47, 0.9); color: #fff; }
 
-        .add-btn { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%) translateZ(30px); background: var(--text-main); color: var(--bg-deep); padding: 14px 28px; border-radius: 40px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; box-shadow: var(--card-shadow); transition: 0.3s; opacity: 0; width: 85%; justify-content: center; z-index: 30; }
-        .menu-card:hover .add-btn { opacity: 1; background: var(--gold); color: #fff; }
-        @media (max-width: 768px) { .add-btn { opacity: 1; bottom: 15px; background: var(--text-main); color: var(--bg-deep); transform: translateX(-50%); } }
+        .add-btn { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%) translateZ(30px); background: var(--text-main); color: var(--bg-deep); padding: 14px 28px; border-radius: 40px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow); opacity: 0; width: 85%; justify-content: center; z-index: 30; transition: background 0.3s, color 0.3s; pointer-events: none; }
+        .add-btn.active { opacity: 1; pointer-events: auto; }
+        .add-btn:hover { background: var(--gold); color: #fff; }
+        @media (max-width: 768px) { .add-btn { opacity: 1; bottom: 15px; background: var(--text-main); color: var(--bg-deep); transform: translateX(-50%); pointer-events: auto; } }
 
         /* ========= 3D LIQUID DROPS (CART ANIMATION) ========= */
         .gooey-filter { filter: url('#goo'); position: fixed; inset: 0; z-index: 999999; pointer-events: none; }
@@ -200,9 +201,13 @@
 </head>
 <body class="hover-target-container">
 
-    <!-- GUARANTEED WORKING AUDIO ENGINE -->
-    <audio id="audio-night" loop src="https://ia800900.us.archive.org/21/items/ambient-piano-music/Ambient%20Piano.mp3" crossorigin="anonymous" preload="auto"></audio>
-    <audio id="audio-day" loop src="https://ia801400.us.archive.org/10/items/bensound-acoustic-breeze/bensound-acousticbreeze.mp3" crossorigin="anonymous" preload="auto"></audio>
+    <!-- GUARANTEED WORKING AUDIO ENGINE (Wikimedia Commons Reliable URLs) -->
+    <audio id="audio-night" loop preload="auto">
+        <source src="https://upload.wikimedia.org/wikipedia/commons/b/b5/A_Shade_of_Melancholy.ogg" type="audio/ogg">
+    </audio>
+    <audio id="audio-day" loop preload="auto">
+        <source src="https://upload.wikimedia.org/wikipedia/commons/6/69/Kevin_MacLeod_-_Acoustic_Breeze.ogg" type="audio/ogg">
+    </audio>
 
     <!-- SVG Gooey Filter for Liquid Pour -->
     <svg style="display: none;">
@@ -320,7 +325,11 @@
         </div>
     </div>
 
+    <!-- MAIN CONTENT -->
     <div id="main-content">
+        <!-- AMBIENT BACKGROUND WITH PARALLAX -->
+        <div class="ambient-bg" id="ambient-bg"></div>
+
         <!-- HERO SECTION -->
         <section class="h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden">
             <div class="absolute inset-0 z-0">
@@ -339,7 +348,7 @@
             </div>
         </section>
 
-        <!-- MENU SECTION WITH UNIQUE OFFERS & 3D GIMMICKS -->
+        <!-- MENU SECTION -->
         <section id="menu" class="py-24 px-6 md:px-20 max-w-[1300px] mx-auto relative z-10">
             <div class="text-center mb-16">
                 <h2 class="text-5xl md:text-6xl font-bold tracking-tighter mb-2 scroll-anim text-[var(--text-main)] transition-colors">Curated <span class="font-serif italic text-gold font-normal">Selections</span></h2>
@@ -347,11 +356,10 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Item 1 -->
-                <div class="menu-card old-frost group scroll-anim">
+                <div class="menu-card old-frost scroll-anim">
                     <div class="offer-tag tag-red">Night Owl 15% OFF</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Americano">
-                        <!-- Aroma Steam Gimmick -->
                         <svg class="aroma-steam" viewBox="0 0 24 24" fill="none"><path d="M8 22c0-5 4-5 4-10S8 7 8 2M16 22c0-5-4-5-4-10s4-5 4-10"/></svg>
                         <button onclick="addToCart('Midnight Americano', 150, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
                     </div>
@@ -368,7 +376,7 @@
                 </div>
 
                 <!-- Item 2 -->
-                <div class="menu-card old-frost group scroll-anim">
+                <div class="menu-card old-frost scroll-anim">
                     <div class="offer-tag tag-gold">Signature</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1572286258217-40142c1c6a70?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Latte">
@@ -382,7 +390,7 @@
                 </div>
 
                 <!-- Item 3 -->
-                <div class="menu-card old-frost group scroll-anim">
+                <div class="menu-card old-frost scroll-anim">
                     <div class="offer-tag tag-red">Happy Hour - Rs 50 Off</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1485808191679-5f86510681a2?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Macchiato">
@@ -402,7 +410,7 @@
                 </div>
 
                 <!-- Item 4 -->
-                <div class="menu-card old-frost group scroll-anim">
+                <div class="menu-card old-frost scroll-anim">
                     <div class="offer-tag tag-dark">Summer Special</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Cold Brew">
@@ -415,7 +423,7 @@
                 </div>
 
                 <!-- Item 5 -->
-                <div class="menu-card old-frost group scroll-anim">
+                <div class="menu-card old-frost scroll-anim">
                     <div class="offer-tag tag-gold" style="background:#8b5e34; color:white;">Combo - Save Rs 80</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Waffle">
@@ -434,7 +442,7 @@
                 </div>
                 
                 <!-- Item 6 (Fixed Zen Matcha) -->
-                <div class="menu-card old-frost group scroll-anim">
+                <div class="menu-card old-frost scroll-anim">
                     <div class="offer-tag tag-green">Vegan Favorite</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1536256263959-770b48d82b0a?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Matcha">
@@ -448,19 +456,19 @@
             </div>
         </section>
 
-        <!-- EXTRA THINGO: HIMALAYAN ORIGINS -->
+        <!-- EXTRA THINGO: HIMALAYAN ORIGINS (Parallax Mountain) -->
         <section class="origin-section scroll-anim">
             <div class="origin-bg parallax-bg"></div>
-            <div class="origin-content old-frost rounded-3xl p-10 text-center relative z-10 mx-6">
+            <div class="origin-content old-frost rounded-[40px] p-10 text-center relative z-10 mx-6 max-w-4xl">
                 <h2 class="text-4xl md:text-5xl font-bold tracking-tighter mb-4 text-[var(--text-main)] transition-colors">Roots in the <span class="font-serif italic text-gold font-normal">Himalayas</span></h2>
-                <p class="text-sm md:text-base font-light opacity-80 max-w-lg mx-auto text-[var(--text-main)] transition-colors">
+                <p class="text-sm md:text-base font-light opacity-80 max-w-2xl mx-auto text-[var(--text-main)] transition-colors">
                     We exclusively partner with small-batch farmers in the high-altitude regions of Nepal. 
                     Every bean is hand-picked, sun-dried, and roasted locally in Bhairahawa to ensure absolute freshness.
                 </p>
             </div>
         </section>
 
-        <!-- EXTRA THINGO: THE ROASTING JOURNEY ACCORDION -->
+        <!-- EXTRA THINGO: THE ROASTING JOURNEY -->
         <section class="py-24 px-6 max-w-[1000px] mx-auto z-10 relative scroll-anim">
             <h2 class="text-4xl md:text-5xl font-bold tracking-tighter mb-10 text-center text-[var(--text-main)] transition-colors">The <span class="font-serif italic text-gold font-normal">Journey</span></h2>
             <div class="old-frost rounded-[40px] p-8 md:p-12">
@@ -523,7 +531,7 @@
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
-        // 2. Web Audio API Tactile Click Engine (Subtle 50% Volume)
+        // 2. Web Audio API Tactile Click Engine (Subtle 5% Volume)
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playClickSound() {
             if(audioCtx.state === 'suspended') audioCtx.resume();
@@ -533,24 +541,24 @@
             gainNode.connect(audioCtx.destination);
             
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(400, audioCtx.currentTime); // Lower pitch for soft bloop
+            osc.frequency.setValueAtTime(300, audioCtx.currentTime); // Deep pitch
             osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.05);
             
-            gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime); // 50% Quieter
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+            gainNode.gain.setValueAtTime(0.02, audioCtx.currentTime); // VERY subtle volume (2%)
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
             
             osc.start();
             osc.stop(audioCtx.currentTime + 0.05);
         }
 
-        // Only play sound on clicks
+        // Play sound ONLY on explicit interactive clicks
         document.addEventListener('mousedown', (e) => {
-            if(e.target.closest('button, a, .hover-target, .menu-card, .process-item')) {
+            if(e.target.closest('button, a, .hover-target, .process-item')) {
                 playClickSound();
             }
         });
 
-        // 3. Reliable Audio Tracks Setup
+        // 3. Reliable Audio Tracks Setup (Wikimedia Commons)
         const audioNight = document.getElementById('audio-night');
         const audioDay = document.getElementById('audio-day');
         let currentAudio = null;
@@ -570,57 +578,69 @@
             if (playPromise !== undefined) {
                 playPromise.then(() => {
                     gsap.to(newAudio, { volume: globalVolume, duration: 1.5 });
-                }).catch(error => console.log("Audio play prevented. User must interact."));
+                }).catch(error => console.log("Audio play prevented by browser. User must interact."));
             }
             currentAudio = newAudio;
         }
 
-        // 4. Sensory Cursor & 3D Magnetic Cards (FIXED GIMMICKS)
-        const cursorDot = document.getElementById('cursor-dot');
-        const cursorRing = document.getElementById('cursor-ring');
-        const cursorRipple = document.getElementById('cursor-ripple');
-        let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+        // 4. Sensory Cursor & Mouse Parallax
+        const isTouch = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
+        if(!isTouch) {
+            const cursorDot = document.getElementById('cursor-dot');
+            const cursorRing = document.getElementById('cursor-ring');
+            const cursorRipple = document.getElementById('cursor-ripple');
+            let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
 
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX; mouseY = e.clientY;
-            gsap.to(cursorDot, { x: mouseX, y: mouseY, duration: 0.1 });
-        });
-        gsap.ticker.add(() => {
-            ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15;
-            gsap.set(cursorRing, { x: ringX, y: ringY });
-        });
-        
-        // Fix for Volume slider blur
-        document.querySelectorAll('.hover-target, button, a, .menu-card, .process-item').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                document.body.classList.add('hover-active');
-                if(el.classList.contains('hover-radio')) document.body.classList.add('hover-no-blur'); 
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX; mouseY = e.clientY;
+                gsap.to(cursorDot, { x: mouseX, y: mouseY, duration: 0.1 });
+                
+                // MOUSE PARALLAX GIMMICK: Move background beans opposite to mouse
+                const moveX = (window.innerWidth / 2 - mouseX) * 0.02;
+                const moveY = (window.innerHeight / 2 - mouseY) * 0.02;
+                gsap.to('.ambient-bg', { x: moveX, y: moveY, duration: 1, ease: "power2.out" });
             });
-            el.addEventListener('mouseleave', () => {
-                document.body.classList.remove('hover-active');
-                document.body.classList.remove('hover-no-blur');
+            gsap.ticker.add(() => {
+                ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15;
+                gsap.set(cursorRing, { x: ringX, y: ringY });
             });
-        });
-        document.addEventListener('mousedown', () => {
-            gsap.fromTo(cursorRipple, { x: mouseX, y: mouseY, scale: 0, opacity: 1 }, { scale: 4, opacity: 0, duration: 0.6, ease: "power2.out" });
-        });
+            
+            // Handle hover states
+            document.querySelectorAll('.hover-target, button, a, .menu-card, .process-item').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    document.body.classList.add('hover-active');
+                    if(el.classList.contains('hover-radio')) document.body.classList.add('hover-no-blur'); 
+                });
+                el.addEventListener('mouseleave', () => {
+                    document.body.classList.remove('hover-active');
+                    document.body.classList.remove('hover-no-blur');
+                });
+            });
+            document.addEventListener('mousedown', () => {
+                gsap.fromTo(cursorRipple, { x: mouseX, y: mouseY, scale: 0, opacity: 1 }, { scale: 4, opacity: 0, duration: 0.6, ease: "power2.out" });
+            });
+        }
 
-        // 3D Magnetic Effect (Applied directly to the card parent so it works everywhere)
-        document.querySelectorAll('.menu-card').forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const xPct = (x / rect.width - 0.5) * 20; 
-                const yPct = (y / rect.height - 0.5) * -20;
-                gsap.to(card, { rotationY: xPct, rotationX: yPct, transformPerspective: 1000, duration: 0.4, ease: "power2.out" });
+        // 5. Build Dynamic Background Elements (Blobs and Beans)
+        const ambientBg = document.getElementById('ambient-bg');
+        // Add beans
+        for(let i=0; i<15; i++) {
+            const bean = document.createElement('div');
+            bean.classList.add('floating-bean');
+            bean.style.left = Math.random() * 100 + 'vw';
+            bean.style.top = Math.random() * 100 + 'vh';
+            bean.style.transform = `rotate(${Math.random() * 360}deg) scale(${Math.random() * 0.5 + 0.5})`;
+            ambientBg.appendChild(bean);
+            
+            gsap.to(bean, {
+                y: `-=${Math.random() * 200 + 100}`,
+                rotation: `+=${Math.random() * 180 - 90}`,
+                duration: Math.random() * 20 + 15,
+                repeat: -1, yoyo: true, ease: "sine.inOut"
             });
-            card.addEventListener('mouseleave', () => {
-                gsap.to(card, { rotationY: 0, rotationX: 0, duration: 0.6, ease: "elastic.out(1, 0.3)" });
-            });
-        });
+        }
 
-        // 5. The Vibe Selector (Entry Logic)
+        // 6. The Vibe Selector (Entry Logic)
         let isLightMode = false;
         
         window.initExperience = function(mode) {
@@ -649,7 +669,7 @@
             }});
         };
 
-        // 6. True Liquid Pour Theme Transition
+        // 7. True Liquid Pour Theme Transition
         window.triggerLiquidPour = function() {
             const drips = document.querySelectorAll('.pour-drip');
             const icon = document.getElementById('theme-icon');
@@ -657,7 +677,7 @@
             const nextColor = isLightMode ? '#0a0604' : '#fdfaf6'; 
             drips.forEach(d => { d.style.backgroundColor = nextColor; d.style.top = "0"; d.style.bottom = "auto"; });
 
-            // Always scroll to top during theme change
+            // Scroll to top
             lenis.scrollTo(0, { duration: 1.2 });
 
             const tl = gsap.timeline();
@@ -689,19 +709,58 @@
                         crossfadeAudio(audioNight);
                     }
                     
+                    // Rewrite CSS Variables logic for 3D cards
+                    updateCardPhysics();
+
                     drips.forEach(d => { d.style.top = "auto"; d.style.bottom = "0"; });
-                    
-                    gsap.to(drips, {
-                        height: "0vh",
-                        stagger: { amount: 0.3, from: "edges" },
-                        duration: 1.2,
-                        ease: "power2.out"
-                    });
+                    gsap.to(drips, { height: "0vh", stagger: { amount: 0.3, from: "edges" }, duration: 1.2, ease: "power2.out" });
                 }
             });
         };
 
-        // 7. Analog Clock & Weather
+        // 8. JS-Controlled 3D Card Hover (Fixes GSAP/CSS conflict in both modes)
+        function updateCardPhysics() {
+            const easeType = isLightMode ? "back.out(1.5)" : "power2.out";
+            const duration = isLightMode ? 0.4 : 0.6;
+            const lift = isLightMode ? -15 : -8;
+            const shadow = isLightMode ? "0 25px 40px rgba(176, 112, 60, 0.15)" : "0 20px 40px rgba(0,0,0,0.8)";
+            
+            document.querySelectorAll('.menu-card').forEach(card => {
+                // Clear existing listeners to prevent duplicates
+                const newCard = card.cloneNode(true);
+                card.parentNode.replaceChild(newCard, card);
+                
+                newCard.addEventListener('mousemove', (e) => {
+                    const rect = newCard.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const xPct = (x / rect.width - 0.5) * 20; 
+                    const yPct = (y / rect.height - 0.5) * -20;
+                    
+                    gsap.to(newCard, { 
+                        y: lift, rotationY: xPct, rotationX: yPct, 
+                        transformPerspective: 1000, duration: duration, ease: easeType,
+                        boxShadow: shadow, borderColor: "#d4a373"
+                    });
+                    // Show add button
+                    gsap.to(newCard.querySelector('.add-btn'), { opacity: 1, pointerEvents: "auto", bottom: "20px", duration: 0.3 });
+                });
+                
+                newCard.addEventListener('mouseleave', () => {
+                    gsap.to(newCard, { 
+                        y: 0, rotationY: 0, rotationX: 0, 
+                        duration: duration + 0.2, ease: "elastic.out(1, 0.3)",
+                        boxShadow: "none", borderColor: isLightMode ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.05)"
+                    });
+                    // Hide add button
+                    gsap.to(newCard.querySelector('.add-btn'), { opacity: 0, pointerEvents: "none", bottom: "-50px", duration: 0.3 });
+                });
+            });
+        }
+        // Initialize once
+        updateCardPhysics();
+
+        // 9. Analog Clock & Weather Widget
         function updateWidgets() {
             const now = new Date();
             const h = now.getHours(); const m = now.getMinutes(); const s = now.getSeconds();
@@ -720,7 +779,7 @@
         }
         setInterval(updateWidgets, 1000); updateWidgets();
 
-        // 8. Dynamic Footer Margin Fix
+        // 10. Dynamic Footer Margin Fix
         function updateFooterMargin() {
             if(window.innerWidth > 768) {
                 const footerHeight = document.getElementById('footer').offsetHeight;
@@ -734,14 +793,14 @@
         }
         window.addEventListener('resize', updateFooterMargin); setTimeout(updateFooterMargin, 500);
 
-        // 9. Accordion Toggle
+        // 11. Accordion Toggle
         window.toggleAccordion = function(element) {
             document.querySelectorAll('.process-item').forEach(item => { if(item !== element) item.classList.remove('active'); });
             element.classList.toggle('active');
             setTimeout(ScrollTrigger.refresh, 400); 
         }
 
-        // 10. Advanced 3D Liquid Fly-to-Cart
+        // 12. Advanced 3D Liquid Fly-to-Cart
         let cart = [];
         const liquidContainer = document.getElementById('liquid-container');
         
@@ -759,7 +818,12 @@
             badge.classList.remove('scale-0');
             gsap.fromTo(badge, { scale: 1.5 }, { scale: 1, duration: 0.4, ease: "back.out" });
 
-            const imgRect = btnElement.getBoundingClientRect();
+            const card = btnElement.closest('.menu-card');
+            const img = card.querySelector('.menu-img');
+            const bounceEase = isLightMode ? "back.out(1.7)" : "power2.inOut";
+            gsap.to(img, { y: -20, scale: 1.15, duration: 0.3, yoyo: true, repeat: 1, ease: bounceEase });
+
+            const imgRect = img.getBoundingClientRect();
             const iconRect = document.getElementById('cart-icon').getBoundingClientRect();
             
             for(let i=0; i<12; i++) {
@@ -768,7 +832,7 @@
                 const size = Math.random() * 18 + 8;
                 drop.style.width = size + 'px'; drop.style.height = size + 'px';
                 drop.style.left = (imgRect.left + imgRect.width/2) + 'px';
-                drop.style.top = (imgRect.top - 20) + 'px';
+                drop.style.top = (imgRect.top + imgRect.height/2) + 'px';
                 liquidContainer.appendChild(drop);
 
                 const randomX = (Math.random() - 0.5) * 250;
@@ -814,7 +878,7 @@
                     <div class="flex justify-between items-center bg-black/5 p-4 rounded-xl border border-[var(--cart-border)] text-[var(--cart-text)] shadow-sm">
                         <div><h5 class="font-bold text-base">${name}</h5><p class="text-sm opacity-70">Rs ${data.price} x ${data.count}</p></div>
                         <div class="flex items-center gap-4">
-                            <span class="font-bold text-lg">Rs ${data.price * data.count}</span>
+                            <span class="font-bold text-lg text-[var(--cart-text)]">Rs ${data.price * data.count}</span>
                             <button onclick="removeFromCart(${data.ids[0]})" class="text-red-500 hover:bg-red-100 p-2 rounded-full transition-colors hover-target"><i class="ph ph-trash text-lg"></i></button>
                         </div>
                     </div>`;
