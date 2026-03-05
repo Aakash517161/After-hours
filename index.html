@@ -113,7 +113,7 @@
             .hover-active .cursor-dot { width: 0; height: 0; }
             .hover-active .cursor-ring { width: 60px; height: 60px; opacity: 1; background: rgba(212, 163, 115, 0.1); backdrop-filter: blur(4px); border-width: 2px; }
             
-            /* FIXED: Remove blur when hovering the radio/volume so it's readable */
+            /* Remove blur when hovering the radio/volume so it's readable */
             .hover-no-blur .cursor-ring { backdrop-filter: none !important; background: transparent !important; border-color: var(--gold) !important; width: 30px !important; height: 30px !important; }
         }
 
@@ -127,12 +127,11 @@
 
         /* ========= MENU CARDS (3D Magnetic & Aroma Gimmick) ========= */
         .menu-card { position: relative; overflow: visible; border-radius: 24px; z-index: 2; transform-style: preserve-3d; background: var(--bg-card); border: 1px solid var(--border-color); }
-        /* CSS hover removed to prevent conflicts with GSAP 3D logic. GSAP handles everything now! */
         
         .menu-img-wrap { height: 260px; overflow: hidden; position: relative; border-radius: 24px 24px 0 0; }
         .menu-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; }
         
-        /* Fixed Gimmick: Aroma Steam */
+        /* Aroma Steam Gimmick */
         .aroma-steam { position: absolute; bottom: 10%; left: 50%; transform: translateX(-50%); width: 60px; height: 80px; opacity: 0; pointer-events: none; z-index: 20; stroke: var(--gold); stroke-width: 3; }
         @keyframes riseUp { 0% { transform: translate(-50%, 0) scale(0.8); opacity: 0; filter: blur(1px); } 50% { opacity: 0.8; } 100% { transform: translate(-50%, -60px) scale(1.3); opacity: 0; filter: blur(4px); } }
         
@@ -142,7 +141,7 @@
         .tag-dark { background: rgba(30, 30, 30, 0.9); color: #fff; border: 1px solid var(--gold); }
         .tag-green { background: rgba(85, 107, 47, 0.9); color: #fff; }
 
-        .add-btn { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%) translateZ(30px); background: var(--text-main); color: var(--bg-deep); padding: 14px 28px; border-radius: 40px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow); opacity: 0; width: 85%; justify-content: center; z-index: 30; transition: background 0.3s, color 0.3s; pointer-events: none; }
+        .add-btn { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%) translateZ(30px); background: var(--text-main); color: var(--bg-deep); padding: 14px 28px; border-radius: 40px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow); transition: 0.3s; opacity: 0; width: 85%; justify-content: center; z-index: 30; pointer-events: none; }
         .add-btn.active { opacity: 1; pointer-events: auto; }
         .add-btn:hover { background: var(--gold); color: #fff; }
         @media (max-width: 768px) { .add-btn { opacity: 1; bottom: 15px; background: var(--text-main); color: var(--bg-deep); transform: translateX(-50%); pointer-events: auto; } }
@@ -201,13 +200,10 @@
 </head>
 <body class="hover-target-container">
 
-    <!-- GUARANTEED WORKING AUDIO ENGINE (Wikimedia Commons Reliable URLs) -->
-    <audio id="audio-night" loop preload="auto">
-        <source src="https://upload.wikimedia.org/wikipedia/commons/b/b5/A_Shade_of_Melancholy.ogg" type="audio/ogg">
-    </audio>
-    <audio id="audio-day" loop preload="auto">
-        <source src="https://upload.wikimedia.org/wikipedia/commons/6/69/Kevin_MacLeod_-_Acoustic_Breeze.ogg" type="audio/ogg">
-    </audio>
+    <!-- PERMANENT RELIABLE AUDIO ENGINE -->
+    <!-- Using permanent Wikimedia Commons links -->
+    <audio id="audio-night" loop preload="auto" src="https://upload.wikimedia.org/wikipedia/commons/1/15/Brahms_-_opus_118_-_118-2_intermezzo_in_a_major.ogg"></audio>
+    <audio id="audio-day" loop preload="auto" src="https://upload.wikimedia.org/wikipedia/commons/b/b4/Kevin_MacLeod_-_Acoustic_Breeze.ogg"></audio>
 
     <!-- SVG Gooey Filter for Liquid Pour -->
     <svg style="display: none;">
@@ -303,21 +299,21 @@
     <div class="cart-overlay hover-target" onclick="toggleCart()" id="cart-overlay"></div>
     <div id="cart-sidebar" class="pt-32 pb-8 px-6">
         <div class="flex justify-between items-center mb-6 border-b border-black/10 pb-4">
-            <h2 class="text-3xl font-serif font-bold text-black">Your Order</h2>
-            <button onclick="toggleCart()" class="text-3xl text-black hover:text-red-500 hover-target"><i class="ph ph-x"></i></button>
+            <h2 class="text-3xl font-serif font-bold text-[var(--cart-text)]">Your Order</h2>
+            <button onclick="toggleCart()" class="text-3xl text-[var(--cart-text)] hover:text-red-500 hover-target"><i class="ph ph-x"></i></button>
         </div>
         
         <div id="cart-items" class="flex-1 overflow-y-auto space-y-3 pr-2">
-            <div class="text-center mt-10 text-base italic text-black/50">Your cart is empty. Let's brew something.</div>
+            <div class="text-center mt-10 text-base italic text-[var(--cart-text)] opacity-50">Your cart is empty. Let's brew something.</div>
         </div>
         
         <div class="mt-6 border-t border-black/10 pt-6">
-            <div class="flex justify-between text-base mb-2 font-medium text-black"><span>Subtotal:</span> <span id="cart-subtotal">Rs 0</span></div>
-            <div class="flex justify-between text-base mb-4 font-medium text-black">
+            <div class="flex justify-between text-base mb-2 font-medium text-[var(--cart-text)]"><span>Subtotal:</span> <span id="cart-subtotal">Rs 0</span></div>
+            <div class="flex justify-between text-base mb-4 font-medium text-[var(--cart-text)]">
                 <span>Delivery:</span> 
                 <span><span class="line-through opacity-50 mr-2">Rs 100</span> <span class="text-[#b07d47] font-bold">Free (On Us 🤎)</span></span>
             </div>
-            <div class="flex justify-between text-2xl font-bold mb-6 border-t border-black/10 pt-4 text-black"><span>Total:</span> <span id="cart-total" class="text-[#b07d47]">Rs 0</span></div>
+            <div class="flex justify-between text-2xl font-bold mb-6 border-t border-black/10 pt-4 text-[var(--cart-text)]"><span>Total:</span> <span id="cart-total" class="text-[#b07d47]">Rs 0</span></div>
             
             <button onclick="checkout()" class="w-full bg-[#111] text-white py-4 rounded-xl font-bold tracking-widest uppercase hover-target hover:bg-[#d4a373] transition-colors flex justify-center items-center gap-2 shadow-lg">
                 <i class="ph ph-whatsapp-logo text-2xl"></i> Checkout via WhatsApp
@@ -325,10 +321,12 @@
         </div>
     </div>
 
-    <!-- MAIN CONTENT -->
     <div id="main-content">
-        <!-- AMBIENT BACKGROUND WITH PARALLAX -->
-        <div class="ambient-bg" id="ambient-bg"></div>
+        <!-- AMBIENT BACKGROUND WITH MOUSE PARALLAX -->
+        <div class="ambient-bg" id="ambient-bg">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+        </div>
 
         <!-- HERO SECTION -->
         <section class="h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden">
@@ -348,7 +346,7 @@
             </div>
         </section>
 
-        <!-- MENU SECTION -->
+        <!-- MENU SECTION WITH UNIQUE OFFERS & GIMMICKS -->
         <section id="menu" class="py-24 px-6 md:px-20 max-w-[1300px] mx-auto relative z-10">
             <div class="text-center mb-16">
                 <h2 class="text-5xl md:text-6xl font-bold tracking-tighter mb-2 scroll-anim text-[var(--text-main)] transition-colors">Curated <span class="font-serif italic text-gold font-normal">Selections</span></h2>
@@ -356,7 +354,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Item 1 -->
-                <div class="menu-card old-frost scroll-anim">
+                <div class="menu-card old-frost group scroll-anim">
                     <div class="offer-tag tag-red">Night Owl 15% OFF</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Americano">
@@ -376,7 +374,7 @@
                 </div>
 
                 <!-- Item 2 -->
-                <div class="menu-card old-frost scroll-anim">
+                <div class="menu-card old-frost group scroll-anim">
                     <div class="offer-tag tag-gold">Signature</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1572286258217-40142c1c6a70?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Latte">
@@ -390,7 +388,7 @@
                 </div>
 
                 <!-- Item 3 -->
-                <div class="menu-card old-frost scroll-anim">
+                <div class="menu-card old-frost group scroll-anim">
                     <div class="offer-tag tag-red">Happy Hour - Rs 50 Off</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1485808191679-5f86510681a2?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Macchiato">
@@ -410,7 +408,7 @@
                 </div>
 
                 <!-- Item 4 -->
-                <div class="menu-card old-frost scroll-anim">
+                <div class="menu-card old-frost group scroll-anim">
                     <div class="offer-tag tag-dark">Summer Special</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Cold Brew">
@@ -423,7 +421,7 @@
                 </div>
 
                 <!-- Item 5 -->
-                <div class="menu-card old-frost scroll-anim">
+                <div class="menu-card old-frost group scroll-anim">
                     <div class="offer-tag tag-gold" style="background:#8b5e34; color:white;">Combo - Save Rs 80</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Waffle">
@@ -441,8 +439,8 @@
                     </div>
                 </div>
                 
-                <!-- Item 6 (Fixed Zen Matcha) -->
-                <div class="menu-card old-frost scroll-anim">
+                <!-- Item 6 -->
+                <div class="menu-card old-frost group scroll-anim">
                     <div class="offer-tag tag-green">Vegan Favorite</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1536256263959-770b48d82b0a?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Matcha">
@@ -456,10 +454,10 @@
             </div>
         </section>
 
-        <!-- EXTRA THINGO: HIMALAYAN ORIGINS (Parallax Mountain) -->
+        <!-- EXTRA THINGO: HIMALAYAN ORIGINS -->
         <section class="origin-section scroll-anim">
             <div class="origin-bg parallax-bg"></div>
-            <div class="origin-content old-frost rounded-[40px] p-10 text-center relative z-10 mx-6 max-w-4xl">
+            <div class="origin-content old-frost rounded-3xl p-10 text-center relative z-10 mx-6 max-w-4xl">
                 <h2 class="text-4xl md:text-5xl font-bold tracking-tighter mb-4 text-[var(--text-main)] transition-colors">Roots in the <span class="font-serif italic text-gold font-normal">Himalayas</span></h2>
                 <p class="text-sm md:text-base font-light opacity-80 max-w-2xl mx-auto text-[var(--text-main)] transition-colors">
                     We exclusively partner with small-batch farmers in the high-altitude regions of Nepal. 
@@ -468,7 +466,7 @@
             </div>
         </section>
 
-        <!-- EXTRA THINGO: THE ROASTING JOURNEY -->
+        <!-- EXTRA THINGO: THE ROASTING JOURNEY ACCORDION -->
         <section class="py-24 px-6 max-w-[1000px] mx-auto z-10 relative scroll-anim">
             <h2 class="text-4xl md:text-5xl font-bold tracking-tighter mb-10 text-center text-[var(--text-main)] transition-colors">The <span class="font-serif italic text-gold font-normal">Journey</span></h2>
             <div class="old-frost rounded-[40px] p-8 md:p-12">
@@ -495,6 +493,7 @@
     <footer id="footer" class="px-6 md:px-20 pt-20 pb-10 text-center flex flex-col items-center border-t border-[var(--border-color)]">
         <div class="grid grid-cols-1 md:grid-cols-2 w-full max-w-[1200px] gap-20 items-center mb-16 relative z-10">
             
+            <!-- Contact & Socials -->
             <div class="flex flex-col items-center md:items-start text-left scroll-anim">
                 <h2 class="text-6xl md:text-8xl font-bold tracking-tighter mb-4 font-serif text-[var(--text-main)] transition-colors">After Hours</h2>
                 <a href="tel:+9779705965333" class="font-serif text-4xl md:text-6xl font-bold text-gold mb-10 hover-target transition-transform hover:translate-x-2 inline-block">
@@ -510,12 +509,12 @@
                 </div>
             </div>
 
-            <!-- Get Directions Box (Fixed for Day Mode visibility) -->
-            <div class="flex flex-col items-center w-full old-frost p-10 rounded-[40px] scroll-anim bg-[#1a120e] text-white">
+            <!-- Get Directions Box -->
+            <div class="flex flex-col items-center w-full old-frost p-10 rounded-3xl scroll-anim bg-[#1a120e] text-white">
                 <i class="ph ph-map-pin text-6xl text-gold mb-4"></i>
-                <p class="text-2xl font-light mb-2">Bhairahawa, Nepal</p>
-                <p class="text-sm opacity-60 mb-8">Delivering hot to your doorstep.</p>
-                <a href="https://maps.app.goo.gl/4KRKkC4Xjv824BLf7" target="_blank" class="px-8 py-4 bg-gold text-white rounded-full text-sm font-bold tracking-widest uppercase hover-target shadow-[0_10px_30px_rgba(212,163,115,0.4)] transition-transform hover:-translate-y-1 border border-transparent hover:border-white">
+                <p class="text-2xl font-light mb-2 text-white">Bhairahawa, Nepal</p>
+                <p class="text-sm opacity-60 mb-8 text-white">Delivering hot to your doorstep.</p>
+                <a href="https://maps.app.goo.gl/4KRKkC4Xjv824BLf7" target="_blank" class="px-8 py-4 bg-gold text-white rounded-full text-sm font-bold tracking-widest uppercase hover-target shadow-[0_10px_30px_rgba(212,163,115,0.4)] transition-transform hover:-translate-y-1">
                     Get Directions
                 </a>
             </div>
@@ -531,7 +530,7 @@
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
-        // 2. Web Audio API Tactile Click Engine (Subtle 5% Volume)
+        // 2. Web Audio API Tactile Click Engine (Super Subtle 5% Volume)
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playClickSound() {
             if(audioCtx.state === 'suspended') audioCtx.resume();
@@ -541,19 +540,19 @@
             gainNode.connect(audioCtx.destination);
             
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(300, audioCtx.currentTime); // Deep pitch
-            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.05);
+            osc.frequency.setValueAtTime(300, audioCtx.currentTime); // Deep, satisfying bloop
+            osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.05);
             
-            gainNode.gain.setValueAtTime(0.02, audioCtx.currentTime); // VERY subtle volume (2%)
+            gainNode.gain.setValueAtTime(0.01, audioCtx.currentTime); // VERY subtle volume
             gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
             
             osc.start();
             osc.stop(audioCtx.currentTime + 0.05);
         }
 
-        // Play sound ONLY on explicit interactive clicks
+        // Only play sound on clicks to buttons/cards
         document.addEventListener('mousedown', (e) => {
-            if(e.target.closest('button, a, .hover-target, .process-item')) {
+            if(e.target.closest('button, a, .hover-target, .process-item, .vibe-btn')) {
                 playClickSound();
             }
         });
@@ -574,16 +573,26 @@
                 gsap.to(currentAudio, { volume: 0, duration: 1.5, onComplete: () => currentAudio.pause() });
             }
             newAudio.volume = 0;
+            
+            // Force load and catch errors gracefully
+            newAudio.load();
             let playPromise = newAudio.play();
             if (playPromise !== undefined) {
                 playPromise.then(() => {
                     gsap.to(newAudio, { volume: globalVolume, duration: 1.5 });
-                }).catch(error => console.log("Audio play prevented by browser. User must interact."));
+                }).catch(error => {
+                    console.log("Browser blocked auto-play. Waiting for user click...");
+                    document.addEventListener('click', function playOnInteract() {
+                        newAudio.play();
+                        gsap.to(newAudio, { volume: globalVolume, duration: 1.5 });
+                        document.removeEventListener('click', playOnInteract);
+                    }, {once: true});
+                });
             }
             currentAudio = newAudio;
         }
 
-        // 4. Sensory Cursor & Mouse Parallax
+        // 4. Sensory Cursor & Mouse Parallax Gimmick
         const isTouch = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
         if(!isTouch) {
             const cursorDot = document.getElementById('cursor-dot');
@@ -595,17 +604,18 @@
                 mouseX = e.clientX; mouseY = e.clientY;
                 gsap.to(cursorDot, { x: mouseX, y: mouseY, duration: 0.1 });
                 
-                // MOUSE PARALLAX GIMMICK: Move background beans opposite to mouse
+                // MOUSE PARALLAX GIMMICK
                 const moveX = (window.innerWidth / 2 - mouseX) * 0.02;
                 const moveY = (window.innerHeight / 2 - mouseY) * 0.02;
                 gsap.to('.ambient-bg', { x: moveX, y: moveY, duration: 1, ease: "power2.out" });
             });
+            
             gsap.ticker.add(() => {
                 ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15;
                 gsap.set(cursorRing, { x: ringX, y: ringY });
             });
             
-            // Handle hover states
+            // Fixed hover classes
             document.querySelectorAll('.hover-target, button, a, .menu-card, .process-item').forEach(el => {
                 el.addEventListener('mouseenter', () => {
                     document.body.classList.add('hover-active');
@@ -619,11 +629,35 @@
             document.addEventListener('mousedown', () => {
                 gsap.fromTo(cursorRipple, { x: mouseX, y: mouseY, scale: 0, opacity: 1 }, { scale: 4, opacity: 0, duration: 0.6, ease: "power2.out" });
             });
+
+            // GIMMICK: True 3D Magnetic Cards
+            document.querySelectorAll('.menu-card').forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const xPct = (x / rect.width - 0.5) * 20; 
+                    const yPct = (y / rect.height - 0.5) * -20;
+                    
+                    gsap.to(card, { 
+                        rotationY: xPct, rotationX: yPct, 
+                        transformPerspective: 1000, duration: 0.4, ease: "power2.out" 
+                    });
+                    
+                    // Show add button dynamically
+                    gsap.to(card.querySelector('.add-btn'), { opacity: 1, pointerEvents: "auto", bottom: "20px", duration: 0.3 });
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, { rotationY: 0, rotationX: 0, duration: 0.6, ease: "elastic.out(1, 0.3)" });
+                    // Hide add button
+                    gsap.to(card.querySelector('.add-btn'), { opacity: 0, pointerEvents: "none", bottom: "-50px", duration: 0.3 });
+                });
+            });
         }
 
-        // 5. Build Dynamic Background Elements (Blobs and Beans)
+        // 5. Build Dynamic Background Beans
         const ambientBg = document.getElementById('ambient-bg');
-        // Add beans
         for(let i=0; i<15; i++) {
             const bean = document.createElement('div');
             bean.classList.add('floating-bean');
@@ -677,7 +711,7 @@
             const nextColor = isLightMode ? '#0a0604' : '#fdfaf6'; 
             drips.forEach(d => { d.style.backgroundColor = nextColor; d.style.top = "0"; d.style.bottom = "auto"; });
 
-            // Scroll to top
+            // Scroll to top automatically
             lenis.scrollTo(0, { duration: 1.2 });
 
             const tl = gsap.timeline();
@@ -709,58 +743,13 @@
                         crossfadeAudio(audioNight);
                     }
                     
-                    // Rewrite CSS Variables logic for 3D cards
-                    updateCardPhysics();
-
                     drips.forEach(d => { d.style.top = "auto"; d.style.bottom = "0"; });
                     gsap.to(drips, { height: "0vh", stagger: { amount: 0.3, from: "edges" }, duration: 1.2, ease: "power2.out" });
                 }
             });
         };
 
-        // 8. JS-Controlled 3D Card Hover (Fixes GSAP/CSS conflict in both modes)
-        function updateCardPhysics() {
-            const easeType = isLightMode ? "back.out(1.5)" : "power2.out";
-            const duration = isLightMode ? 0.4 : 0.6;
-            const lift = isLightMode ? -15 : -8;
-            const shadow = isLightMode ? "0 25px 40px rgba(176, 112, 60, 0.15)" : "0 20px 40px rgba(0,0,0,0.8)";
-            
-            document.querySelectorAll('.menu-card').forEach(card => {
-                // Clear existing listeners to prevent duplicates
-                const newCard = card.cloneNode(true);
-                card.parentNode.replaceChild(newCard, card);
-                
-                newCard.addEventListener('mousemove', (e) => {
-                    const rect = newCard.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const xPct = (x / rect.width - 0.5) * 20; 
-                    const yPct = (y / rect.height - 0.5) * -20;
-                    
-                    gsap.to(newCard, { 
-                        y: lift, rotationY: xPct, rotationX: yPct, 
-                        transformPerspective: 1000, duration: duration, ease: easeType,
-                        boxShadow: shadow, borderColor: "#d4a373"
-                    });
-                    // Show add button
-                    gsap.to(newCard.querySelector('.add-btn'), { opacity: 1, pointerEvents: "auto", bottom: "20px", duration: 0.3 });
-                });
-                
-                newCard.addEventListener('mouseleave', () => {
-                    gsap.to(newCard, { 
-                        y: 0, rotationY: 0, rotationX: 0, 
-                        duration: duration + 0.2, ease: "elastic.out(1, 0.3)",
-                        boxShadow: "none", borderColor: isLightMode ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.05)"
-                    });
-                    // Hide add button
-                    gsap.to(newCard.querySelector('.add-btn'), { opacity: 0, pointerEvents: "none", bottom: "-50px", duration: 0.3 });
-                });
-            });
-        }
-        // Initialize once
-        updateCardPhysics();
-
-        // 9. Analog Clock & Weather Widget
+        // 8. Analog Clock & Weather Widget
         function updateWidgets() {
             const now = new Date();
             const h = now.getHours(); const m = now.getMinutes(); const s = now.getSeconds();
@@ -779,7 +768,7 @@
         }
         setInterval(updateWidgets, 1000); updateWidgets();
 
-        // 10. Dynamic Footer Margin Fix
+        // 9. Dynamic Footer Margin Fix
         function updateFooterMargin() {
             if(window.innerWidth > 768) {
                 const footerHeight = document.getElementById('footer').offsetHeight;
@@ -793,14 +782,14 @@
         }
         window.addEventListener('resize', updateFooterMargin); setTimeout(updateFooterMargin, 500);
 
-        // 11. Accordion Toggle
+        // 10. Accordion Toggle
         window.toggleAccordion = function(element) {
             document.querySelectorAll('.process-item').forEach(item => { if(item !== element) item.classList.remove('active'); });
             element.classList.toggle('active');
             setTimeout(ScrollTrigger.refresh, 400); 
         }
 
-        // 12. Advanced 3D Liquid Fly-to-Cart
+        // 11. Advanced 3D Liquid Fly-to-Cart
         let cart = [];
         const liquidContainer = document.getElementById('liquid-container');
         
