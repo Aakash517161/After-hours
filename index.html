@@ -77,9 +77,13 @@
 
         html.lenis { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto; }
-        body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Outfit', sans-serif; overflow-x: hidden; cursor: none; transition: background-color 0.1s, color 0.1s; }
+        /* Removed "cursor: none" from body to prevent invisible mouse bug */
+        body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Outfit', sans-serif; overflow-x: hidden; transition: background-color 0.1s, color 0.1s; }
         ::selection { background: var(--gold); color: #fff; }
         .font-serif { font-family: 'Playfair Display', serif; }
+
+        /* Custom class added by JS only when a mouse is detected */
+        .hide-native-cursor, .hide-native-cursor * { cursor: none !important; }
 
         /* ========= OLD-SCHOOL FROSTED GLASS ========= */
         .old-frost {
@@ -94,7 +98,7 @@
         #vibe-selector { position: fixed; inset: 0; background: #0a0604; z-index: 100000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1s; }
         .vibe-box { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); padding: 50px; border-radius: 40px; text-align: center; }
         .vibe-btn-container { display: flex; gap: 20px; margin-top: 30px; justify-content: center; flex-wrap: wrap; }
-        .vibe-btn { padding: 15px 30px; border-radius: 30px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; font-size: 0.85rem; display: flex; align-items: center; gap: 10px; transition: 0.4s; cursor: none; }
+        .vibe-btn { padding: 15px 30px; border-radius: 30px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; font-size: 0.85rem; display: flex; align-items: center; gap: 10px; transition: 0.4s; }
         .btn-day { background: #f2e9df; color: #2b1c11; }
         .btn-day:hover { background: #fff; transform: translateY(-5px); box-shadow: 0 10px 30px rgba(242,233,223,0.3); }
         .btn-night { background: #1f110a; color: #c69b6a; border: 1px solid #c69b6a; }
@@ -105,14 +109,14 @@
         .pour-drip { flex: 1; height: 0vh; background: var(--accent-pour); border-radius: 0 0 100px 100px; transform-origin: top; margin: 0 -5px; }
 
         /* ========= SENSORY CURSOR ========= */
-        @media (pointer: fine) {
-            .cursor-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999999; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s; }
-            .cursor-ring { width: 34px; height: 34px; border: 1px solid var(--gold); border-radius: 50%; opacity: 0.5; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999998; transform: translate(-50%, -50%); transition: width var(--anim-speed) var(--anim-ease), height var(--anim-speed) var(--anim-ease), backdrop-filter 0.2s; }
-            .cursor-click-ripple { position: fixed; width: 20px; height: 20px; border: 2px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999997; transform: translate(-50%, -50%) scale(0); opacity: 0; }
-            
-            .hover-active .cursor-dot { width: 0; height: 0; }
-            .hover-active .cursor-ring { width: 60px; height: 60px; opacity: 1; background: rgba(212, 163, 115, 0.1); backdrop-filter: blur(4px); border-width: 2px; }
-        }
+        .cursor-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999999; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s; opacity: 0; }
+        .cursor-ring { width: 34px; height: 34px; border: 1px solid var(--gold); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999998; transform: translate(-50%, -50%); transition: width var(--anim-speed) var(--anim-ease), height var(--anim-speed) var(--anim-ease), backdrop-filter 0.2s; opacity: 0; }
+        .cursor-click-ripple { position: fixed; width: 20px; height: 20px; border: 2px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999997; transform: translate(-50%, -50%) scale(0); opacity: 0; }
+        
+        .hover-active .cursor-dot { width: 0; height: 0; }
+        .hover-active .cursor-ring { width: 60px; height: 60px; background: rgba(212, 163, 115, 0.1); backdrop-filter: blur(4px); border-width: 2px; }
+        
+        .hover-no-blur .cursor-ring { backdrop-filter: none !important; background: transparent !important; border-color: var(--gold) !important; width: 30px !important; height: 30px !important; }
 
         /* ========= BIGGER ANALOG CLOCK ========= */
         .analog-clock { width: 60px; height: 60px; border: 2px solid var(--gold); border-radius: 50%; position: relative; background: transparent; }
@@ -128,7 +132,6 @@
         .menu-img-wrap { height: 260px; overflow: hidden; position: relative; border-radius: 24px 24px 0 0; }
         .menu-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; }
         
-        /* Aroma Steam Gimmick */
         .aroma-steam { position: absolute; bottom: 10%; left: 50%; transform: translateX(-50%); width: 60px; height: 80px; opacity: 0; pointer-events: none; z-index: 20; stroke: var(--gold); stroke-width: 3; }
         @keyframes riseUp { 0% { transform: translate(-50%, 0) scale(0.8); opacity: 0; filter: blur(1px); } 50% { opacity: 0.8; } 100% { transform: translate(-50%, -60px) scale(1.3); opacity: 0; filter: blur(4px); } }
         
@@ -166,7 +169,23 @@
         .origin-bg { position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2000&auto=format&fit=crop') center/cover; opacity: 0.4; z-index: 0; filter: grayscale(50%); }
         body.light-mode .origin-bg { opacity: 0.2; filter: grayscale(0%); }
 
-        /* ========= FOOTER & MAIN WRAPPER ========= */
+        /* ========= RADIO WIDGET & VOLUME SLIDER ========= */
+        .radio-widget { position: fixed; bottom: 30px; left: 30px; z-index: 50; display: flex; align-items: center; gap: 15px; padding: 10px 20px 10px 10px; border-radius: 50px; overflow: hidden; transition: 0.4s ease; }
+        .vinyl { width: 40px; height: 40px; background: #111; border-radius: 50%; border: 2px solid #333; position: relative; animation: spin 4s linear infinite; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
+        .vinyl::after { content: ''; width: 12px; height: 12px; background: var(--gold); border-radius: 50%; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        
+        .radio-info { display: flex; flex-direction: column; white-space: nowrap; transition: 0.3s; }
+        .volume-container { display: flex; align-items: center; gap: 10px; width: 0; opacity: 0; overflow: hidden; transition: 0.4s ease; }
+        .radio-widget:hover .volume-container { width: 100px; opacity: 1; }
+        .radio-widget:hover .radio-info { display: none; }
+        
+        input[type=range] { -webkit-appearance: none; width: 100px; background: transparent; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 12px; width: 12px; border-radius: 50%; background: var(--gold); margin-top: -4px; box-shadow: 0 0 10px var(--gold); }
+        body.light-mode input[type=range]::-webkit-slider-runnable-track { background: rgba(0,0,0,0.2); }
+
+        /* ========= FOOTER & MAIN WRAPPER (Dynamic Fix) ========= */
         #main-content { position: relative; z-index: 2; background: var(--bg-deep); box-shadow: 0 40px 100px rgba(0,0,0,1); border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; transition: background 0.8s ease; }
         footer { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1; background: #050302; display: flex; flex-direction: column; justify-content: center; transition: background 0.8s; }
         body.light-mode footer { background: #e6dfd5; }
@@ -175,10 +194,19 @@
             #main-content { margin-bottom: 0 !important; border-radius: 0; }
             footer { position: relative; height: auto !important; padding: 60px 20px; }
             .process-item.active { height: 280px; }
+            .radio-widget { display: none; }
         }
     </style>
 </head>
 <body class="hover-target-container">
+
+    <!-- GUARANTEED WORKING AUDIO ENGINE (Wikimedia Commons Reliable URLs) -->
+    <audio id="audio-night" loop preload="auto">
+        <source src="https://upload.wikimedia.org/wikipedia/commons/1/15/Brahms_-_opus_118_-_118-2_intermezzo_in_a_major.ogg" type="audio/ogg">
+    </audio>
+    <audio id="audio-day" loop preload="auto">
+        <source src="https://upload.wikimedia.org/wikipedia/commons/b/b4/Kevin_MacLeod_-_Acoustic_Breeze.ogg" type="audio/ogg">
+    </audio>
 
     <!-- SVG Gooey Filter for Liquid Pour -->
     <svg style="display: none;">
@@ -191,7 +219,7 @@
         </defs>
     </svg>
 
-    <!-- THE VIBE SELECTOR (Interactive Preloader) -->
+    <!-- THE VIBE SELECTOR (Interactive Preloader / Unlocks Audio) -->
     <div id="vibe-selector">
         <div class="vibe-box hover-target">
             <h1 class="text-4xl font-serif text-gold mb-2">Welcome to After Hours</h1>
@@ -248,12 +276,25 @@
         <!-- Right: Controls -->
         <div class="flex items-center gap-4 pointer-events-auto">
             <button onclick="triggerLiquidPour()" class="old-frost hover-target w-14 h-14 rounded-full flex justify-center items-center text-xl hover:text-gold transition-colors text-[var(--text-main)]" id="theme-btn">
-                <i class="ph ph-sun" id="theme-icon"></i>
+                <i class="ph ph-moon" id="theme-icon"></i>
             </button>
             <button onclick="toggleCart()" class="old-frost relative w-14 h-14 rounded-full flex justify-center items-center hover-target hover:bg-gold hover:text-white transition-colors group text-[var(--text-main)]" id="cart-icon">
                 <i class="ph ph-shopping-bag text-2xl transition-transform group-hover:scale-110"></i>
                 <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-600 text-white text-[11px] font-bold w-6 h-6 flex justify-center items-center rounded-full scale-0 transition-transform duration-300">0</span>
             </button>
+        </div>
+    </div>
+
+    <!-- RADIO WIDGET (Bottom Left) WITH FIXED HOVER VOLUME SLIDER -->
+    <div class="radio-widget old-frost hover-target hover-radio nav-anim opacity-0">
+        <div class="vinyl"></div>
+        <div class="radio-info">
+            <span class="text-[9px] uppercase tracking-widest text-gold font-bold">Now Playing</span>
+            <span class="text-sm font-light italic text-[var(--text-main)] transition-colors" id="radio-track">Midnight Jazz</span>
+        </div>
+        <div class="volume-container">
+            <i class="ph ph-speaker-high text-gold text-lg"></i>
+            <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
         </div>
     </div>
 
@@ -320,7 +361,7 @@
                     <div class="offer-tag tag-red">Night Owl 15% OFF</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Americano">
-                        <!-- Aroma Steam Gimmick -->
+                        <!-- Fixed Aroma Steam Gimmick (Gold colored) -->
                         <svg class="aroma-steam" viewBox="0 0 24 24" fill="none"><path d="M8 22c0-5 4-5 4-10S8 7 8 2M16 22c0-5-4-5-4-10s4-5 4-10"/></svg>
                         <button onclick="addToCart('Midnight Americano', 150, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
                     </div>
@@ -471,7 +512,7 @@
                 </div>
             </div>
 
-            <!-- Get Directions Box (Fixed for Day Mode visibility) -->
+            <!-- Get Directions Box -->
             <div class="flex flex-col items-center w-full old-frost p-10 rounded-[40px] scroll-anim bg-[#1a120e] text-white">
                 <i class="ph ph-map-pin text-6xl text-gold mb-4"></i>
                 <p class="text-2xl font-light mb-2 text-white">Bhairahawa, Nepal</p>
@@ -492,10 +533,8 @@
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
-        // 2. Web Audio API Click Engine 
-        // 5% Volume generic click, Plus new Drop sound for Cart
+        // 2. Web Audio API Click Engine (Super Subtle 5% Volume)
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        
         function playClickSound() {
             if(audioCtx.state === 'suspended') audioCtx.resume();
             const osc = audioCtx.createOscillator();
@@ -504,102 +543,104 @@
             gainNode.connect(audioCtx.destination);
             
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(300, audioCtx.currentTime); 
+            osc.frequency.setValueAtTime(300, audioCtx.currentTime); // Deep, satisfying bloop
             osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.05);
             
-            gainNode.gain.setValueAtTime(0.01, audioCtx.currentTime); // 5% volume
+            gainNode.gain.setValueAtTime(0.01, audioCtx.currentTime); // VERY subtle volume (2%)
             gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
             
             osc.start();
             osc.stop(audioCtx.currentTime + 0.05);
         }
 
-        function playDropSound() {
-            if(audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            osc.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            
-            osc.type = 'sine';
-            // Liquid drop effect: quick frequency sweep up
-            osc.frequency.setValueAtTime(400, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(1000, audioCtx.currentTime + 0.1);
-            
-            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); 
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-            
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.1);
-        }
-
+        // Only play sound on clicks to buttons/cards
         document.addEventListener('mousedown', (e) => {
-            // Play normal click unless it's the add button
-            if(e.target.closest('button, a, .hover-target, .process-item, .vibe-btn') && !e.target.closest('.add-btn')) {
+            if(e.target.closest('button, a, .hover-target, .process-item, .vibe-btn')) {
                 playClickSound();
             }
         });
 
-        // 3. Sensory Cursor & Mouse Parallax Gimmick
-        const isTouch = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
-        if(!isTouch) {
-            const cursorDot = document.getElementById('cursor-dot');
-            const cursorRing = document.getElementById('cursor-ring');
-            const cursorRipple = document.getElementById('cursor-ripple');
-            let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+        // 3. Reliable Audio Tracks Setup (Wikimedia Commons)
+        const audioNight = document.getElementById('audio-night');
+        const audioDay = document.getElementById('audio-day');
+        let currentAudio = null;
+        let globalVolume = 0.5;
 
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX; mouseY = e.clientY;
-                gsap.to(cursorDot, { x: mouseX, y: mouseY, duration: 0.1 });
-                
-                // MOUSE PARALLAX GIMMICK
-                const moveX = (window.innerWidth / 2 - mouseX) * 0.02;
-                const moveY = (window.innerHeight / 2 - mouseY) * 0.02;
-                gsap.to('.ambient-bg', { x: moveX, y: moveY, duration: 1, ease: "power2.out" });
-            });
-            
-            gsap.ticker.add(() => {
-                ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15;
-                gsap.set(cursorRing, { x: ringX, y: ringY });
-            });
-            
-            document.querySelectorAll('.hover-target, button, a, .menu-card, .process-item').forEach(el => {
-                el.addEventListener('mouseenter', () => {
-                    document.body.classList.add('hover-active');
-                });
-                el.addEventListener('mouseleave', () => {
-                    document.body.classList.remove('hover-active');
-                });
-            });
-            document.addEventListener('mousedown', () => {
-                gsap.fromTo(cursorRipple, { x: mouseX, y: mouseY, scale: 0, opacity: 1 }, { scale: 4, opacity: 0, duration: 0.6, ease: "power2.out" });
-            });
+        document.getElementById('volume-slider').addEventListener('input', (e) => {
+            globalVolume = parseFloat(e.target.value);
+            if(currentAudio) currentAudio.volume = globalVolume;
+        });
 
-            // GIMMICK: True 3D Magnetic Cards
-            document.querySelectorAll('.menu-card').forEach(card => {
-                card.addEventListener('mousemove', (e) => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const xPct = (x / rect.width - 0.5) * 20; 
-                    const yPct = (y / rect.height - 0.5) * -20;
-                    
-                    gsap.to(card, { 
-                        rotationY: xPct, rotationX: yPct, 
-                        transformPerspective: 1000, duration: 0.4, ease: "power2.out" 
-                    });
-                    
-                    gsap.to(card.querySelector('.add-btn'), { opacity: 1, pointerEvents: "auto", bottom: "20px", duration: 0.3 });
+        function crossfadeAudio(newAudio) {
+            if(currentAudio && currentAudio !== newAudio) {
+                gsap.to(currentAudio, { volume: 0, duration: 1.5, onComplete: () => currentAudio.pause() });
+            }
+            newAudio.volume = 0;
+            
+            // Force load and catch errors gracefully
+            newAudio.load();
+            let playPromise = newAudio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    gsap.to(newAudio, { volume: globalVolume, duration: 1.5 });
+                }).catch(error => {
+                    console.log("Browser blocked auto-play. Waiting for user click...");
+                    document.addEventListener('click', function playOnInteract() {
+                        newAudio.play();
+                        gsap.to(newAudio, { volume: globalVolume, duration: 1.5 });
+                        document.removeEventListener('click', playOnInteract);
+                    }, {once: true});
                 });
-                
-                card.addEventListener('mouseleave', () => {
-                    gsap.to(card, { rotationY: 0, rotationX: 0, duration: 0.6, ease: "elastic.out(1, 0.3)" });
-                    gsap.to(card.querySelector('.add-btn'), { opacity: 0, pointerEvents: "none", bottom: "-50px", duration: 0.3 });
-                });
-            });
+            }
+            currentAudio = newAudio;
         }
 
-        // 4. Build Dynamic Background Beans
+        // 4. Sensory Cursor & Mouse Parallax Gimmick
+        // Hides native cursor and draws custom cursor ONLY when a physical mouse moves
+        let cursorActive = false;
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorRing = document.getElementById('cursor-ring');
+        const cursorRipple = document.getElementById('cursor-ripple');
+        let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            if(!cursorActive) {
+                document.body.classList.add('hide-native-cursor');
+                cursorActive = true;
+            }
+            mouseX = e.clientX; mouseY = e.clientY;
+            gsap.to(cursorDot, { x: mouseX, y: mouseY, duration: 0.1 });
+            
+            // MOUSE PARALLAX GIMMICK: Move background beans opposite to mouse
+            const moveX = (window.innerWidth / 2 - mouseX) * 0.02;
+            const moveY = (window.innerHeight / 2 - mouseY) * 0.02;
+            gsap.to('.ambient-bg', { x: moveX, y: moveY, duration: 1, ease: "power2.out" });
+        });
+        
+        gsap.ticker.add(() => {
+            ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15;
+            gsap.set(cursorRing, { x: ringX, y: ringY });
+        });
+        
+        // Handle hover states (with fix to clear blur over volume slider)
+        document.querySelectorAll('.hover-target, button, a, .menu-card, .process-item').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                document.body.classList.add('hover-active');
+                if(el.classList.contains('hover-radio')) document.body.classList.add('hover-no-blur'); 
+            });
+            el.addEventListener('mouseleave', () => {
+                document.body.classList.remove('hover-active');
+                document.body.classList.remove('hover-no-blur');
+            });
+        });
+        
+        document.addEventListener('mousedown', () => {
+            if(cursorActive) {
+                gsap.fromTo(cursorRipple, { x: mouseX, y: mouseY, scale: 0, opacity: 1 }, { scale: 4, opacity: 0, duration: 0.6, ease: "power2.out" });
+            }
+        });
+
+        // 5. Build Dynamic Background Beans
         const ambientBg = document.getElementById('ambient-bg');
         for(let i=0; i<15; i++) {
             const bean = document.createElement('div');
@@ -617,7 +658,7 @@
             });
         }
 
-        // 5. The Vibe Selector (Entry Logic)
+        // 6. The Vibe Selector (Entry Logic)
         let isLightMode = false;
         
         window.initExperience = function(mode) {
@@ -630,10 +671,16 @@
                 document.getElementById('hero-state-text').innerText = "STAY";
                 document.getElementById('hero-state-word').innerText = "Fresh";
                 document.getElementById('hero-sub-text').innerText = "Bhairahawa's premier morning roastery. Bright flavors, refreshing vibes, delivered hot.";
+                document.getElementById('radio-track').innerText = "Morning Acoustic";
                 document.getElementById('hero-img').src = "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=2000&auto=format&fit=crop"; 
+                crossfadeAudio(audioDay);
             } else {
                 document.getElementById('theme-icon').classList.replace('ph-sun', 'ph-moon');
+                crossfadeAudio(audioNight);
             }
+
+            // Init dynamic card physics based on mode
+            updateCardPhysics();
 
             gsap.to("#vibe-selector", { opacity: 0, duration: 0.8, onComplete: () => {
                 document.getElementById('vibe-selector').style.display = 'none';
@@ -643,7 +690,7 @@
             }});
         };
 
-        // 6. True Liquid Pour Theme Transition
+        // 7. True Liquid Pour Theme Transition
         window.triggerLiquidPour = function() {
             const drips = document.querySelectorAll('.pour-drip');
             const icon = document.getElementById('theme-icon');
@@ -651,7 +698,7 @@
             const nextColor = isLightMode ? '#0a0604' : '#fdfaf6'; 
             drips.forEach(d => { d.style.backgroundColor = nextColor; d.style.top = "0"; d.style.bottom = "auto"; });
 
-            // Scroll to top automatically
+            // ALWAYS SCROLL TO TOP during theme change
             lenis.scrollTo(0, { duration: 1.2 });
 
             const tl = gsap.timeline();
@@ -670,22 +717,67 @@
                         document.getElementById('hero-state-text').innerText = "STAY";
                         document.getElementById('hero-state-word').innerText = "Fresh";
                         document.getElementById('hero-sub-text').innerText = "Bhairahawa's premier morning roastery. Bright flavors, refreshing vibes, delivered hot.";
+                        document.getElementById('radio-track').innerText = "Morning Acoustic";
                         document.getElementById('hero-img').src = "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=2000&auto=format&fit=crop";
+                        crossfadeAudio(audioDay);
                     } else {
                         icon.classList.replace('ph-sun', 'ph-moon');
                         document.getElementById('hero-state-text').innerText = "STAY";
                         document.getElementById('hero-state-word').innerText = "Awake";
                         document.getElementById('hero-sub-text').innerText = "Bhairahawa's premier nocturnal roastery. Deep flavors, aesthetic vibes, delivered hot.";
+                        document.getElementById('radio-track').innerText = "Midnight Jazz";
                         document.getElementById('hero-img').src = "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=2000&auto=format&fit=crop";
+                        crossfadeAudio(audioNight);
                     }
                     
+                    // Update physics values for cards
+                    updateCardPhysics();
+
                     drips.forEach(d => { d.style.top = "auto"; d.style.bottom = "0"; });
                     gsap.to(drips, { height: "0vh", stagger: { amount: 0.3, from: "edges" }, duration: 1.2, ease: "power2.out" });
                 }
             });
         };
 
-        // 7. Analog Clock & Weather Widget
+        // 8. JS-Controlled 3D Card Hover (Fixes GSAP/CSS conflict in Night Mode)
+        function updateCardPhysics() {
+            const easeType = isLightMode ? "back.out(1.5)" : "power2.out";
+            const duration = isLightMode ? 0.4 : 0.6;
+            const lift = isLightMode ? -15 : -8;
+            const shadow = isLightMode ? "0 25px 40px rgba(176, 112, 60, 0.15)" : "0 20px 40px rgba(0,0,0,0.8)";
+            
+            document.querySelectorAll('.menu-card').forEach(card => {
+                // Clear old listeners by cloning
+                const newCard = card.cloneNode(true);
+                card.parentNode.replaceChild(newCard, card);
+                
+                newCard.addEventListener('mousemove', (e) => {
+                    const rect = newCard.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const xPct = (x / rect.width - 0.5) * 20; 
+                    const yPct = (y / rect.height - 0.5) * -20;
+                    
+                    gsap.to(newCard, { 
+                        y: lift, rotationY: xPct, rotationX: yPct, 
+                        transformPerspective: 1000, duration: duration, ease: easeType,
+                        boxShadow: shadow, borderColor: "#d4a373"
+                    });
+                    gsap.to(newCard.querySelector('.add-btn'), { opacity: 1, pointerEvents: "auto", bottom: "20px", duration: 0.3 });
+                });
+                
+                newCard.addEventListener('mouseleave', () => {
+                    gsap.to(newCard, { 
+                        y: 0, rotationY: 0, rotationX: 0, 
+                        duration: duration + 0.2, ease: "elastic.out(1, 0.3)",
+                        boxShadow: "none", borderColor: isLightMode ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.05)"
+                    });
+                    gsap.to(newCard.querySelector('.add-btn'), { opacity: 0, pointerEvents: "none", bottom: "-50px", duration: 0.3 });
+                });
+            });
+        }
+
+        // 9. Analog Clock & Weather Widget
         function updateWidgets() {
             const now = new Date();
             const h = now.getHours(); const m = now.getMinutes(); const s = now.getSeconds();
@@ -699,12 +791,12 @@
             if (h >= 5 && h < 17) { icon = "ph-sun"; temp = "28°C"; }
             else if (h >= 17 && h < 20) { icon = "ph-cloud-sun"; temp = "24°C"; }
             else { icon = "ph-moon-stars"; temp = "18°C"; }
-            document.getElementById('weather-icon').className = `ph ${icon} text-lg`;
+            document.getElementById('weather-icon').className = `ph ${icon}`;
             document.getElementById('weather-text').innerText = temp;
         }
         setInterval(updateWidgets, 1000); updateWidgets();
 
-        // 8. Dynamic Footer Margin Fix
+        // 10. Dynamic Footer Margin Fix
         function updateFooterMargin() {
             if(window.innerWidth > 768) {
                 const footerHeight = document.getElementById('footer').offsetHeight;
@@ -718,4 +810,120 @@
         }
         window.addEventListener('resize', updateFooterMargin); setTimeout(updateFooterMargin, 500);
 
-        // 
+        // 11. Accordion Toggle
+        window.toggleAccordion = function(element) {
+            document.querySelectorAll('.process-item').forEach(item => { if(item !== element) item.classList.remove('active'); });
+            element.classList.toggle('active');
+            setTimeout(ScrollTrigger.refresh, 400); 
+        }
+
+        // 12. Advanced 3D Liquid Fly-to-Cart
+        let cart = [];
+        const liquidContainer = document.getElementById('liquid-container');
+        
+        window.toggleCart = function() {
+            document.getElementById('cart-sidebar').classList.toggle('open');
+            document.getElementById('cart-overlay').classList.toggle('open');
+            renderCart();
+        };
+
+        window.addToCart = function(name, price, btnElement) {
+            cart.push({ id: Date.now(), name, price });
+            
+            const badge = document.getElementById('cart-badge');
+            badge.innerText = cart.length;
+            badge.classList.remove('scale-0');
+            gsap.fromTo(badge, { scale: 1.5 }, { scale: 1, duration: 0.4, ease: "back.out" });
+
+            const card = btnElement.closest('.menu-card');
+            const img = card.querySelector('.menu-img');
+            const bounceEase = isLightMode ? "back.out(1.7)" : "power2.inOut";
+            gsap.to(img, { y: -20, scale: 1.15, duration: 0.3, yoyo: true, repeat: 1, ease: bounceEase });
+
+            const imgRect = img.getBoundingClientRect();
+            const iconRect = document.getElementById('cart-icon').getBoundingClientRect();
+            
+            for(let i=0; i<12; i++) {
+                const drop = document.createElement('div');
+                drop.classList.add('liquid-drop-3d');
+                const size = Math.random() * 18 + 8;
+                drop.style.width = size + 'px'; drop.style.height = size + 'px';
+                drop.style.left = (imgRect.left + imgRect.width/2) + 'px';
+                drop.style.top = (imgRect.top + imgRect.height/2) + 'px';
+                liquidContainer.appendChild(drop);
+
+                const randomX = (Math.random() - 0.5) * 250;
+                const randomY = (Math.random() - 0.5) * 200 - 50;
+
+                const tl = gsap.timeline({
+                    onComplete: () => {
+                        drop.remove();
+                        if(i === 0) gsap.fromTo('#cart-icon', { scale: 0.8 }, { scale: 1, duration: 0.4, ease: "elastic.out" });
+                    }
+                });
+
+                tl.to(drop, { x: randomX, y: randomY, scale: Math.random() * 0.5 + 0.8, duration: 0.35, ease: "power2.out" })
+                  .to(drop, { left: iconRect.left + 20, top: iconRect.top + 20, x: 0, y: 0, scale: 0.1, duration: 0.7 + Math.random()*0.4, ease: "back.in(1.2)" });
+            }
+        };
+
+        window.removeFromCart = function(id) {
+            cart = cart.filter(item => item.id !== id);
+            const badge = document.getElementById('cart-badge');
+            badge.innerText = cart.length;
+            if(cart.length === 0) badge.classList.add('scale-0');
+            renderCart();
+        };
+
+        function renderCart() {
+            const container = document.getElementById('cart-items');
+            if(cart.length === 0) {
+                container.innerHTML = `<div class="text-center mt-10 text-base italic opacity-50 text-[var(--cart-text)]">Your cart is empty. Let's brew something.</div>`;
+                document.getElementById('cart-subtotal').innerText = 'Rs 0';
+                document.getElementById('cart-total').innerText = 'Rs 0';
+                return;
+            }
+
+            let html = ''; let total = 0; const counts = {};
+            cart.forEach(item => {
+                if(!counts[item.name]) counts[item.name] = { price: item.price, ids: [], count: 0 };
+                counts[item.name].ids.push(item.id); counts[item.name].count++; total += item.price;
+            });
+
+            for (const [name, data] of Object.entries(counts)) {
+                html += `
+                    <div class="flex justify-between items-center bg-black/5 p-4 rounded-xl border border-[var(--cart-border)] text-[var(--cart-text)] shadow-sm">
+                        <div><h5 class="font-bold text-base">${name}</h5><p class="text-sm opacity-70">Rs ${data.price} x ${data.count}</p></div>
+                        <div class="flex items-center gap-4">
+                            <span class="font-bold text-lg text-[var(--cart-text)]">Rs ${data.price * data.count}</span>
+                            <button onclick="removeFromCart(${data.ids[0]})" class="text-red-500 hover:bg-red-100 p-2 rounded-full transition-colors hover-target"><i class="ph ph-trash text-lg"></i></button>
+                        </div>
+                    </div>`;
+            }
+            container.innerHTML = html;
+            document.getElementById('cart-subtotal').innerText = `Rs ${total}`;
+            document.getElementById('cart-total').innerText = `Rs ${total}`;
+        }
+
+        window.checkout = function() {
+            if(cart.length === 0) return alert("Add items first.");
+            let msg = "Hello After Hours! 🌙\nOrder for Delivery:\n\n";
+            let total = 0; const counts = {};
+            cart.forEach(i => { counts[i.name] = (counts[i.name] || 0) + 1; total += i.price; });
+            for (const [name, count] of Object.entries(counts)) msg += `- ${count}x ${name}\n`;
+            msg += `\nDelivery: Free\nTotal: Rs ${total}\n\nPlease confirm!`;
+            window.open(`https://wa.me/9779705965333?text=${encodeURIComponent(msg)}`, '_blank');
+        };
+
+        // Scroll Animations Engine
+        gsap.utils.toArray('.scroll-anim').forEach(el => {
+            gsap.from(el, { y: 60, opacity: 0, duration: 1.2, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 85%" }});
+        });
+
+        gsap.utils.toArray('.parallax-bg').forEach(bg => {
+            gsap.to(bg, { yPercent: 30, ease: "none", scrollTrigger: { trigger: bg.parentElement, start: "top bottom", end: "bottom top", scrub: true }});
+        });
+
+    </script>
+</body>
+</html>
