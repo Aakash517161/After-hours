@@ -14,7 +14,7 @@
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>After Hours Café | Lakeside, Pokhara</title>
+    <title>After Hours Café | Sensory Experience</title>
     
     <!-- Tailwind, GSAP, Lenis, and Phosphor Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -31,19 +31,19 @@
             /* NIGHT MODE */
             --bg-rgb: 8, 5, 4; 
             --bg-deep: #0a0604;
-            --bg-card: rgba(20, 12, 8, 0.5);
-            --bg-glass: rgba(10, 6, 4, 0.6);
-            --text-main: #f4eade;
-            --text-muted: #8c7e73;
-            --border-color: rgba(255,255,255,0.05);
+            --bg-card: rgba(30, 20, 15, 0.7); 
+            --bg-glass: rgba(10, 6, 4, 0.8);
+            --text-main: #fdfbf9;
+            --text-muted: #a3968c;
+            --border-color: rgba(255,255,255,0.08);
             --gold: #c69b6a;
             --accent-pour: #1f110a; 
             
-            /* Physics Engine */
             --anim-speed: 0.8s;
             --anim-ease: cubic-bezier(0.4, 0, 0.2, 1); 
+            --card-lift: -8px;
+            --card-shadow: 0 20px 40px rgba(0,0,0,0.8);
             
-            /* Cart visibility fixed to ALWAYS BE LIGHT */
             --cart-bg: #ffffff; 
             --cart-text: #1a120e; 
             --cart-border: rgba(0,0,0,0.1);
@@ -53,31 +53,26 @@
             /* DAY MODE */
             --bg-rgb: 242, 233, 223;
             --bg-deep: #f2e9df;
-            --bg-card: rgba(255, 255, 255, 0.8);
-            --bg-glass: rgba(255, 255, 255, 0.6);
+            --bg-card: rgba(255, 255, 255, 0.9);
+            --bg-glass: rgba(255, 255, 255, 0.7);
             --text-main: #2b1c11;
             --text-muted: #736154;
             --border-color: rgba(0,0,0,0.08);
             --gold: #b0703c;
             --accent-pour: #fdfaf6; 
             
-            /* Physics Engine */
             --anim-speed: 0.4s;
             --anim-ease: cubic-bezier(0.34, 1.56, 0.64, 1); 
-            
-            /* Cart visibility */
-            --cart-bg: #ffffff; 
-            --cart-text: #1a120e; 
-            --cart-border: rgba(0,0,0,0.1);
+            --card-lift: -15px;
+            --card-shadow: 0 25px 40px rgba(176, 112, 60, 0.15);
         }
 
         html.lenis { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto; }
-        body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Outfit', sans-serif; overflow-x: hidden; transition: background-color 0.1s, color 0.1s; }
+        body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Outfit', sans-serif; overflow-x: hidden; transition: background-color 0.4s, color 0.4s; }
         ::selection { background: var(--gold); color: #fff; }
         .font-serif { font-family: 'Playfair Display', serif; }
 
-        /* Safely hides native cursor only when JS confirms a mouse exists */
         .hide-native-cursor, .hide-native-cursor * { cursor: none !important; }
 
         /* ========= OLD-SCHOOL FROSTED GLASS ========= */
@@ -106,31 +101,41 @@
         /* ========= SENSORY CURSOR ========= */
         @media (pointer: fine) {
             .cursor-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999999; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s; opacity: 0; }
-            .cursor-ring { width: 34px; height: 34px; border: 1px solid var(--gold); border-radius: 50%; opacity: 0.5; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999998; transform: translate(-50%, -50%); transition: width var(--anim-speed) var(--anim-ease), height var(--anim-speed) var(--anim-ease), backdrop-filter 0.2s; opacity: 0; }
+            .cursor-ring { width: 34px; height: 34px; border: 1px solid var(--gold); border-radius: 50%; opacity: 0.5; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999998; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s, backdrop-filter 0.2s; opacity: 0; }
             .cursor-click-ripple { position: fixed; width: 20px; height: 20px; border: 2px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999997; transform: translate(-50%, -50%) scale(0); opacity: 0; }
             
             .hover-active .cursor-dot { width: 0; height: 0; }
             .hover-active .cursor-ring { width: 60px; height: 60px; opacity: 1; background: rgba(212, 163, 115, 0.1); backdrop-filter: blur(4px); border-width: 2px; }
-            
-            .hover-no-blur .cursor-ring { backdrop-filter: none !important; background: transparent !important; border-color: var(--gold) !important; width: 30px !important; height: 30px !important; }
         }
 
-        /* ========= BIGGER ANALOG CLOCK ========= */
-        .analog-clock { width: 60px; height: 60px; border: 2px solid var(--gold); border-radius: 50%; position: relative; background: transparent; }
+        /* ========= MASSIVE ANALOG CLOCK ========= */
+        .analog-clock { border: 2px solid var(--gold); border-radius: 50%; position: relative; background: transparent; }
         .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: var(--text-main); border-radius: 10px; }
-        .hour-hand { width: 4px; height: 16px; margin-left: -2px; }
-        .min-hand { width: 3px; height: 22px; margin-left: -1.5px; }
-        .sec-hand { width: 1.5px; height: 26px; background: var(--gold); margin-left: -0.75px; }
-        .clock-center { width: 8px; height: 8px; background: var(--gold); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .clock-center { background: var(--gold); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        
+        /* Desktop Header Clock Sizes */
+        .desktop-clock { width: 80px; height: 80px; box-shadow: 0 0 20px rgba(212, 163, 115, 0.2); }
+        .desktop-clock .hour-hand { width: 4px; height: 20px; margin-left: -2px; }
+        .desktop-clock .min-hand { width: 3px; height: 28px; margin-left: -1.5px; }
+        .desktop-clock .sec-hand { width: 2px; height: 34px; background: var(--gold); margin-left: -1px; }
+        .desktop-clock .clock-center { width: 10px; height: 10px; }
 
-        /* ========= MENU CARDS (3D Proximity Magnetic) ========= */
-        .menu-card { position: relative; overflow: visible; border-radius: 24px; z-index: 2; transform-style: preserve-3d; background: var(--bg-card); border: 1px solid var(--border-color); /* CSS transitions removed for smooth JS Proximity Control */ }
+        /* Mobile Floating Clock Sizes */
+        .mobile-floating-clock { position: fixed; bottom: 24px; left: 24px; z-index: 40; border-radius: 50%; padding: 12px; display: flex; justify-content: center; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .mobile-clock { width: 60px; height: 60px; }
+        .mobile-clock .hour-hand { width: 3px; height: 15px; margin-left: -1.5px; }
+        .mobile-clock .min-hand { width: 2px; height: 22px; margin-left: -1px; }
+        .mobile-clock .sec-hand { width: 1.5px; height: 26px; background: var(--gold); margin-left: -0.75px; }
+        .mobile-clock .clock-center { width: 8px; height: 8px; }
+
+        /* ========= MENU CARDS (3D Magnetic & Aroma Gimmick) ========= */
+        .menu-card { position: relative; overflow: visible; border-radius: 24px; z-index: 2; transform-style: preserve-3d; background: var(--bg-card); border: 1px solid var(--border-color); transition: transform var(--anim-speed) var(--anim-ease), box-shadow var(--anim-speed) var(--anim-ease), border-color 0.3s; }
+        .menu-card:hover { border-color: var(--gold); z-index: 10; transform: translateY(var(--card-lift)); box-shadow: var(--card-shadow); }
         
         .menu-img-wrap { height: 260px; overflow: hidden; position: relative; border-radius: 24px 24px 0 0; }
-        .menu-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; transition: transform 0.5s ease; }
+        .menu-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease, filter 0.5s ease; opacity: 0.9; }
         .menu-card:hover .menu-img { transform: scale(1.1); filter: brightness(1.15); opacity: 1; }
         
-        /* Aroma Steam Gimmick */
         .aroma-steam { position: absolute; bottom: 10%; left: 50%; transform: translateX(-50%); width: 60px; height: 80px; opacity: 0; pointer-events: none; z-index: 20; stroke: var(--gold); stroke-width: 3; }
         .menu-card:hover .aroma-steam { opacity: 0.8; animation: riseUp 2s infinite ease-in; }
         @keyframes riseUp { 0% { transform: translate(-50%, 0) scale(0.8); opacity: 0; filter: blur(1px); } 50% { opacity: 0.8; } 100% { transform: translate(-50%, -60px) scale(1.3); opacity: 0; filter: blur(4px); } }
@@ -141,15 +146,17 @@
         .tag-dark { background: rgba(30, 30, 30, 0.9); color: #fff; border: 1px solid var(--gold); }
         .tag-green { background: rgba(85, 107, 47, 0.9); color: #fff; }
 
-        .add-btn { position: absolute; bottom: -50px; left: 50%; transform: translateX(-50%) translateZ(30px); background: var(--text-main); color: var(--bg-deep); padding: 14px 28px; border-radius: 40px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); opacity: 0; width: 85%; justify-content: center; z-index: 30; pointer-events: none; cursor: pointer; }
+        .add-btn { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%) translateZ(30px); background: var(--text-main); color: var(--bg-deep); padding: 14px 28px; border-radius: 40px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow); transition: 0.3s; opacity: 0; width: 85%; justify-content: center; z-index: 30; pointer-events: none; cursor: pointer; }
+        .add-btn.active { opacity: 1; pointer-events: auto; }
         .add-btn:hover { background: var(--gold) !important; color: #fff !important; }
+        @media (max-width: 768px) { .add-btn { opacity: 1; bottom: 15px; background: var(--text-main); color: var(--bg-deep); transform: translateX(-50%); pointer-events: auto; } }
 
         /* ========= 3D LIQUID DROPS (CART ANIMATION) ========= */
         .gooey-filter { filter: url('#goo'); position: fixed; inset: 0; z-index: 999999; pointer-events: none; }
         .liquid-drop-3d { position: absolute; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #ffeedb, var(--gold) 60%, #8b5e34); box-shadow: 0 10px 20px rgba(0,0,0,0.5), inset -2px -2px 6px rgba(0,0,0,0.4); transform-origin: center; z-index: 999999; }
 
         /* ========= BRIGHT CART SIDEBAR ========= */
-        #cart-sidebar { position: fixed; top: 0; right: -100%; width: 100%; max-width: 420px; height: 100vh; z-index: 10000; transition: 0.6s cubic-bezier(0.25, 1, 0.5, 1); background: var(--cart-bg); color: var(--cart-text); border-left: 1px solid var(--cart-border); display: flex; flex-direction: column; box-shadow: -20px 0 60px rgba(0,0,0,0.5); backdrop-filter: blur(30px); }
+        #cart-sidebar { position: fixed; top: 0; right: -100%; width: 100%; max-width: 420px; height: 100vh; z-index: 10000; transition: 0.6s var(--anim-ease); background: var(--cart-bg); color: var(--cart-text); border-left: 1px solid var(--cart-border); display: flex; flex-direction: column; box-shadow: -20px 0 60px rgba(0,0,0,0.5); backdrop-filter: blur(30px); }
         #cart-sidebar.open { right: 0; }
         .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 9999; opacity: 0; pointer-events: none; transition: 0.4s; }
         .cart-overlay.open { opacity: 1; pointer-events: all; }
@@ -167,46 +174,23 @@
         .origin-bg { position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2000&auto=format&fit=crop') center/cover; opacity: 0.4; z-index: 0; filter: grayscale(50%); }
         body.light-mode .origin-bg { opacity: 0.2; filter: grayscale(0%); }
 
-        /* ========= RADIO WIDGET & VOLUME SLIDER ========= */
-        .radio-widget { position: fixed; bottom: 30px; left: 30px; z-index: 50; display: flex; align-items: center; gap: 15px; padding: 10px 20px 10px 10px; border-radius: 50px; overflow: hidden; transition: 0.4s ease; }
-        .vinyl { width: 40px; height: 40px; background: #111; border-radius: 50%; border: 2px solid #333; position: relative; animation: spin 4s linear infinite; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
-        .vinyl::after { content: ''; width: 12px; height: 12px; background: var(--gold); border-radius: 50%; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        
-        .radio-info { display: flex; flex-direction: column; white-space: nowrap; transition: 0.3s; }
-        .volume-container { display: flex; align-items: center; gap: 10px; width: 0; opacity: 0; overflow: hidden; transition: 0.4s ease; }
-        .radio-widget:hover .volume-container { width: 100px; opacity: 1; }
-        .radio-widget:hover .radio-info { display: none; }
-        
-        input[type=range] { -webkit-appearance: none; width: 100px; background: transparent; cursor: pointer; }
-        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 12px; width: 12px; border-radius: 50%; background: var(--gold); margin-top: -4px; box-shadow: 0 0 10px var(--gold); }
-        body.light-mode input[type=range]::-webkit-slider-runnable-track { background: rgba(0,0,0,0.2); }
+        /* ========= GET DIRECTIONS VISIBILITY FIX ========= */
+        .dir-box { background: #110a07; color: #fff; transition: 0.5s; border: 1px solid transparent; }
+        body.light-mode .dir-box { background: #fff; color: #1a120e; border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
 
         /* ========= FOOTER & MAIN WRAPPER ========= */
-        #main-content { position: relative; z-index: 2; background: var(--bg-deep); box-shadow: 0 40px 100px rgba(0,0,0,1); border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; transition: background 0.8s ease; overflow-x: hidden; }
+        #main-content { position: relative; z-index: 2; background: var(--bg-deep); box-shadow: 0 40px 100px rgba(0,0,0,1); border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; transition: background 0.8s ease; }
         footer { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1; background: #050302; display: flex; flex-direction: column; justify-content: center; transition: background 0.8s; }
         body.light-mode footer { background: #e6dfd5; }
 
-        /* Mobile specific overrides */
         @media (max-width: 768px) {
             #main-content { margin-bottom: 0 !important; border-radius: 0; }
             footer { position: relative; height: auto !important; padding: 60px 20px; }
             .process-item.active { height: 280px; }
-            .radio-widget { display: none; }
-            .add-btn { opacity: 1; bottom: 15px; background: var(--text-main); color: var(--bg-deep); transform: translateX(-50%); pointer-events: auto; }
         }
     </style>
 </head>
 <body class="hover-target-container">
-
-    <!-- RELIABLE AUDIO ENGINE (Wikimedia Commons Reliable URLs) -->
-    <audio id="audio-night" loop preload="auto">
-        <source src="https://upload.wikimedia.org/wikipedia/commons/1/15/Brahms_-_opus_118_-_118-2_intermezzo_in_a_major.ogg" type="audio/ogg">
-    </audio>
-    <audio id="audio-day" loop preload="auto">
-        <source src="https://upload.wikimedia.org/wikipedia/commons/b/b4/Kevin_MacLeod_-_Acoustic_Breeze.ogg" type="audio/ogg">
-    </audio>
 
     <!-- SVG Gooey Filter for Liquid Pour -->
     <svg style="display: none;">
@@ -219,10 +203,10 @@
         </defs>
     </svg>
 
-    <!-- THE VIBE SELECTOR (Interactive Preloader / Unlocks Audio) -->
+    <!-- THE VIBE SELECTOR (Interactive Preloader) -->
     <div id="vibe-selector">
         <div class="vibe-box hover-target">
-            <h1 class="text-4xl md:text-5xl font-serif text-gold mb-2">Welcome to After Hours</h1>
+            <h1 class="text-4xl font-serif text-gold mb-2">Welcome to After Hours</h1>
             <p class="text-[#8c7e73] mb-8 text-sm">Select your atmosphere to begin.</p>
             <div class="vibe-btn-container">
                 <button class="vibe-btn btn-day hover-target" onclick="initExperience('day')"><i class="ph ph-sun text-xl"></i> Morning Light</button>
@@ -242,59 +226,57 @@
     <div class="cursor-ring" id="cursor-ring"></div>
     <div class="cursor-click-ripple" id="cursor-ripple"></div>
 
+    <!-- MOBILE FLOATING CLOCK (Shows separately on mobile scroll) -->
+    <div class="mobile-floating-clock old-frost md:hidden hover-target">
+        <div class="analog-clock mobile-clock">
+            <div class="hand hour-hand"></div>
+            <div class="hand min-hand"></div>
+            <div class="hand sec-hand"></div>
+            <div class="clock-center"></div>
+        </div>
+    </div>
+
     <!-- HEADER: FROSTED COMMAND CENTER -->
-    <div class="fixed top-0 left-0 w-full z-50 flex justify-between items-start px-4 md:px-6 py-6 pointer-events-none nav-anim opacity-0 translate-y-[-20px]">
+    <div class="fixed top-0 left-0 w-full z-50 flex justify-between items-start px-4 md:px-8 py-6 pointer-events-none nav-anim opacity-0 translate-y-[-20px]">
         
-        <!-- Left: BIG Logo + BIG Clock + Weather -->
-        <div class="flex flex-col gap-4 pointer-events-auto">
-            <div class="old-frost rounded-full px-6 py-3 flex items-center gap-4 hover-target cursor-pointer" onclick="window.scrollTo(0,0)">
-                <svg width="45" height="45" viewBox="0 0 100 100" fill="none" class="transition-transform duration-500 hover:rotate-12">
+        <!-- Left: MASSIVE Logo + Clock + Weather -->
+        <div class="flex flex-col gap-6 pointer-events-auto">
+            <div class="old-frost rounded-full px-8 py-4 flex items-center gap-5 hover-target cursor-pointer" onclick="window.scrollTo(0,0)">
+                <svg width="60" height="60" viewBox="0 0 100 100" fill="none" class="transition-transform duration-500 hover:rotate-12">
                     <circle cx="50" cy="50" r="48" stroke="var(--gold)" stroke-width="2"/>
                     <path d="M30 70 L50 30 L70 70" stroke="var(--gold)" stroke-width="4" stroke-linecap="round"/>
                     <line x1="40" y1="55" x2="60" y2="55" stroke="var(--gold)" stroke-width="4" stroke-linecap="round"/>
                 </svg>
                 <div class="flex flex-col">
-                    <span class="text-2xl md:text-3xl font-bold tracking-[0.2em] leading-none text-[var(--text-main)] transition-colors">AFTER HOURS</span>
-                    <span class="text-[10px] md:text-xs tracking-widest text-gold uppercase mt-1">Pokhara</span>
+                    <span class="text-3xl md:text-5xl font-bold tracking-[0.2em] leading-none text-[var(--text-main)] transition-colors">AFTER HOURS</span>
+                    <span class="text-xs md:text-sm tracking-widest text-gold uppercase mt-2">Pokhara</span>
                 </div>
             </div>
 
-            <div class="old-frost rounded-3xl p-5 flex items-center gap-5 hover-target w-max hidden md:flex">
-                <div class="analog-clock">
-                    <div class="hand hour-hand" id="hour-hand"></div>
-                    <div class="hand min-hand" id="min-hand"></div>
-                    <div class="hand sec-hand" id="sec-hand"></div>
+            <!-- Desktop Clock Widget -->
+            <div class="old-frost rounded-[40px] p-6 flex items-center gap-6 hover-target w-max hidden md:flex">
+                <div class="analog-clock desktop-clock">
+                    <div class="hand hour-hand"></div>
+                    <div class="hand min-hand"></div>
+                    <div class="hand sec-hand"></div>
                     <div class="clock-center"></div>
                 </div>
                 <div class="flex flex-col">
-                    <span class="text-3xl md:text-4xl font-bold font-serif text-gold leading-none" id="digital-time">--:--</span>
-                    <span class="text-sm opacity-80 flex items-center gap-1 mt-1 text-[var(--text-main)] transition-colors"><i id="weather-icon" class="ph ph-moon-stars text-lg"></i> <span id="weather-text">22°C</span></span>
+                    <span class="text-4xl md:text-5xl font-bold font-serif text-gold leading-none" id="digital-time">--:--</span>
+                    <span class="text-sm opacity-80 flex items-center gap-2 mt-2 text-[var(--text-main)] transition-colors"><i id="weather-icon" class="ph ph-moon-stars text-xl"></i> <span id="weather-text">22°C</span></span>
                 </div>
             </div>
         </div>
 
         <!-- Right: Controls -->
-        <div class="flex items-center gap-2 md:gap-4 pointer-events-auto">
-            <button onclick="triggerLiquidPour()" class="old-frost hover-target w-12 h-12 md:w-14 md:h-14 rounded-full flex justify-center items-center text-xl hover:text-gold transition-colors text-[var(--text-main)]" id="theme-btn">
+        <div class="flex items-center gap-3 md:gap-5 pointer-events-auto">
+            <button onclick="triggerLiquidPour()" class="old-frost hover-target w-14 h-14 md:w-16 md:h-16 rounded-full flex justify-center items-center text-2xl hover:text-gold transition-colors text-[var(--text-main)]" id="theme-btn">
                 <i class="ph ph-moon" id="theme-icon"></i>
             </button>
-            <button onclick="toggleCart()" class="old-frost relative w-12 h-12 md:w-14 md:h-14 rounded-full flex justify-center items-center hover-target hover:bg-gold hover:text-white transition-colors group text-[var(--text-main)]" id="cart-icon">
-                <i class="ph ph-shopping-bag text-2xl transition-transform group-hover:scale-110"></i>
-                <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-600 text-white text-[11px] font-bold w-6 h-6 flex justify-center items-center rounded-full scale-0 transition-transform duration-300">0</span>
+            <button onclick="toggleCart()" class="old-frost relative w-14 h-14 md:w-16 md:h-16 rounded-full flex justify-center items-center hover-target hover:bg-gold hover:text-white transition-colors group text-[var(--text-main)]" id="cart-icon">
+                <i class="ph ph-shopping-bag text-3xl transition-transform group-hover:scale-110"></i>
+                <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-600 text-white text-[12px] font-bold w-7 h-7 flex justify-center items-center rounded-full scale-0 transition-transform duration-300 shadow-lg">0</span>
             </button>
-        </div>
-    </div>
-
-    <!-- RADIO WIDGET (Bottom Left) WITH FIXED HOVER VOLUME SLIDER -->
-    <div class="radio-widget old-frost hover-target hover-radio nav-anim opacity-0">
-        <div class="vinyl"></div>
-        <div class="radio-info">
-            <span class="text-[9px] uppercase tracking-widest text-gold font-bold">Now Playing</span>
-            <span class="text-sm font-light italic text-[var(--text-main)] transition-colors" id="radio-track">Midnight Jazz</span>
-        </div>
-        <div class="volume-container">
-            <i class="ph ph-speaker-high text-gold text-lg"></i>
-            <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
         </div>
     </div>
 
@@ -324,7 +306,6 @@
         </div>
     </div>
 
-    <!-- MAIN WRAPPER -->
     <div id="main-content">
         <!-- AMBIENT BACKGROUND WITH MOUSE PARALLAX -->
         <div class="ambient-bg" id="ambient-bg">
@@ -333,24 +314,24 @@
         </div>
 
         <!-- HERO SECTION -->
-        <section class="h-screen flex flex-col items-center justify-center px-4 md:px-6 relative overflow-hidden">
+        <section class="h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden">
             <div class="absolute inset-0 z-0">
                 <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover opacity-30 transition-all duration-1000 parallax-bg" id="hero-img" alt="Bg">
                 <div class="absolute inset-0 bg-gradient-to-t from-[var(--bg-deep)] via-transparent to-[var(--bg-deep)] transition-colors duration-1000"></div>
             </div>
 
             <div class="text-center z-10 w-full relative pt-20">
-                <h1 class="text-6xl md:text-[13rem] font-bold tracking-tighter leading-[0.85] mb-4 flex flex-col items-center">
+                <h1 class="text-7xl md:text-[14rem] font-bold tracking-tighter leading-[0.85] mb-4 flex flex-col items-center">
                     <span class="hero-anim opacity-0 translate-y-10 text-[var(--text-main)] transition-colors" id="hero-state-text">STAY</span>
                     <span class="font-serif italic font-normal text-gold hero-anim opacity-0 translate-y-10 mt-2" id="hero-state-word">Awake</span>
                 </h1>
-                <p class="max-w-md md:max-w-lg mx-auto text-sm md:text-lg font-light opacity-90 hero-anim opacity-0 translate-y-10 text-[var(--text-main)] transition-colors" id="hero-sub-text">
-                    Lakeside's premier nocturnal roastery. Deep flavors, old-school aesthetics, delivered hot.
+                <p class="max-w-lg mx-auto text-base md:text-lg font-light opacity-90 hero-anim opacity-0 translate-y-10 text-[var(--text-main)] transition-colors" id="hero-sub-text">
+                    Pokhara's premier nocturnal roastery. Deep flavors, old-school aesthetics, delivered hot.
                 </p>
             </div>
         </section>
 
-        <!-- MENU SECTION WITH PROXIMITY 3D GIMMICK -->
+        <!-- MENU SECTION WITH UNIQUE OFFERS & GIMMICKS -->
         <section id="menu" class="py-24 px-6 md:px-20 max-w-[1300px] mx-auto relative z-10">
             <div class="text-center mb-16">
                 <h2 class="text-5xl md:text-6xl font-bold tracking-tighter mb-2 scroll-anim text-[var(--text-main)] transition-colors">Curated <span class="font-serif italic text-gold font-normal">Selections</span></h2>
@@ -358,10 +339,11 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Item 1 -->
-                <div class="menu-card old-frost scroll-anim">
+                <div class="menu-card old-frost group scroll-anim hover-target">
                     <div class="offer-tag tag-red">Night Owl 15% OFF</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Americano">
+                        <!-- Aroma Steam Gimmick -->
                         <svg class="aroma-steam" viewBox="0 0 24 24" fill="none"><path d="M8 22c0-5 4-5 4-10S8 7 8 2M16 22c0-5-4-5-4-10s4-5 4-10"/></svg>
                         <button onclick="addToCart('Midnight Americano', 150, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
                     </div>
@@ -378,7 +360,7 @@
                 </div>
 
                 <!-- Item 2 -->
-                <div class="menu-card old-frost scroll-anim">
+                <div class="menu-card old-frost group scroll-anim hover-target">
                     <div class="offer-tag tag-gold">Signature</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1572286258217-40142c1c6a70?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Latte">
@@ -392,7 +374,7 @@
                 </div>
 
                 <!-- Item 3 -->
-                <div class="menu-card old-frost scroll-anim">
+                <div class="menu-card old-frost group scroll-anim hover-target">
                     <div class="offer-tag tag-red">Happy Hour - Rs 50 Off</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1485808191679-5f86510681a2?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Macchiato">
@@ -412,7 +394,7 @@
                 </div>
 
                 <!-- Item 4 -->
-                <div class="menu-card old-frost scroll-anim">
+                <div class="menu-card old-frost group scroll-anim hover-target">
                     <div class="offer-tag tag-dark">Summer Special</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Cold Brew">
@@ -425,7 +407,7 @@
                 </div>
 
                 <!-- Item 5 -->
-                <div class="menu-card old-frost scroll-anim">
+                <div class="menu-card old-frost group scroll-anim hover-target">
                     <div class="offer-tag tag-gold" style="background:#8b5e34; color:white;">Combo - Save Rs 80</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Waffle">
@@ -444,7 +426,7 @@
                 </div>
                 
                 <!-- Item 6 -->
-                <div class="menu-card old-frost scroll-anim">
+                <div class="menu-card old-frost group scroll-anim hover-target">
                     <div class="offer-tag tag-green">Vegan Favorite</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1536256263959-770b48d82b0a?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Matcha">
@@ -458,10 +440,10 @@
             </div>
         </section>
 
-        <!-- EXTRA THINGO: HIMALAYAN ORIGINS PARALLAX -->
+        <!-- EXTRA THINGO: HIMALAYAN ORIGINS (Parallax Mountain) -->
         <section class="origin-section scroll-anim">
             <div class="origin-bg parallax-bg"></div>
-            <div class="origin-content old-frost rounded-3xl p-8 md:p-10 text-center relative z-10 mx-6 max-w-4xl">
+            <div class="origin-content old-frost rounded-3xl p-10 text-center relative z-10 mx-6 max-w-4xl">
                 <h2 class="text-4xl md:text-5xl font-bold tracking-tighter mb-4 text-[var(--text-main)] transition-colors">Roots in the <span class="font-serif italic text-gold font-normal">Himalayas</span></h2>
                 <p class="text-sm md:text-base font-light opacity-80 max-w-2xl mx-auto text-[var(--text-main)] transition-colors">
                     We exclusively partner with small-batch farmers in the high-altitude regions of Nepal. 
@@ -475,16 +457,16 @@
             <h2 class="text-4xl md:text-5xl font-bold tracking-tighter mb-10 text-center text-[var(--text-main)] transition-colors">The <span class="font-serif italic text-gold font-normal">Journey</span></h2>
             <div class="old-frost rounded-[40px] p-8 md:p-12">
                 <div class="process-item hover-target active" onclick="toggleAccordion(this)">
-                    <h3 class="process-title text-xl md:text-2xl">01. Sourcing <i class="ph ph-caret-down opacity-50"></i></h3>
-                    <p class="process-content text-sm md:text-base">We ethically source 100% organic beans directly from high-altitude farmers, ensuring fair trade and premium quality.</p>
+                    <h3 class="process-title">01. Sourcing <i class="ph ph-caret-down text-xl opacity-50"></i></h3>
+                    <p class="process-content">We ethically source 100% organic beans directly from high-altitude farmers, ensuring fair trade and premium quality.</p>
                 </div>
                 <div class="process-item hover-target" onclick="toggleAccordion(this)">
-                    <h3 class="process-title text-xl md:text-2xl">02. Roasting <i class="ph ph-caret-down opacity-50"></i></h3>
-                    <p class="process-content text-sm md:text-base">Our master roasters craft small batches daily, carefully controlling temperature profiles to unlock deep, chocolatey notes.</p>
+                    <h3 class="process-title">02. Roasting <i class="ph ph-caret-down text-xl opacity-50"></i></h3>
+                    <p class="process-content">Our master roasters craft small batches daily, carefully controlling temperature profiles to unlock deep, chocolatey notes.</p>
                 </div>
                 <div class="process-item hover-target" onclick="toggleAccordion(this)">
-                    <h3 class="process-title text-xl md:text-2xl">03. Brewing <i class="ph ph-caret-down opacity-50"></i></h3>
-                    <p class="process-content text-sm md:text-base">Calibrated water chemistry, perfect pressure, and artisan baristas come together. Every espresso shot is a calculated science experiment.</p>
+                    <h3 class="process-title">03. Brewing <i class="ph ph-caret-down text-xl opacity-50"></i></h3>
+                    <p class="process-content">Calibrated water chemistry, perfect pressure, and artisan baristas come together. Every espresso shot is a calculated science experiment.</p>
                 </div>
             </div>
         </section>
@@ -513,11 +495,11 @@
             </div>
 
             <!-- Get Directions Box (Fixed for Day Mode visibility) -->
-            <div class="flex flex-col items-center w-full old-frost p-10 rounded-[40px] scroll-anim bg-[#1a120e] text-white">
+            <div class="flex flex-col items-center w-full dir-box p-10 rounded-[40px] scroll-anim hover-target cursor-pointer" onclick="window.open('https://maps.app.goo.gl/4KRKkC4Xjv824BLf7', '_blank')">
                 <i class="ph ph-map-pin text-6xl text-gold mb-4"></i>
-                <p class="text-2xl font-light mb-2 text-white">Lakeside, Pokhara</p>
-                <p class="text-sm opacity-60 mb-8 text-white">Delivering hot to your doorstep.</p>
-                <a href="https://maps.app.goo.gl/PzB3tVb7W2B2FwYx6" target="_blank" class="px-8 py-4 bg-gold text-white rounded-full text-sm font-bold tracking-widest uppercase hover-target shadow-[0_10px_30px_rgba(212,163,115,0.4)] transition-transform hover:-translate-y-1 border border-transparent hover:border-white">
+                <p class="text-2xl font-light mb-2">Pokhara, Nepal</p>
+                <p class="text-sm opacity-60 mb-8">Delivering hot to your doorstep.</p>
+                <a href="https://maps.app.goo.gl/4KRKkC4Xjv824BLf7" target="_blank" class="px-8 py-4 bg-gold text-white rounded-full text-sm font-bold tracking-widest uppercase shadow-[0_10px_30px_rgba(212,163,115,0.4)] transition-transform hover:-translate-y-1 border border-transparent hover:border-white">
                     Get Directions
                 </a>
             </div>
@@ -533,10 +515,20 @@
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
-        // 2. Web Audio API Tactile Click Engine
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        // 2. Web Audio API Tactile Engines
+        let audioCtx;
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        // Extremely subtle UI Click sound
         function playClickSound() {
-            if(audioCtx.state === 'suspended') audioCtx.resume();
+            if(!audioCtx) return;
             const osc = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
             osc.connect(gainNode);
@@ -546,54 +538,66 @@
             osc.frequency.setValueAtTime(300, audioCtx.currentTime); 
             osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.05);
             
-            gainNode.gain.setValueAtTime(0.01, audioCtx.currentTime); // 5% volume
+            gainNode.gain.setValueAtTime(0.01, audioCtx.currentTime); // 5% volume limit
             gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
             
             osc.start();
             osc.stop(audioCtx.currentTime + 0.05);
         }
 
-        // Only play sound on explicit interactive elements
+        // Awesome Espresso Machine/Steam sound specifically for Cart Add
+        function playSteamSound() {
+            if(!audioCtx) return;
+            
+            // 1. Create White Noise (Steam)
+            const bufferSize = audioCtx.sampleRate * 0.8;
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = Math.random() * 2 - 1; // White noise
+            }
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = buffer;
+            
+            // Filter noise to sound like high-pressure steam
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'highpass';
+            filter.frequency.value = 2000;
+            
+            const noiseGain = audioCtx.createGain();
+            noiseGain.gain.setValueAtTime(0.15, audioCtx.currentTime); // Steam volume
+            noiseGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+            
+            noise.connect(filter);
+            filter.connect(noiseGain);
+            noiseGain.connect(audioCtx.destination);
+            
+            // 2. Create Machine Rumble (Low Oscillation)
+            const osc = audioCtx.createOscillator();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(60, audioCtx.currentTime); // Low hum
+            
+            const oscGain = audioCtx.createGain();
+            oscGain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            oscGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+            
+            osc.connect(oscGain);
+            oscGain.connect(audioCtx.destination);
+            
+            noise.start();
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.8);
+        }
+
+        // Bind normal clicks to UI elements (ignores scrolling entirely)
         document.addEventListener('mousedown', (e) => {
-            if(e.target.closest('button, a, .hover-target, .process-item, .vibe-btn')) {
+            initAudio();
+            if(e.target.closest('button, a, .hover-target, .process-item, .vibe-btn') && !e.target.closest('.add-btn')) {
                 playClickSound();
             }
         });
 
-        // 3. Reliable Audio Tracks Setup
-        const audioNight = document.getElementById('audio-night');
-        const audioDay = document.getElementById('audio-day');
-        let currentAudio = null;
-        let globalVolume = 0.5;
-
-        document.getElementById('volume-slider').addEventListener('input', (e) => {
-            globalVolume = parseFloat(e.target.value);
-            if(currentAudio) currentAudio.volume = globalVolume;
-        });
-
-        function crossfadeAudio(newAudio) {
-            if(currentAudio && currentAudio !== newAudio) {
-                gsap.to(currentAudio, { volume: 0, duration: 1.5, onComplete: () => currentAudio.pause() });
-            }
-            newAudio.volume = 0;
-            
-            let playPromise = newAudio.play();
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    gsap.to(newAudio, { volume: globalVolume, duration: 1.5 });
-                }).catch(error => {
-                    console.log("Browser blocked auto-play. Waiting for user interaction...");
-                    document.addEventListener('click', function playOnInteract() {
-                        newAudio.play();
-                        gsap.to(newAudio, { volume: globalVolume, duration: 1.5 });
-                        document.removeEventListener('click', playOnInteract);
-                    }, {once: true});
-                });
-            }
-            currentAudio = newAudio;
-        }
-
-        // 4. Sensory Cursor, Parallax, and 3D Proximity Cards (GIMMICKS FIXED)
+        // 3. Sensory Cursor & Mouse Parallax Gimmick
         let cursorActive = false;
         const cursorDot = document.getElementById('cursor-dot');
         const cursorRing = document.getElementById('cursor-ring');
@@ -613,66 +617,20 @@
             const moveX = (window.innerWidth / 2 - mouseX) * 0.02;
             const moveY = (window.innerHeight / 2 - mouseY) * 0.02;
             gsap.to('.ambient-bg', { x: moveX, y: moveY, duration: 1, ease: "power2.out" });
-
-            // 3D MAGNETIC CARDS PROXIMITY GIMMICK
-            if(window.innerWidth > 768) {
-                document.querySelectorAll('.menu-card').forEach(card => {
-                    const rect = card.getBoundingClientRect();
-                    const cardX = rect.left + rect.width / 2;
-                    const cardY = rect.top + rect.height / 2;
-                    
-                    const distX = mouseX - cardX;
-                    const distY = mouseY - cardY;
-                    const distance = Math.sqrt(distX * distX + distY * distY);
-                    
-                    const threshold = 350; // Active when within 350px of center
-                    
-                    if (distance < threshold) {
-                        const intensity = 1 - (distance / threshold);
-                        const xPct = (distX / (rect.width/2)) * 15 * intensity;
-                        const yPct = (distY / (rect.height/2)) * -15 * intensity;
-                        
-                        const lift = isLightMode ? -15 * intensity : -8 * intensity;
-                        const shadowAlpha = isLightMode ? 0.15 * intensity : 0.8 * intensity;
-                        const shadow = isLightMode ? `0 25px 40px rgba(176, 112, 60, ${shadowAlpha})` : `0 20px 40px rgba(0,0,0,${shadowAlpha})`;
-
-                        gsap.to(card, { 
-                            y: lift, rotationY: xPct, rotationX: yPct, 
-                            transformPerspective: 1000, duration: 0.4, ease: "power2.out",
-                            boxShadow: shadow, 
-                            borderColor: intensity > 0.6 ? "var(--gold)" : (isLightMode ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.05)")
-                        });
-                        
-                        if (distance < 150) {
-                            gsap.to(card.querySelector('.add-btn'), { opacity: 1, pointerEvents: "auto", bottom: "20px", duration: 0.3 });
-                        } else {
-                            gsap.to(card.querySelector('.add-btn'), { opacity: 0, pointerEvents: "none", bottom: "-50px", duration: 0.3 });
-                        }
-                    } else {
-                        gsap.to(card, { 
-                            y: 0, rotationY: 0, rotationX: 0, 
-                            duration: 0.6, ease: "elastic.out(1, 0.3)",
-                            boxShadow: "none", borderColor: isLightMode ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.05)"
-                        });
-                        gsap.to(card.querySelector('.add-btn'), { opacity: 0, pointerEvents: "none", bottom: "-50px", duration: 0.3 });
-                    }
-                });
-            }
         });
         
         gsap.ticker.add(() => {
-            ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15;
+            ringX += (mouseX - ringX) * 0.15;
+            ringY += (mouseY - ringY) * 0.15;
             gsap.set(cursorRing, { x: ringX, y: ringY });
         });
         
-        document.querySelectorAll('.hover-target, button, a, .process-item').forEach(el => {
+        document.querySelectorAll('.hover-target, button, a, .menu-card, .process-item').forEach(el => {
             el.addEventListener('mouseenter', () => {
                 document.body.classList.add('hover-active');
-                if(el.classList.contains('hover-radio')) document.body.classList.add('hover-no-blur'); 
             });
             el.addEventListener('mouseleave', () => {
                 document.body.classList.remove('hover-active');
-                document.body.classList.remove('hover-no-blur');
             });
         });
         
@@ -682,7 +640,30 @@
             }
         });
 
-        // 5. Build Dynamic Background Beans
+        // FIXED 3D MAGNETIC CARDS (Works seamlessly with GSAP in both modes)
+        document.querySelectorAll('.menu-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const xPct = (x / rect.width - 0.5) * 20; 
+                const yPct = (y / rect.height - 0.5) * -20;
+                
+                // Show add button
+                gsap.to(card.querySelector('.add-btn'), { opacity: 1, pointerEvents: "auto", bottom: "20px", duration: 0.3 });
+                // Tilt Card
+                gsap.to(card, { rotationY: xPct, rotationX: yPct, transformPerspective: 1000, duration: 0.4, ease: "power2.out" });
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                // Reset Tilt
+                gsap.to(card, { rotationY: 0, rotationX: 0, duration: 0.6, ease: "elastic.out(1, 0.3)" });
+                // Hide add button
+                gsap.to(card.querySelector('.add-btn'), { opacity: 0, pointerEvents: "none", bottom: "-50px", duration: 0.3 });
+            });
+        });
+
+        // 4. Build Dynamic Background Beans
         const ambientBg = document.getElementById('ambient-bg');
         for(let i=0; i<15; i++) {
             const bean = document.createElement('div');
@@ -700,11 +681,11 @@
             });
         }
 
-        // 6. The Vibe Selector (Entry Logic)
+        // 5. The Vibe Selector (Entry Logic)
         let isLightMode = false;
         
         window.initExperience = function(mode) {
-            if(audioCtx.state === 'suspended') audioCtx.resume(); 
+            initAudio(); // Initialize Audio Context
             isLightMode = (mode === 'day');
             
             if(isLightMode) {
@@ -713,12 +694,9 @@
                 document.getElementById('hero-state-text').innerText = "STAY";
                 document.getElementById('hero-state-word').innerText = "Fresh";
                 document.getElementById('hero-sub-text').innerText = "Pokhara's premier morning roastery. Bright flavors, refreshing vibes, delivered hot.";
-                document.getElementById('radio-track').innerText = "Morning Acoustic";
                 document.getElementById('hero-img').src = "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=2000&auto=format&fit=crop"; 
-                crossfadeAudio(audioDay);
             } else {
                 document.getElementById('theme-icon').classList.replace('ph-sun', 'ph-moon');
-                crossfadeAudio(audioNight);
             }
 
             gsap.to("#vibe-selector", { opacity: 0, duration: 0.8, onComplete: () => {
@@ -729,7 +707,7 @@
             }});
         };
 
-        // 7. True Liquid Pour Theme Transition
+        // 6. True Liquid Pour Theme Transition
         window.triggerLiquidPour = function() {
             const drips = document.querySelectorAll('.pour-drip');
             const icon = document.getElementById('theme-icon');
@@ -755,17 +733,13 @@
                         document.getElementById('hero-state-text').innerText = "STAY";
                         document.getElementById('hero-state-word').innerText = "Fresh";
                         document.getElementById('hero-sub-text').innerText = "Pokhara's premier morning roastery. Bright flavors, refreshing vibes, delivered hot.";
-                        document.getElementById('radio-track').innerText = "Morning Acoustic";
                         document.getElementById('hero-img').src = "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=2000&auto=format&fit=crop";
-                        crossfadeAudio(audioDay);
                     } else {
                         icon.classList.replace('ph-sun', 'ph-moon');
                         document.getElementById('hero-state-text').innerText = "STAY";
                         document.getElementById('hero-state-word').innerText = "Awake";
                         document.getElementById('hero-sub-text').innerText = "Pokhara's premier nocturnal roastery. Deep flavors, aesthetic vibes, delivered hot.";
-                        document.getElementById('radio-track').innerText = "Midnight Jazz";
                         document.getElementById('hero-img').src = "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=2000&auto=format&fit=crop";
-                        crossfadeAudio(audioNight);
                     }
                     
                     drips.forEach(d => { d.style.top = "auto"; d.style.bottom = "0"; });
@@ -774,13 +748,20 @@
             });
         };
 
-        // 8. Analog Clock & Weather Widget
+        // 7. Analog Clock & Weather Widget
         function updateWidgets() {
             const now = new Date();
             const h = now.getHours(); const m = now.getMinutes(); const s = now.getSeconds();
-            document.getElementById('hour-hand').style.transform = `rotate(${(h % 12) * 30 + m * 0.5}deg)`;
-            document.getElementById('min-hand').style.transform = `rotate(${m * 6}deg)`;
-            document.getElementById('sec-hand').style.transform = `rotate(${s * 6}deg)`;
+            
+            // Find all instances of clock hands (Desktop + Mobile)
+            const hourHands = document.querySelectorAll('.hour-hand');
+            const minHands = document.querySelectorAll('.min-hand');
+            const secHands = document.querySelectorAll('.sec-hand');
+            
+            hourHands.forEach(hand => hand.style.transform = `rotate(${(h % 12) * 30 + m * 0.5}deg)`);
+            minHands.forEach(hand => hand.style.transform = `rotate(${m * 6}deg)`);
+            secHands.forEach(hand => hand.style.transform = `rotate(${s * 6}deg)`);
+            
             const ampm = h >= 12 ? 'PM' : 'AM';
             document.getElementById('digital-time').innerText = `${h % 12 || 12}:${m.toString().padStart(2,'0')} ${ampm}`;
 
@@ -788,12 +769,12 @@
             if (h >= 5 && h < 17) { icon = "ph-sun"; temp = "28°C"; }
             else if (h >= 17 && h < 20) { icon = "ph-cloud-sun"; temp = "24°C"; }
             else { icon = "ph-moon-stars"; temp = "18°C"; }
-            document.getElementById('weather-icon').className = `ph ${icon} text-lg`;
+            document.getElementById('weather-icon').className = `ph ${icon} text-xl md:text-2xl`;
             document.getElementById('weather-text').innerText = temp;
         }
         setInterval(updateWidgets, 1000); updateWidgets();
 
-        // 9. Dynamic Footer Margin Fix
+        // 8. Dynamic Footer Margin Fix
         function updateFooterMargin() {
             if(window.innerWidth > 768) {
                 const footerHeight = document.getElementById('footer').offsetHeight;
@@ -807,14 +788,14 @@
         }
         window.addEventListener('resize', updateFooterMargin); setTimeout(updateFooterMargin, 500);
 
-        // 10. Accordion Toggle
+        // 9. Accordion Toggle
         window.toggleAccordion = function(element) {
             document.querySelectorAll('.process-item').forEach(item => { if(item !== element) item.classList.remove('active'); });
             element.classList.toggle('active');
             setTimeout(ScrollTrigger.refresh, 400); 
         }
 
-        // 11. Advanced 3D Liquid Fly-to-Cart
+        // 10. Advanced 3D Liquid Fly-to-Cart (With Steam Sound)
         let cart = [];
         const liquidContainer = document.getElementById('liquid-container');
         
@@ -825,6 +806,9 @@
         };
 
         window.addToCart = function(name, price, btnElement) {
+            initAudio(); // Ensure context is awake
+            playSteamSound(); // Trigger custom Espresso Steam machine sound
+
             cart.push({ id: Date.now(), name, price });
             
             const badge = document.getElementById('cart-badge');
