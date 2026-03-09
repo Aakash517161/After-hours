@@ -31,11 +31,11 @@
             /* NIGHT MODE */
             --bg-rgb: 8, 5, 4; 
             --bg-deep: #0a0604;
-            --bg-card: rgba(30, 20, 15, 0.7); 
-            --bg-glass: rgba(10, 6, 4, 0.8);
-            --text-main: #fdfbf9;
-            --text-muted: #a3968c;
-            --border-color: rgba(255,255,255,0.08);
+            --bg-card: rgba(20, 12, 8, 0.5);
+            --bg-glass: rgba(10, 6, 4, 0.6);
+            --text-main: #f4eade;
+            --text-muted: #8c7e73;
+            --border-color: rgba(255,255,255,0.05);
             --gold: #c69b6a;
             --accent-pour: #1f110a; 
             
@@ -53,8 +53,8 @@
             /* DAY MODE */
             --bg-rgb: 242, 233, 223;
             --bg-deep: #f2e9df;
-            --bg-card: rgba(255, 255, 255, 0.9);
-            --bg-glass: rgba(255, 255, 255, 0.7);
+            --bg-card: rgba(255, 255, 255, 0.8);
+            --bg-glass: rgba(255, 255, 255, 0.6);
             --text-main: #2b1c11;
             --text-muted: #736154;
             --border-color: rgba(0,0,0,0.08);
@@ -69,10 +69,11 @@
 
         html.lenis { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto; }
-        body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Outfit', sans-serif; overflow-x: hidden; transition: background-color 0.4s, color 0.4s; }
+        body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Outfit', sans-serif; overflow-x: hidden; cursor: none; transition: background-color 0.1s, color 0.1s; }
         ::selection { background: var(--gold); color: #fff; }
         .font-serif { font-family: 'Playfair Display', serif; }
 
+        /* Safely hides native cursor only when JS confirms a mouse exists */
         .hide-native-cursor, .hide-native-cursor * { cursor: none !important; }
 
         /* ========= OLD-SCHOOL FROSTED GLASS ========= */
@@ -81,7 +82,7 @@
             backdrop-filter: blur(30px) saturate(140%);
             -webkit-backdrop-filter: blur(30px) saturate(140%);
             border: 1px solid var(--border-color);
-            transition: all var(--anim-speed) var(--anim-ease);
+            transition: background var(--anim-speed), border-color var(--anim-speed);
         }
 
         /* ========= THE VIBE SELECTOR (PRELOADER) ========= */
@@ -101,53 +102,70 @@
         /* ========= SENSORY CURSOR ========= */
         @media (pointer: fine) {
             .cursor-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999999; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s; opacity: 0; }
-            .cursor-ring { width: 34px; height: 34px; border: 1px solid var(--gold); border-radius: 50%; opacity: 0.5; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999998; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s, backdrop-filter 0.2s; opacity: 0; }
+            .cursor-ring { width: 34px; height: 34px; border: 1px solid var(--gold); border-radius: 50%; opacity: 0.5; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999998; transform: translate(-50%, -50%); transition: width var(--anim-speed) var(--anim-ease), height var(--anim-speed) var(--anim-ease), backdrop-filter 0.2s; opacity: 0; }
             .cursor-click-ripple { position: fixed; width: 20px; height: 20px; border: 2px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999997; transform: translate(-50%, -50%) scale(0); opacity: 0; }
             
             .hover-active .cursor-dot { width: 0; height: 0; }
             .hover-active .cursor-ring { width: 60px; height: 60px; opacity: 1; background: rgba(212, 163, 115, 0.1); backdrop-filter: blur(4px); border-width: 2px; }
         }
 
-        /* ========= MASSIVE ANALOG CLOCK ========= */
+        /* ========= 12FPS HEADER COFFEE POUR ========= */
+        .header-pour { position: relative; width: 24px; height: 28px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; margin-left: 10px; }
+        .pour-stream { position: absolute; top: 0; width: 2px; background: var(--gold); animation: pour12fps 2s steps(12, end) infinite; }
+        .pour-cup { width: 20px; height: 14px; border: 2px solid var(--gold); border-top: none; border-radius: 0 0 10px 10px; position: relative; overflow: hidden; }
+        .pour-fill { position: absolute; bottom: 0; left: 0; width: 100%; background: var(--gold); animation: fill12fps 2s steps(12, end) infinite; }
+        
+        @keyframes pour12fps {
+            0% { height: 0; top: 0; opacity: 1; }
+            20% { height: 14px; top: 0; opacity: 1; }
+            80% { height: 14px; top: 0; opacity: 1; }
+            100% { height: 0; top: 14px; opacity: 0; }
+        }
+        @keyframes fill12fps {
+            0% { height: 0%; }
+            20% { height: 0%; }
+            80% { height: 100%; }
+            100% { height: 100%; }
+        }
+
+        /* ========= ANALOG CLOCK ========= */
         .analog-clock { border: 2px solid var(--gold); border-radius: 50%; position: relative; background: transparent; }
         .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: var(--text-main); border-radius: 10px; }
         .clock-center { background: var(--gold); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
         
-        /* Desktop Header Clock Sizes */
-        .desktop-clock { width: 80px; height: 80px; box-shadow: 0 0 20px rgba(212, 163, 115, 0.2); }
-        .desktop-clock .hour-hand { width: 4px; height: 20px; margin-left: -2px; }
-        .desktop-clock .min-hand { width: 3px; height: 28px; margin-left: -1.5px; }
-        .desktop-clock .sec-hand { width: 2px; height: 34px; background: var(--gold); margin-left: -1px; }
-        .desktop-clock .clock-center { width: 10px; height: 10px; }
+        /* Desktop Clock */
+        .desktop-clock { width: 70px; height: 70px; box-shadow: 0 0 20px rgba(212, 163, 115, 0.2); }
+        .desktop-clock .hour-hand { width: 4px; height: 18px; margin-left: -2px; }
+        .desktop-clock .min-hand { width: 3px; height: 26px; margin-left: -1.5px; }
+        .desktop-clock .sec-hand { width: 2px; height: 32px; background: var(--gold); margin-left: -1px; }
+        .desktop-clock .clock-center { width: 8px; height: 8px; }
 
-        /* Mobile Floating Clock Sizes */
-        .mobile-floating-clock { position: fixed; bottom: 24px; left: 24px; z-index: 40; border-radius: 50%; padding: 12px; display: flex; justify-content: center; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .mobile-clock { width: 60px; height: 60px; }
-        .mobile-clock .hour-hand { width: 3px; height: 15px; margin-left: -1.5px; }
-        .mobile-clock .min-hand { width: 2px; height: 22px; margin-left: -1px; }
-        .mobile-clock .sec-hand { width: 1.5px; height: 26px; background: var(--gold); margin-left: -0.75px; }
-        .mobile-clock .clock-center { width: 8px; height: 8px; }
+        /* Mobile Floating Clock */
+        .mobile-floating-clock { position: fixed; bottom: 24px; left: 24px; z-index: 40; border-radius: 50%; padding: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .mobile-clock { width: 45px; height: 45px; }
+        .mobile-clock .hour-hand { width: 2.5px; height: 12px; margin-left: -1.25px; }
+        .mobile-clock .min-hand { width: 2px; height: 18px; margin-left: -1px; }
+        .mobile-clock .sec-hand { width: 1.5px; height: 22px; background: var(--gold); margin-left: -0.75px; }
+        .mobile-clock .clock-center { width: 6px; height: 6px; }
 
-        /* ========= MENU CARDS (3D Magnetic & Aroma Gimmick) ========= */
-        .menu-card { position: relative; overflow: visible; border-radius: 24px; z-index: 2; transform-style: preserve-3d; background: var(--bg-card); border: 1px solid var(--border-color); transition: transform var(--anim-speed) var(--anim-ease), box-shadow var(--anim-speed) var(--anim-ease), border-color 0.3s; }
-        .menu-card:hover { border-color: var(--gold); z-index: 10; transform: translateY(var(--card-lift)); box-shadow: var(--card-shadow); }
-        
-        .menu-img-wrap { height: 260px; overflow: hidden; position: relative; border-radius: 24px 24px 0 0; }
-        .menu-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease, filter 0.5s ease; opacity: 0.9; }
+        /* ========= MENU CARDS (Smooth 3D Magnetic) ========= */
+        /* Removed transform from transition to fix GSAP delay bug */
+        .menu-card { position: relative; overflow: visible; border-radius: 24px; z-index: 2; transform-style: preserve-3d; background: var(--bg-card); border: 1px solid var(--border-color); transition: box-shadow var(--anim-speed) var(--anim-ease), border-color 0.3s; }
+        .menu-img-wrap { height: 260px; overflow: hidden; position: relative; border-radius: 24px 24px 0 0; pointer-events: none; }
+        .menu-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; transition: transform 0.5s ease, filter 0.5s ease; }
         .menu-card:hover .menu-img { transform: scale(1.1); filter: brightness(1.15); opacity: 1; }
         
         .aroma-steam { position: absolute; bottom: 10%; left: 50%; transform: translateX(-50%); width: 60px; height: 80px; opacity: 0; pointer-events: none; z-index: 20; stroke: var(--gold); stroke-width: 3; }
         .menu-card:hover .aroma-steam { opacity: 0.8; animation: riseUp 2s infinite ease-in; }
         @keyframes riseUp { 0% { transform: translate(-50%, 0) scale(0.8); opacity: 0; filter: blur(1px); } 50% { opacity: 0.8; } 100% { transform: translate(-50%, -60px) scale(1.3); opacity: 0; filter: blur(4px); } }
         
-        .offer-tag { position: absolute; top: 15px; right: 15px; font-size: 0.7rem; font-weight: 800; padding: 6px 14px; border-radius: 30px; letter-spacing: 1px; z-index: 10; backdrop-filter: blur(10px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .offer-tag { position: absolute; top: 15px; right: 15px; font-size: 0.7rem; font-weight: 800; padding: 6px 14px; border-radius: 30px; letter-spacing: 1px; z-index: 10; backdrop-filter: blur(10px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); pointer-events: none; }
         .tag-red { background: rgba(230, 57, 70, 0.9); color: #fff; }
         .tag-gold { background: rgba(212, 163, 115, 0.9); color: #000; }
         .tag-dark { background: rgba(30, 30, 30, 0.9); color: #fff; border: 1px solid var(--gold); }
         .tag-green { background: rgba(85, 107, 47, 0.9); color: #fff; }
 
-        .add-btn { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%) translateZ(30px); background: var(--text-main); color: var(--bg-deep); padding: 14px 28px; border-radius: 40px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow); transition: 0.3s; opacity: 0; width: 85%; justify-content: center; z-index: 30; pointer-events: none; cursor: pointer; }
-        .add-btn.active { opacity: 1; pointer-events: auto; }
+        .add-btn { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%) translateZ(30px); background: var(--text-main); color: var(--bg-deep); padding: 14px 28px; border-radius: 40px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow); transition: background 0.3s, color 0.3s; opacity: 0; width: 85%; justify-content: center; z-index: 30; pointer-events: none; cursor: pointer; }
         .add-btn:hover { background: var(--gold) !important; color: #fff !important; }
         @media (max-width: 768px) { .add-btn { opacity: 1; bottom: 15px; background: var(--text-main); color: var(--bg-deep); transform: translateX(-50%); pointer-events: auto; } }
 
@@ -156,13 +174,13 @@
         .liquid-drop-3d { position: absolute; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #ffeedb, var(--gold) 60%, #8b5e34); box-shadow: 0 10px 20px rgba(0,0,0,0.5), inset -2px -2px 6px rgba(0,0,0,0.4); transform-origin: center; z-index: 999999; }
 
         /* ========= BRIGHT CART SIDEBAR ========= */
-        #cart-sidebar { position: fixed; top: 0; right: -100%; width: 100%; max-width: 420px; height: 100vh; z-index: 10000; transition: 0.6s var(--anim-ease); background: var(--cart-bg); color: var(--cart-text); border-left: 1px solid var(--cart-border); display: flex; flex-direction: column; box-shadow: -20px 0 60px rgba(0,0,0,0.5); backdrop-filter: blur(30px); }
+        #cart-sidebar { position: fixed; top: 0; right: -100%; width: 100%; max-width: 420px; height: 100vh; z-index: 10000; transition: 0.6s cubic-bezier(0.25, 1, 0.5, 1); background: var(--cart-bg); color: var(--cart-text); border-left: 1px solid var(--cart-border); display: flex; flex-direction: column; box-shadow: -20px 0 60px rgba(0,0,0,0.5); backdrop-filter: blur(30px); }
         #cart-sidebar.open { right: 0; }
         .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 9999; opacity: 0; pointer-events: none; transition: 0.4s; }
         .cart-overlay.open { opacity: 1; pointer-events: all; }
 
         /* ========= THE ROASTING JOURNEY ACCORDION ========= */
-        .process-item { border-bottom: 1px solid var(--border-color); padding: 25px 0; cursor: pointer; transition: var(--anim-speed) var(--anim-ease); overflow: hidden; height: 85px; }
+        .process-item { border-bottom: 1px solid var(--border-color); padding: 25px 0; cursor: pointer; transition: 0.5s ease; overflow: hidden; height: 85px; }
         .process-item.active { height: 220px; border-bottom-color: var(--gold); }
         .process-title { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--text-muted); transition: 0.4s; display: flex; align-items: center; justify-content: space-between; }
         .process-item.active .process-title { color: var(--gold); font-size: 2.5rem; }
@@ -173,10 +191,6 @@
         .origin-section { position: relative; height: 60vh; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-top: 50px; }
         .origin-bg { position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2000&auto=format&fit=crop') center/cover; opacity: 0.4; z-index: 0; filter: grayscale(50%); }
         body.light-mode .origin-bg { opacity: 0.2; filter: grayscale(0%); }
-
-        /* ========= GET DIRECTIONS VISIBILITY FIX ========= */
-        .dir-box { background: #110a07; color: #fff; transition: 0.5s; border: 1px solid transparent; }
-        body.light-mode .dir-box { background: #fff; color: #1a120e; border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
 
         /* ========= FOOTER & MAIN WRAPPER ========= */
         #main-content { position: relative; z-index: 2; background: var(--bg-deep); box-shadow: 0 40px 100px rgba(0,0,0,1); border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; transition: background 0.8s ease; }
@@ -206,7 +220,7 @@
     <!-- THE VIBE SELECTOR (Interactive Preloader) -->
     <div id="vibe-selector">
         <div class="vibe-box hover-target">
-            <h1 class="text-4xl font-serif text-gold mb-2">Welcome to After Hours</h1>
+            <h1 class="text-4xl md:text-5xl font-serif text-gold mb-2">Welcome to After Hours</h1>
             <p class="text-[#8c7e73] mb-8 text-sm">Select your atmosphere to begin.</p>
             <div class="vibe-btn-container">
                 <button class="vibe-btn btn-day hover-target" onclick="initExperience('day')"><i class="ph ph-sun text-xl"></i> Morning Light</button>
@@ -226,7 +240,7 @@
     <div class="cursor-ring" id="cursor-ring"></div>
     <div class="cursor-click-ripple" id="cursor-ripple"></div>
 
-    <!-- MOBILE FLOATING CLOCK (Shows separately on mobile scroll) -->
+    <!-- MOBILE FLOATING CLOCK -->
     <div class="mobile-floating-clock old-frost md:hidden hover-target">
         <div class="analog-clock mobile-clock">
             <div class="hand hour-hand"></div>
@@ -239,17 +253,25 @@
     <!-- HEADER: FROSTED COMMAND CENTER -->
     <div class="fixed top-0 left-0 w-full z-50 flex justify-between items-start px-4 md:px-8 py-6 pointer-events-none nav-anim opacity-0 translate-y-[-20px]">
         
-        <!-- Left: MASSIVE Logo + Clock + Weather -->
+        <!-- Left: BIG Logo + 12fps Pour + BIG Clock + Weather -->
         <div class="flex flex-col gap-6 pointer-events-auto">
-            <div class="old-frost rounded-full px-8 py-4 flex items-center gap-5 hover-target cursor-pointer" onclick="window.scrollTo(0,0)">
-                <svg width="60" height="60" viewBox="0 0 100 100" fill="none" class="transition-transform duration-500 hover:rotate-12">
+            <div class="old-frost rounded-full px-8 py-4 flex items-center gap-4 hover-target cursor-pointer" onclick="window.scrollTo(0,0)">
+                <svg width="45" height="45" viewBox="0 0 100 100" fill="none" class="transition-transform duration-500 hover:rotate-12 hidden md:block">
                     <circle cx="50" cy="50" r="48" stroke="var(--gold)" stroke-width="2"/>
                     <path d="M30 70 L50 30 L70 70" stroke="var(--gold)" stroke-width="4" stroke-linecap="round"/>
                     <line x1="40" y1="55" x2="60" y2="55" stroke="var(--gold)" stroke-width="4" stroke-linecap="round"/>
                 </svg>
-                <div class="flex flex-col">
-                    <span class="text-3xl md:text-5xl font-bold tracking-[0.2em] leading-none text-[var(--text-main)] transition-colors">AFTER HOURS</span>
-                    <span class="text-xs md:text-sm tracking-widest text-gold uppercase mt-2">Pokhara</span>
+                
+                <div class="flex items-center gap-3">
+                    <div class="flex flex-col">
+                        <span class="text-3xl md:text-4xl font-bold tracking-[0.2em] leading-none text-[var(--text-main)] transition-colors">AFTER HOURS</span>
+                        <span class="text-xs md:text-sm tracking-widest text-gold uppercase mt-2">Pokhara</span>
+                    </div>
+                    <!-- 12 FPS Header Pouring Animation -->
+                    <div class="header-pour">
+                        <div class="pour-stream"></div>
+                        <div class="pour-cup"><div class="pour-fill"></div></div>
+                    </div>
                 </div>
             </div>
 
@@ -314,24 +336,24 @@
         </div>
 
         <!-- HERO SECTION -->
-        <section class="h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden">
+        <section class="h-screen flex flex-col items-center justify-center px-4 md:px-6 relative overflow-hidden">
             <div class="absolute inset-0 z-0">
                 <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover opacity-30 transition-all duration-1000 parallax-bg" id="hero-img" alt="Bg">
                 <div class="absolute inset-0 bg-gradient-to-t from-[var(--bg-deep)] via-transparent to-[var(--bg-deep)] transition-colors duration-1000"></div>
             </div>
 
             <div class="text-center z-10 w-full relative pt-20">
-                <h1 class="text-7xl md:text-[14rem] font-bold tracking-tighter leading-[0.85] mb-4 flex flex-col items-center">
+                <h1 class="text-6xl md:text-[13rem] font-bold tracking-tighter leading-[0.85] mb-4 flex flex-col items-center">
                     <span class="hero-anim opacity-0 translate-y-10 text-[var(--text-main)] transition-colors" id="hero-state-text">STAY</span>
                     <span class="font-serif italic font-normal text-gold hero-anim opacity-0 translate-y-10 mt-2" id="hero-state-word">Awake</span>
                 </h1>
-                <p class="max-w-lg mx-auto text-base md:text-lg font-light opacity-90 hero-anim opacity-0 translate-y-10 text-[var(--text-main)] transition-colors" id="hero-sub-text">
-                    Pokhara's premier nocturnal roastery. Deep flavors, old-school aesthetics, delivered hot.
+                <p class="max-w-md md:max-w-lg mx-auto text-sm md:text-lg font-light opacity-90 hero-anim opacity-0 translate-y-10 text-[var(--text-main)] transition-colors" id="hero-sub-text">
+                    Lakeside's premier nocturnal roastery. Deep flavors, old-school aesthetics, delivered hot.
                 </p>
             </div>
         </section>
 
-        <!-- MENU SECTION WITH UNIQUE OFFERS & GIMMICKS -->
+        <!-- MENU SECTION WITH PROXIMITY 3D GIMMICK -->
         <section id="menu" class="py-24 px-6 md:px-20 max-w-[1300px] mx-auto relative z-10">
             <div class="text-center mb-16">
                 <h2 class="text-5xl md:text-6xl font-bold tracking-tighter mb-2 scroll-anim text-[var(--text-main)] transition-colors">Curated <span class="font-serif italic text-gold font-normal">Selections</span></h2>
@@ -339,11 +361,10 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Item 1 -->
-                <div class="menu-card old-frost group scroll-anim hover-target">
+                <div class="menu-card group scroll-anim">
                     <div class="offer-tag tag-red">Night Owl 15% OFF</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Americano">
-                        <!-- Aroma Steam Gimmick -->
                         <svg class="aroma-steam" viewBox="0 0 24 24" fill="none"><path d="M8 22c0-5 4-5 4-10S8 7 8 2M16 22c0-5-4-5-4-10s4-5 4-10"/></svg>
                         <button onclick="addToCart('Midnight Americano', 150, this)" class="add-btn hover-target"><i class="ph ph-plus-circle text-xl"></i> Add to Order</button>
                     </div>
@@ -360,7 +381,7 @@
                 </div>
 
                 <!-- Item 2 -->
-                <div class="menu-card old-frost group scroll-anim hover-target">
+                <div class="menu-card group scroll-anim">
                     <div class="offer-tag tag-gold">Signature</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1572286258217-40142c1c6a70?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Latte">
@@ -374,7 +395,7 @@
                 </div>
 
                 <!-- Item 3 -->
-                <div class="menu-card old-frost group scroll-anim hover-target">
+                <div class="menu-card group scroll-anim">
                     <div class="offer-tag tag-red">Happy Hour - Rs 50 Off</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1485808191679-5f86510681a2?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Macchiato">
@@ -394,7 +415,7 @@
                 </div>
 
                 <!-- Item 4 -->
-                <div class="menu-card old-frost group scroll-anim hover-target">
+                <div class="menu-card group scroll-anim">
                     <div class="offer-tag tag-dark">Summer Special</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Cold Brew">
@@ -407,7 +428,7 @@
                 </div>
 
                 <!-- Item 5 -->
-                <div class="menu-card old-frost group scroll-anim hover-target">
+                <div class="menu-card group scroll-anim">
                     <div class="offer-tag tag-gold" style="background:#8b5e34; color:white;">Combo - Save Rs 80</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Waffle">
@@ -426,7 +447,7 @@
                 </div>
                 
                 <!-- Item 6 -->
-                <div class="menu-card old-frost group scroll-anim hover-target">
+                <div class="menu-card group scroll-anim">
                     <div class="offer-tag tag-green">Vegan Favorite</div>
                     <div class="menu-img-wrap">
                         <img src="https://images.unsplash.com/photo-1536256263959-770b48d82b0a?q=80&w=800&auto=format&fit=crop" class="menu-img" alt="Matcha">
@@ -440,10 +461,10 @@
             </div>
         </section>
 
-        <!-- EXTRA THINGO: HIMALAYAN ORIGINS (Parallax Mountain) -->
+        <!-- EXTRA THINGO: HIMALAYAN ORIGINS PARALLAX -->
         <section class="origin-section scroll-anim">
             <div class="origin-bg parallax-bg"></div>
-            <div class="origin-content old-frost rounded-3xl p-10 text-center relative z-10 mx-6 max-w-4xl">
+            <div class="origin-content old-frost rounded-3xl p-8 md:p-10 text-center relative z-10 mx-6 max-w-4xl">
                 <h2 class="text-4xl md:text-5xl font-bold tracking-tighter mb-4 text-[var(--text-main)] transition-colors">Roots in the <span class="font-serif italic text-gold font-normal">Himalayas</span></h2>
                 <p class="text-sm md:text-base font-light opacity-80 max-w-2xl mx-auto text-[var(--text-main)] transition-colors">
                     We exclusively partner with small-batch farmers in the high-altitude regions of Nepal. 
@@ -457,16 +478,16 @@
             <h2 class="text-4xl md:text-5xl font-bold tracking-tighter mb-10 text-center text-[var(--text-main)] transition-colors">The <span class="font-serif italic text-gold font-normal">Journey</span></h2>
             <div class="old-frost rounded-[40px] p-8 md:p-12">
                 <div class="process-item hover-target active" onclick="toggleAccordion(this)">
-                    <h3 class="process-title">01. Sourcing <i class="ph ph-caret-down text-xl opacity-50"></i></h3>
-                    <p class="process-content">We ethically source 100% organic beans directly from high-altitude farmers, ensuring fair trade and premium quality.</p>
+                    <h3 class="process-title text-xl md:text-2xl">01. Sourcing <i class="ph ph-caret-down opacity-50"></i></h3>
+                    <p class="process-content text-sm md:text-base">We ethically source 100% organic beans directly from high-altitude farmers, ensuring fair trade and premium quality.</p>
                 </div>
                 <div class="process-item hover-target" onclick="toggleAccordion(this)">
-                    <h3 class="process-title">02. Roasting <i class="ph ph-caret-down text-xl opacity-50"></i></h3>
-                    <p class="process-content">Our master roasters craft small batches daily, carefully controlling temperature profiles to unlock deep, chocolatey notes.</p>
+                    <h3 class="process-title text-xl md:text-2xl">02. Roasting <i class="ph ph-caret-down opacity-50"></i></h3>
+                    <p class="process-content text-sm md:text-base">Our master roasters craft small batches daily, carefully controlling temperature profiles to unlock deep, chocolatey notes.</p>
                 </div>
                 <div class="process-item hover-target" onclick="toggleAccordion(this)">
-                    <h3 class="process-title">03. Brewing <i class="ph ph-caret-down text-xl opacity-50"></i></h3>
-                    <p class="process-content">Calibrated water chemistry, perfect pressure, and artisan baristas come together. Every espresso shot is a calculated science experiment.</p>
+                    <h3 class="process-title text-xl md:text-2xl">03. Brewing <i class="ph ph-caret-down opacity-50"></i></h3>
+                    <p class="process-content text-sm md:text-base">Calibrated water chemistry, perfect pressure, and artisan baristas come together. Every espresso shot is a calculated science experiment.</p>
                 </div>
             </div>
         </section>
@@ -481,11 +502,11 @@
             
             <div class="flex flex-col items-center md:items-start text-left scroll-anim">
                 <h2 class="text-6xl md:text-8xl font-bold tracking-tighter mb-4 font-serif text-[var(--text-main)] transition-colors">After Hours</h2>
-                <a href="tel:+9779705965333" class="font-serif text-4xl md:text-6xl font-bold text-gold mb-10 hover-target transition-transform hover:translate-x-2 inline-block">
-                    970 596 5333
+                <a href="tel:+9779705117333" class="font-serif text-4xl md:text-6xl font-bold text-gold mb-10 hover-target transition-transform hover:translate-x-2 inline-block">
+                    970 511 7333
                 </a>
                 <div class="flex gap-4 flex-wrap justify-center md:justify-start">
-                    <a href="https://wa.me/9779705965333" target="_blank" class="hover-target flex items-center gap-2 px-6 py-3 border border-[#25D366] text-[#25D366] rounded-full text-xs font-bold tracking-widest uppercase hover:bg-[#25D366] hover:text-white transition-all shadow-lg">
+                    <a href="https://wa.me/9779705117333" target="_blank" class="hover-target flex items-center gap-2 px-6 py-3 border border-[#25D366] text-[#25D366] rounded-full text-xs font-bold tracking-widest uppercase hover:bg-[#25D366] hover:text-white transition-all shadow-lg">
                         <i class="ph ph-whatsapp-logo text-xl"></i> WhatsApp
                     </a>
                     <a href="https://www.instagram.com/afterhourscafe.bhw/" target="_blank" class="hover-target flex items-center gap-2 px-6 py-3 border border-[#E1306C] text-[#E1306C] rounded-full text-xs font-bold tracking-widest uppercase hover:bg-[#E1306C] hover:text-white transition-all shadow-lg">
@@ -494,17 +515,22 @@
                 </div>
             </div>
 
-            <!-- Get Directions Box (Fixed for Day Mode visibility) -->
-            <div class="flex flex-col items-center w-full dir-box p-10 rounded-[40px] scroll-anim hover-target cursor-pointer" onclick="window.open('https://maps.app.goo.gl/4KRKkC4Xjv824BLf7', '_blank')">
+            <div class="flex flex-col items-center w-full old-frost p-10 rounded-[40px] scroll-anim bg-[#1a120e] text-white transition-none">
                 <i class="ph ph-map-pin text-6xl text-gold mb-4"></i>
-                <p class="text-2xl font-light mb-2">Pokhara, Nepal</p>
-                <p class="text-sm opacity-60 mb-8">Delivering hot to your doorstep.</p>
-                <a href="https://maps.app.goo.gl/4KRKkC4Xjv824BLf7" target="_blank" class="px-8 py-4 bg-gold text-white rounded-full text-sm font-bold tracking-widest uppercase shadow-[0_10px_30px_rgba(212,163,115,0.4)] transition-transform hover:-translate-y-1 border border-transparent hover:border-white">
+                <p class="text-2xl font-light mb-2 text-white">Lakeside, Pokhara</p>
+                <p class="text-sm opacity-60 mb-8 text-white">Delivering hot to your doorstep.</p>
+                <a href="https://maps.app.goo.gl/PzB3tVb7W2B2FwYx6" target="_blank" class="px-8 py-4 bg-gold text-white rounded-full text-sm font-bold tracking-widest uppercase hover-target shadow-[0_10px_30px_rgba(212,163,115,0.4)] transition-transform hover:-translate-y-1 border border-transparent hover:border-white">
                     Get Directions
                 </a>
             </div>
         </div>
-        <p class="text-[10px] tracking-[0.5em] uppercase opacity-50 relative z-10 text-[var(--text-main)] transition-colors">&copy; 2024 After Hours Café.</p>
+        
+        <!-- Footer Attribution added gracefully -->
+        <div class="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 text-[10px] tracking-[0.5em] uppercase opacity-50 relative z-10 text-[var(--text-main)] transition-colors mt-8">
+            <span>&copy; 2024 After Hours Café.</span>
+            <span class="hidden md:inline">|</span>
+            <span>Page design by Aakash</span>
+        </div>
     </footer>
 
     <script>
@@ -526,7 +552,7 @@
             }
         }
 
-        // Extremely subtle UI Click sound
+        // Subtler UI Click sound (5% volume)
         function playClickSound() {
             if(!audioCtx) return;
             const osc = audioCtx.createOscillator();
@@ -538,58 +564,50 @@
             osc.frequency.setValueAtTime(300, audioCtx.currentTime); 
             osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.05);
             
-            gainNode.gain.setValueAtTime(0.01, audioCtx.currentTime); // 5% volume limit
+            gainNode.gain.setValueAtTime(0.01, audioCtx.currentTime); 
             gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
             
             osc.start();
             osc.stop(audioCtx.currentTime + 0.05);
         }
 
-        // Awesome Espresso Machine/Steam sound specifically for Cart Add
-        function playSteamSound() {
+        // Drop/Steam sound for Cart Add
+        function playDropSound() {
             if(!audioCtx) return;
             
-            // 1. Create White Noise (Steam)
+            // White Noise (Steam)
             const bufferSize = audioCtx.sampleRate * 0.8;
             const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
             const data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) {
-                data[i] = Math.random() * 2 - 1; // White noise
-            }
+            for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
             const noise = audioCtx.createBufferSource();
             noise.buffer = buffer;
             
-            // Filter noise to sound like high-pressure steam
             const filter = audioCtx.createBiquadFilter();
-            filter.type = 'highpass';
-            filter.frequency.value = 2000;
+            filter.type = 'highpass'; filter.frequency.value = 2000;
             
             const noiseGain = audioCtx.createGain();
-            noiseGain.gain.setValueAtTime(0.15, audioCtx.currentTime); // Steam volume
+            noiseGain.gain.setValueAtTime(0.15, audioCtx.currentTime); 
             noiseGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
             
-            noise.connect(filter);
-            filter.connect(noiseGain);
-            noiseGain.connect(audioCtx.destination);
+            noise.connect(filter); filter.connect(noiseGain); noiseGain.connect(audioCtx.destination);
             
-            // 2. Create Machine Rumble (Low Oscillation)
+            // Drop bloop
             const osc = audioCtx.createOscillator();
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(60, audioCtx.currentTime); // Low hum
+            osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1000, audioCtx.currentTime + 0.1);
             
             const oscGain = audioCtx.createGain();
             oscGain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-            oscGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+            oscGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
             
-            osc.connect(oscGain);
-            oscGain.connect(audioCtx.destination);
+            osc.connect(oscGain); oscGain.connect(audioCtx.destination);
             
-            noise.start();
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.8);
+            noise.start(); osc.start(); osc.stop(audioCtx.currentTime + 0.8);
         }
 
-        // Bind normal clicks to UI elements (ignores scrolling entirely)
+        // Bind normal clicks (ignores scrolling)
         document.addEventListener('mousedown', (e) => {
             initAudio();
             if(e.target.closest('button, a, .hover-target, .process-item, .vibe-btn') && !e.target.closest('.add-btn')) {
@@ -626,12 +644,8 @@
         });
         
         document.querySelectorAll('.hover-target, button, a, .menu-card, .process-item').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                document.body.classList.add('hover-active');
-            });
-            el.addEventListener('mouseleave', () => {
-                document.body.classList.remove('hover-active');
-            });
+            el.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
         });
         
         document.addEventListener('mousedown', () => {
@@ -640,7 +654,7 @@
             }
         });
 
-        // FIXED 3D MAGNETIC CARDS (Works seamlessly with GSAP in both modes)
+        // FIXED 3D MAGNETIC CARDS (Instant, Zero Delay)
         document.querySelectorAll('.menu-card').forEach(card => {
             card.addEventListener('mousemove', (e) => {
                 const rect = card.getBoundingClientRect();
@@ -649,16 +663,14 @@
                 const xPct = (x / rect.width - 0.5) * 20; 
                 const yPct = (y / rect.height - 0.5) * -20;
                 
-                // Show add button
+                // Show add button dynamically
                 gsap.to(card.querySelector('.add-btn'), { opacity: 1, pointerEvents: "auto", bottom: "20px", duration: 0.3 });
-                // Tilt Card
-                gsap.to(card, { rotationY: xPct, rotationX: yPct, transformPerspective: 1000, duration: 0.4, ease: "power2.out" });
+                // Tilt Card instantly (duration 0.15 for super tight tracking)
+                gsap.to(card, { rotationY: xPct, rotationX: yPct, transformPerspective: 1000, duration: 0.15, ease: "none" });
             });
             
             card.addEventListener('mouseleave', () => {
-                // Reset Tilt
-                gsap.to(card, { rotationY: 0, rotationX: 0, duration: 0.6, ease: "elastic.out(1, 0.3)" });
-                // Hide add button
+                gsap.to(card, { rotationY: 0, rotationX: 0, duration: 0.5, ease: "power2.out" });
                 gsap.to(card.querySelector('.add-btn'), { opacity: 0, pointerEvents: "none", bottom: "-50px", duration: 0.3 });
             });
         });
@@ -685,7 +697,7 @@
         let isLightMode = false;
         
         window.initExperience = function(mode) {
-            initAudio(); // Initialize Audio Context
+            initAudio(); 
             isLightMode = (mode === 'day');
             
             if(isLightMode) {
@@ -753,7 +765,6 @@
             const now = new Date();
             const h = now.getHours(); const m = now.getMinutes(); const s = now.getSeconds();
             
-            // Find all instances of clock hands (Desktop + Mobile)
             const hourHands = document.querySelectorAll('.hour-hand');
             const minHands = document.querySelectorAll('.min-hand');
             const secHands = document.querySelectorAll('.sec-hand');
@@ -769,7 +780,7 @@
             if (h >= 5 && h < 17) { icon = "ph-sun"; temp = "28°C"; }
             else if (h >= 17 && h < 20) { icon = "ph-cloud-sun"; temp = "24°C"; }
             else { icon = "ph-moon-stars"; temp = "18°C"; }
-            document.getElementById('weather-icon').className = `ph ${icon} text-xl md:text-2xl`;
+            document.getElementById('weather-icon').className = `ph ${icon} text-xl`;
             document.getElementById('weather-text').innerText = temp;
         }
         setInterval(updateWidgets, 1000); updateWidgets();
@@ -795,7 +806,7 @@
             setTimeout(ScrollTrigger.refresh, 400); 
         }
 
-        // 10. Advanced 3D Liquid Fly-to-Cart (With Steam Sound)
+        // 10. Advanced 3D Liquid Fly-to-Cart
         let cart = [];
         const liquidContainer = document.getElementById('liquid-container');
         
@@ -806,8 +817,7 @@
         };
 
         window.addToCart = function(name, price, btnElement) {
-            initAudio(); // Ensure context is awake
-            playSteamSound(); // Trigger custom Espresso Steam machine sound
+            playDropSound(); // Liquid Steam sound only on cart add
 
             cart.push({ id: Date.now(), name, price });
             
@@ -859,7 +869,7 @@
         function renderCart() {
             const container = document.getElementById('cart-items');
             if(cart.length === 0) {
-                container.innerHTML = `<div class="text-center mt-10 text-base italic opacity-50 text-[var(--cart-text)]">Your cart is empty. Let's brew something.</div>`;
+                container.innerHTML = `<div class="text-center mt-10 text-base italic text-black/50">Your cart is empty. Let's brew something.</div>`;
                 document.getElementById('cart-subtotal').innerText = 'Rs 0';
                 document.getElementById('cart-total').innerText = 'Rs 0';
                 return;
@@ -893,7 +903,7 @@
             cart.forEach(i => { counts[i.name] = (counts[i.name] || 0) + 1; total += i.price; });
             for (const [name, count] of Object.entries(counts)) msg += `- ${count}x ${name}\n`;
             msg += `\nDelivery: Free\nTotal: Rs ${total}\n\nPlease confirm!`;
-            window.open(`https://wa.me/9779705965333?text=${encodeURIComponent(msg)}`, '_blank');
+            window.open(`https://wa.me/9779705117333?text=${encodeURIComponent(msg)}`, '_blank');
         };
 
         // Scroll Animations Engine
